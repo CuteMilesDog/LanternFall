@@ -7792,7 +7792,14 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   /* ---------------- accounts: an optional login that keeps every save online (Firebase) ---------------- */
   /* Paste the web app config from the Firebase console here to turn accounts on, e.g. { apiKey: '…', authDomain: '…', projectId: '…', appId: '…' }.
      Left as null, the login button stays hidden and the game saves only on this device, exactly as before. */
-  const FIREBASE_CONFIG = null;
+  const FIREBASE_CONFIG = {
+    apiKey: 'AIzaSyCXBhPEcDl97MvCfKkwL-sensvBqFXKZWY',
+    authDomain: 'lanternfall-dc40d.firebaseapp.com',
+    projectId: 'lanternfall-dc40d',
+    storageBucket: 'lanternfall-dc40d.firebasestorage.app',
+    messagingSenderId: '397833287268',
+    appId: '1:397833287268:web:7a85588131a38600c65171',
+  };
   const FB_VER = '10.12.2';
   const cloud = { state: 'off', user: null, api: null, busy: false, syncing: false, pending: null, lastSync: 0, t: null, err: '' };
   let acct = { mode: 'in', msg: '', kind: '' };
