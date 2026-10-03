@@ -197,7 +197,8 @@
   .srow em.poor { color: var(--dim); }
   .none { color: var(--dim); font-size: 14px; font-style: italic; margin: 0; }
   #mprompt { bottom: 150px; }
-  @media (max-width: 900px) { .inv-grid, .trade { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 900px) { .inv-grid, .trade { grid-template-columns: minmax(0, 1fr); } .inv-grid > .inv-col:last-child { order: -1; } }
+  @media (max-height: 500px) { body.mplay .skills { grid-template-columns: repeat(3, 48px); grid-auto-rows: 48px; gap: 6px; } body.mplay .slot canvas { width: 26px; height: 26px; } body.mplay .slot[data-act="attack"] canvas { width: 44px; height: 44px; } body.mplay .hud-tl .mini-stats { display: none; } }
 
   .r4 { --rc: #f0a040; }
   .hbar.mp { height: 12px; } .hbar.mp i { background: linear-gradient(180deg, #6a9af8, #2a4aa8); } .hbar.mp span { font-size: 10px; line-height: 10px; }
@@ -360,6 +361,45 @@
   .acct-pend b { color: var(--torch); } .acct-pend small { color: var(--muted); }
   .linkbtn { align-self: flex-start; background: none; border: 0; padding: 2px 0; color: var(--muted); text-decoration: underline; font: 14px var(--body); cursor: pointer; }
   .linkbtn:hover { color: var(--text); }
+  /* phones and tablets: the game fills the screen, with a thumb cluster of buttons on the right */
+  .mpause { display: none; }
+  body.touch #select .help { display: none; }
+  body.touch .slot .k, body.touch .dlg .kbd, body.touch .tut .kbd { display: none; }
+  body.touch .slot, body.touch .skills, body.touch .stage { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: none; }
+  body.mplay { padding: 0; overflow: hidden; overscroll-behavior: none; }
+  body.mplay .top, body.mplay #game > .help { display: none !important; }
+  body.mplay .stage { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; border: 0; border-radius: 0; box-shadow: none; z-index: 30; }
+  body.mplay .hud-tl { left: calc(8px + env(safe-area-inset-left)); top: calc(8px + env(safe-area-inset-top)); width: min(230px, 54vw); padding: 7px 9px 6px; gap: 4px; }
+  body.mplay .who b { font-size: 18px; } body.mplay .who span { font-size: 9px; }
+  body.mplay .hbar { height: 13px; } body.mplay .hbar span { font-size: 9px; line-height: 11px; }
+  body.mplay .mini-stats { font-size: 10px; gap: 2px 8px; flex-wrap: wrap; }
+  body.mplay .chip { font-size: 9px; padding: 0 5px; }
+  body.mplay .minimap { width: 96px; height: 56px; right: calc(8px + env(safe-area-inset-right)); top: calc(8px + env(safe-area-inset-top)); }
+  body.mplay .mpause { display: grid; place-items: center; position: absolute; right: calc(8px + env(safe-area-inset-right)); top: calc(72px + env(safe-area-inset-top)); width: 42px; height: 42px; border-radius: 50%; pointer-events: auto; background: rgba(9,10,14,.72); border: 1px solid rgba(255,255,255,.16); color: var(--text); font: 700 14px var(--mono); letter-spacing: -.1em; padding: 0; touch-action: manipulation; }
+  body.mplay .hud-tc { top: calc(8px + env(safe-area-inset-top)); bottom: auto; max-width: calc(100vw - 2 * min(230px, 54vw) - 40px); padding: 5px 8px; }
+  body.mplay .depth { font-size: 9px; letter-spacing: .08em; white-space: normal; }
+  body.mplay .boss { width: min(300px, 70vw); }
+  body.mplay .feed { display: none; }
+  body.mplay .prompt { top: calc(124px + env(safe-area-inset-top)); bottom: auto; font-size: 14px; padding: 10px 18px; max-width: 80vw; text-align: center; }
+  body.mplay .skills { left: auto; transform: none; right: calc(10px + env(safe-area-inset-right)); bottom: calc(10px + env(safe-area-inset-bottom)); display: grid; gap: 8px;
+    grid-template-columns: repeat(3, 56px); grid-auto-rows: 56px; grid-template-areas: "pot res bag" "ab2 ab3 ." "ab1 atk atk" "dod atk atk"; }
+  body.mplay .slot { width: 100%; height: 100%; border-radius: 14px; }
+  body.mplay .slot canvas { width: 30px; height: 30px; }
+  body.mplay .slot .n { font-size: 8px; max-width: 52px; }
+  body.mplay .slot[data-act="potion"] { grid-area: pot; } body.mplay .slot[data-act="res"] { grid-area: res; } body.mplay .slot[data-act="bag"] { grid-area: bag; }
+  body.mplay .slot[data-act="ab0"] { grid-area: ab1; } body.mplay .slot[data-act="ab1"] { grid-area: ab2; } body.mplay .slot[data-act="ab2"] { grid-area: ab3; }
+  body.mplay .slot[data-act="dodge"] { grid-area: dod; }
+  body.mplay .slot[data-act="attack"] { grid-area: atk; border-radius: 50%; border-color: var(--c); }
+  body.mplay .slot[data-act="attack"] canvas { width: 52px; height: 52px; }
+  body.mplay .slot[data-act="attack"] .n { font-size: 11px; }
+  body.mplay .dlg { padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); z-index: 6; }
+  body.mplay .dlg-card { padding: 10px 14px; gap: 6px; }
+  body.mplay .dlg-who { font-size: 20px; } body.mplay .dlg-text { font-size: 15px; min-height: 2.6em; }
+  body.mplay .tut { width: min(420px, 92vw); padding: 8px 11px 9px; } body.mplay .tut p { font-size: 13px; margin: 3px 0 7px; } body.mplay .tut-top b { font-size: 18px; }
+  @media (orientation: portrait) {
+    body.mplay .hud-tc { top: calc(var(--hudb, 104px) + 6px); max-width: 94vw; }
+    body.mplay .prompt { top: auto; bottom: calc(270px + env(safe-area-inset-bottom)); }
+  }
   @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
   @keyframes pop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
@@ -456,7 +496,7 @@
     <div class="stage" id="stage" tabindex="0" aria-label="Game view. Use WASD or arrow keys to move.">
       <canvas id="view"></canvas>
       <div class="hud">
-        <div class="hud-tl">
+        <div class="hud-tl" id="hud-tl-box">
           <div class="who"><b id="hName"></b><span id="hLvl"></span></div>
           <div class="hbar"><i class="lag" id="hpLag"></i><i id="hpFill"></i><span id="hpText"></span></div>
           <div class="hbar mp" id="mpBar" hidden><i id="mpFill"></i><span id="mpText"></span></div>
@@ -473,6 +513,7 @@
         <canvas class="minimap" id="minimap" width="168" height="96"></canvas>
         <div class="feed" id="feed"></div>
         <div class="prompt" id="prompt" hidden>Press E to descend</div>
+        <button class="mpause" id="mPause" aria-label="Pause">❚❚</button>
         <div class="skills" id="skills"></div>
       </div>
       <div class="inv" id="inv" hidden>
@@ -546,6 +587,8 @@
   const $ = id => document.getElementById(id);
 
   /* ---------------- settings (kept per browser) ---------------- */
+  /* phones and tablets play with touch controls; a laptop with a touch screen switches over on its first touch */
+  let touchMode = matchMedia('(pointer: coarse)').matches;
   const SET_KEY = 'lanternfall-settings';
   const navLang = (() => { const n = String((navigator.languages && navigator.languages[0]) || navigator.language || 'en').slice(0, 2).toLowerCase(); return n === 'es' || n === 'ko' ? n : 'en'; })();
   const SET_DEF = { lang: navLang, diff: 'normal', zoom: 1, shake: true, particles: 'full', numbers: true, minimap: true, flash: true };
@@ -556,6 +599,19 @@
   if (!DIFF[SET.diff]) SET.diff = 'normal';
 
   const L10N = `
+Tap to trade ¦ Toca para comerciar ¦ 눌러서 거래
+Tap to return to Aldermere ¦ Toca para volver a Aldermere ¦ 눌러서 알더미어로 돌아가기
+Tap to descend ¦ Toca para bajar ¦ 눌러서 내려가기
+Tap to climb ¦ Toca para subir ¦ 눌러서 올라가기
+Dodge ¦ Esquivar ¦ 구르기
+Tap Resume to keep going. ¦ Toca Reanudar para seguir. ¦ 계속하려면 계속을 누르자.
+Push the stick all the way out to sprint. Sprinting uses stamina, the green bar under your health. ¦ Empuja el joystick hasta el borde para correr. Correr gasta aguante, la barra verde bajo tu salud. ¦ 조이스틱을 끝까지 밀면 달린다. 달리기는 체력 아래의 초록색 막대인 기력을 쓴다.
+Tap the dodge button to roll. Nothing can hurt you in the middle of a roll, so roll through attacks. ¦ Toca el botón de esquivar para rodar. Nada puede herirte en mitad de una voltereta, así que rueda a través de los ataques. ¦ 구르기 버튼을 누르면 구른다. 구르는 도중에는 아무것도 당신을 다치게 할 수 없으니, 공격을 뚫고 굴러 피하자.
+Saving online… ¦ Guardando en línea… ¦ 온라인에 저장 중…
+Logged out. Your saves are safe in your account and were removed from this device. ¦ Sesión cerrada. Tus partidas están a salvo en tu cuenta y se han borrado de este dispositivo. ¦ 로그아웃했다. 저장은 계정에 안전하게 남아 있고, 이 기기에서는 지워졌다.
+Couldn’t save online. Logging out now would lose anything since your last online save. ¦ No se pudo guardar en línea. Si cierras sesión ahora perderás lo jugado desde el último guardado en línea. ¦ 온라인에 저장하지 못했다. 지금 로그아웃하면 마지막 온라인 저장 이후의 진행이 사라진다.
+Log out anyway ¦ Cerrar sesión igualmente ¦ 그래도 로그아웃
+Logging out saves everything to your account first, then removes your saves from this device. ¦ Al cerrar sesión, todo se guarda primero en tu cuenta y luego se borran tus partidas de este dispositivo. ¦ 로그아웃하면 먼저 모든 것을 계정에 저장한 뒤, 이 기기에서 저장을 지운다.
 That username is taken. Try another. ¦ Ese nombre de usuario ya está en uso. Prueba otro. ¦ 이미 쓰이는 사용자 이름이다. 다른 이름을 골라 보자.
 That username was taken while you were signing up. Pick another one here. ¦ Alguien tomó ese nombre mientras te registrabas. Elige otro aquí. ¦ 가입하는 사이에 누가 그 이름을 가져갔다. 여기서 다른 이름을 골라 보자.
 Pick a username for your account. No two players can have the same one. ¦ Elige un nombre de usuario para tu cuenta. No puede haber dos jugadores con el mismo. ¦ 계정에 쓸 사용자 이름을 정하자. 같은 이름은 두 명이 쓸 수 없다.
@@ -1557,6 +1613,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
 `;
   /* [pattern, Spanish, Korean]; $1.. are translated again on their own, $L1 as a list */
   const TXP = [
+    [/^Tap: (.+)$/, 'Toca: $1', '누르기: $1'],
+    [/^Tap to talk to (.+)$/, 'Toca para hablar con $1', '눌러서 $1와(과) 대화'],
     [/^Saved online (.+)\.$/, 'Guardado en línea a las $1.', '$1에 온라인 저장됨.'],
     [/^Signed in as (.+)$/, 'Sesión iniciada: $1', '로그인: $1'],
     [/^(.+) uses (.+)!$/, '¡$1 usa $2!', '$1의 $2!'],
@@ -5039,12 +5097,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     say(STORY.intro.map(t => say1(KING.who, t, KING.col)), null, offerTut);
   }
   /* ---------------- beginner tutorial: short guided steps after the king's speech ---------------- */
-  const touchy = () => matchMedia('(pointer: coarse)').matches;
+  const touchy = () => touchMode;
   /* touch: text for phones (null skips the step there); goal: checked every frame; ev: finished by tutEvent(); next: read-only, finished with a button */
   const TUT = [
     { id: 'move', title: 'Moving', text: 'Use {WASD} or the {arrow keys} to walk around the square.', touch: 'Drag anywhere on the map to walk. Your hero follows your finger.', goal: T => T.walked >= 260 },
-    { id: 'sprint', title: 'Sprinting', text: 'Hold {Shift} while you walk to sprint. Sprinting uses stamina, the green bar under your health.', touch: null, goal: T => T.sprint >= .8 },
-    { id: 'roll', title: 'Dodging', text: 'Press {Space} to dodge roll. Nothing can hurt you in the middle of a roll, so roll through attacks.', touch: null, ev: 'roll' },
+    { id: 'sprint', title: 'Sprinting', text: 'Hold {Shift} while you walk to sprint. Sprinting uses stamina, the green bar under your health.', touch: 'Push the stick all the way out to sprint. Sprinting uses stamina, the green bar under your health.', goal: T => T.sprint >= .8 },
+    { id: 'roll', title: 'Dodging', text: 'Press {Space} to dodge roll. Nothing can hurt you in the middle of a roll, so roll through attacks.', touch: 'Tap the dodge button to roll. Nothing can hurt you in the middle of a roll, so roll through attacks.', ev: 'roll' },
     { id: 'attack', title: 'Fighting', text: 'Three training dummies! Aim with the mouse and click, or hold {F}, to attack. Break all three.', touch: 'Three training dummies! Hold the attack button to fight. Your hero aims at the nearest enemy. Break all three.',
       setup: () => spawnDummies(), goal: () => !G.mons.some(m => m.t === 'dummy'), count: () => 3 - G.mons.filter(m => m.t === 'dummy').length },
     { id: 'ability', title: 'Abilities', text: 'Press {1} or {2} to use your class abilities. Each one needs a moment to recharge after you use it.', mage: 'Press {1} or {2} to cast a spell. Spells cost magic, the blue bar, and recharge after each cast.', touch: 'Tap the {1} or {2} button to use an ability. Each one needs a moment to recharge.', ev: 'ability' },
@@ -5207,7 +5265,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     let ix = 0, iy = 0;
     if (keys.has('left')) ix -= 1; if (keys.has('right')) ix += 1;
     if (keys.has('up')) iy -= 1; if (keys.has('down')) iy += 1;
-    if (joy.on) { const jx = joy.x - joy.ox, jy = joy.y - joy.oy, jl = Math.hypot(jx, jy); if (jl > 8) { ix = jx / Math.max(jl, 40); iy = jy / Math.max(jl, 40); } }
+    joy.far = false;
+    if (joy.on) { const jx = joy.x - joy.ox, jy = joy.y - joy.oy, jl = Math.hypot(jx, jy); joy.far = jl > 74; if (jl > 8) { ix = jx / Math.max(jl, 40); iy = jy / Math.max(jl, 40); } }
     const il = Math.hypot(ix, iy);
     if (il > 1) { ix /= il; iy /= il; }
     P.moving = il > 0.1;
@@ -5220,7 +5279,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (G.chain && (G.chain.t -= dt) <= 0) G.chain = null;
 
     /* stamina, sprinting and magic */
-    const sprint = keys.has('sprint') && P.moving && !P.dash && !P.roll && !P.exhausted && P.st > 0;
+    const sprint = (keys.has('sprint') || joy.far) && P.moving && !P.dash && !P.roll && !P.exhausted && P.st > 0;
     if (sprint) { P.st = Math.max(0, P.st - 22 * dt * (buffOn('fresh') ? .5 : 1)); P.stT = .6; if (P.st <= 0) { P.exhausted = true; warn('You are out of breath.'); } }
     P.sprinting = sprint;
     if ((P.stT = (P.stT || 0) - dt) <= 0) P.st = Math.min(P.maxSt, P.st + 34 * dt);
@@ -5634,7 +5693,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     cw = r.width; ch = r.height; dpr = Math.min(2, devicePixelRatio || 1);
     cv.width = Math.round(cw * dpr); cv.height = Math.round(ch * dpr);
     lightCv.width = Math.ceil(cw / 2); lightCv.height = Math.ceil(ch / 2);
-    S = (cw < 640 ? 0.72 : 1) * SET.zoom;
+    S = (cw < 640 || ch < 500 ? 0.72 : 1) * SET.zoom;
   }
   function ell(x, y, rx, ry, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, 6.283); ctx.fill(); }
   function circ(x, y, r, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); }
@@ -7382,7 +7441,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
 
     if (joy.on) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(joy.ox, joy.oy, 44, 0, 6.283); ctx.stroke();
+      ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.beginPath(); ctx.arc(joy.ox, joy.oy, 44, 0, 6.283); ctx.fill();
+      ctx.strokeStyle = joy.far ? 'rgba(232,163,61,.8)' : 'rgba(255,255,255,.28)'; ctx.lineWidth = joy.far ? 3 : 2; ctx.beginPath(); ctx.arc(joy.ox, joy.oy, 44, 0, 6.283); ctx.stroke();
       const jx = joy.x - joy.ox, jy = joy.y - joy.oy, jl = Math.hypot(jx, jy), m = Math.min(1, 44 / (jl || 1));
       circ(joy.ox + jx * m, joy.oy + jy * m, 18, 'rgba(232,163,61,.5)');
     }
@@ -7422,6 +7482,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const pot = col => { dot(0, 4, 9, '#2a1414'); dot(0, 4, 8, col); g.fillStyle = '#d8d0c0'; g.fillRect(-3, -11, 6, 8); g.fillStyle = '#7a4a2a'; g.fillRect(-4, -13, 8, 3); dot(-3, 1, 2.5, 'rgba(255,255,255,.5)'); };
     g.translate(17, 17);
     const shapes = {
+      dodge() { S('#c9bfa6', 3); g.beginPath(); g.arc(-2, 3, 9, Math.PI * .85, Math.PI * 2.05); g.stroke(); g.fillStyle = '#e8a33d'; g.beginPath(); g.moveTo(10, -5); g.lineTo(13, 7); g.lineTo(2, 4); g.closePath(); g.fill(); S('rgba(201,191,166,.55)', 2); g.beginPath(); g.moveTo(-15, 9); g.lineTo(-9, 9); g.moveTo(-14, 14); g.lineTo(-7, 14); g.stroke(); },
       charge() { S('#e0714f', 3); g.beginPath(); g.moveTo(-10, 6); g.lineTo(8, 6); g.moveTo(-8, 0); g.lineTo(10, 0); g.moveTo(-10, -6); g.lineTo(8, -6); g.stroke(); g.fillStyle = '#c9a24a'; g.beginPath(); g.moveTo(8, -9); g.lineTo(15, 0); g.lineTo(8, 9); g.fill(); },
       wall() { g.fillStyle = '#74a2e6'; g.beginPath(); g.moveTo(-10, -11); g.lineTo(10, -11); g.lineTo(9, 3); g.lineTo(0, 13); g.lineTo(-9, 3); g.closePath(); g.fill(); g.fillStyle = '#dbe8ff'; g.fillRect(-1.5, -8, 3, 17); g.fillRect(-7, -3, 14, 3); },
       pierce() { S('#e3c46a', 3); g.beginPath(); g.moveTo(-13, 13); g.lineTo(12, -12); g.stroke(); g.fillStyle = '#fff'; g.beginPath(); g.moveTo(14, -14); g.lineTo(5, -12); g.lineTo(12, -5); g.fill(); S('#fff', 1.5); g.beginPath(); g.arc(0, 0, 5, 0, 6.3); g.stroke(); },
@@ -7472,6 +7533,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     mk('R', G.cls === 'mage' ? 'Mana' : 'Stamina', G.cls === 'mage' ? 'manapot' : 'stampot', 'res', G.cls === 'mage' ? '#74a2e6' : '#8ad060', 'resCnt');
     mk('F', 'Attack', 'attack', 'attack', c.col);
     mk('I', 'Bag', 'bag', 'bag', '#c9a24a');
+    if (touchMode) mk('␣', 'Dodge', 'dodge', 'dodge', '#c9bfa6');
   }
 
   let hudT = 0, mmT = 0;
@@ -7511,7 +7573,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (boss) { $('bossFill').style.width = (boss.hp / boss.max * 100) + '%'; $('bossName').textContent = bossTitle(boss.t) + (boss.enraged ? ' · enraged' : ''); $('bossFill').style.filter = boss.enraged ? 'hue-rotate(-70deg) saturate(1.6)' : ''; }
     const tgt = interactTarget();
     $('prompt').hidden = !tgt || invOpen;
-    if (tgt && $('prompt').dataset.en !== tgt.text) { $('prompt').dataset.en = tgt.text; $('prompt').textContent = tgt.text; }
+    const ptx = tgt && (touchMode ? tgt.text.replace(/^Press E: /, 'Tap: ').replace(/^Press E to /, 'Tap to ') : tgt.text);
+    if (tgt && $('prompt').dataset.en !== ptx) { $('prompt').dataset.en = ptx; $('prompt').textContent = ptx; }
     const slots = $('skills').children, n = abilCount();
     for (let i = 0; i < n; i++) {
       const s = slots[i]; if (!s) continue;
@@ -7620,15 +7683,29 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (G.kingNews) msg('King Aldric wants to see you.', '#e3c46a');
     if (tutOn()) tutGo(G.tut.step); else renderTut();
   }
+  /* on a narrow screen the item details sit below the list, so bring them into view after a tap */
+  function showDetail() { if (!touchMode || innerWidth > 900) return; const d = $('trade').hidden ? $('invDetail') : $('tradeDetail'); if (d) d.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' }); }
+  function applyMobile() {
+    document.body.classList.toggle('touch', touchMode);
+    for (const id of ['invClose', 'modalClose']) $(id).textContent = touchMode ? 'Close' : 'Close (Esc)';
+    const m = touchMode && !$('game').hidden;
+    if (document.body.classList.contains('mplay') !== m) { document.body.classList.toggle('mplay', m); requestAnimationFrame(() => { resize(); measureHud(); }); }
+  }
+  /* in portrait the top bar sits under the health panel, so remember how tall that panel is */
+  function measureHud() { const h = $('hud-tl-box'); if (h) document.body.style.setProperty('--hudb', Math.round(h.getBoundingClientRect().bottom) + 'px'); }
+  addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch' && !touchMode) { touchMode = true; applyMobile(); if (G && !$('game').hidden) buildSkills(); }
+  }, true);
+  addEventListener('resize', () => { if (document.body.classList.contains('mplay')) requestAnimationFrame(() => { resize(); measureHud(); }); });
   function showGame() {
     $('select').hidden = true; $('title').hidden = true; $('game').hidden = false; $('abandon').hidden = false; $('pauseBtn').hidden = false; $('fsBtn').hidden = false;
     paused = false; $('veil').hidden = true; invOpen = false; $('inv').hidden = true; dlg = null; $('dlg').hidden = true;
-    resize(); buildSkills(); updateHUD(0, true);
+    applyMobile(); resize(); buildSkills(); updateHUD(0, true); measureHud();
     $('stage').focus({ preventScroll: false });
   }
   function showSelect() {
     G = null; keys.clear(); invOpen = false; $('inv').hidden = true; dlg = null; $('dlg').hidden = true;
-    $('game').hidden = true; $('title').hidden = true; $('select').hidden = false; $('abandon').hidden = true; $('pauseBtn').hidden = true; $('fsBtn').hidden = true; setFullscreen(false);
+    $('game').hidden = true; $('title').hidden = true; $('select').hidden = false; $('abandon').hidden = true; $('pauseBtn').hidden = true; $('fsBtn').hidden = true; setFullscreen(false); applyMobile();
     renderSelect();
   }
   function setPaused(v) {
@@ -7636,7 +7713,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     paused = v; keys.clear(); mouse.down = false; touchAttack = false;
     $('pauseBtn').textContent = v ? 'Resume' : 'Pause';
     if (v) {
-      $('veilCard').innerHTML = `<h2 style="color:var(--torch)">Paused</h2><p>${where()} · Level ${G.p.lvl} · ${G.kills} kills</p><div class="btns"><button class="primary" id="resume">Resume</button><button class="ghost" id="pSaves">Save states</button><button class="ghost" id="pSettings">Settings</button><button class="ghost" id="pMenu">Main menu</button></div><p style="font-size:13px">Press Esc, or click the game, to keep going.</p>`;
+      $('veilCard').innerHTML = `<h2 style="color:var(--torch)">Paused</h2><p>${where()} · Level ${G.p.lvl} · ${G.kills} kills</p><div class="btns"><button class="primary" id="resume">Resume</button><button class="ghost" id="pSaves">Save states</button><button class="ghost" id="pSettings">Settings</button>${cloud.state !== 'off' ? `<button class="ghost" id="pAcct">${cloud.state === 'in' ? acctLabel() : 'Log in'}</button>` : ''}${touchMode && document.fullscreenEnabled ? `<button class="ghost" id="pFull">${fsOn ? 'Exit fullscreen' : 'Fullscreen'}</button>` : ''}<button class="ghost" id="pMenu">Main menu</button></div><p style="font-size:13px">${touchMode ? 'Tap Resume to keep going.' : 'Press Esc, or click the game, to keep going.'}</p>`;
       $('veil').hidden = false;
     } else { $('veil').hidden = true; $('stage').focus(); }
   }
@@ -7666,7 +7743,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   let titleKit = null;
   function showTitle() {
     G = null; keys.clear(); invOpen = false; $('inv').hidden = true; dlg = null; $('dlg').hidden = true; paused = false;
-    $('game').hidden = true; $('select').hidden = true; $('title').hidden = false; $('abandon').hidden = true; $('pauseBtn').hidden = true; $('fsBtn').hidden = true; setFullscreen(false);
+    $('game').hidden = true; $('select').hidden = true; $('title').hidden = false; $('abandon').hidden = true; $('pauseBtn').hidden = true; $('fsBtn').hidden = true; setFullscreen(false); applyMobile();
     renderTitle();
   }
   function renderTitle() {
@@ -7900,10 +7977,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   async function cloudPush() {
     clearTimeout(cloud.t); cloud.t = null;
-    if (cloud.state !== 'in' || !cloud.user) return;
+    if (cloud.state !== 'in' || !cloud.user) return false;
+    let ok = true;
     try { await cloud.api.save(cloud.user.uid, cloudPayload()); cloud.lastSync = Date.now(); cloud.err = ''; }
-    catch { cloud.err = 'Couldn’t save online just now. It will try again on the next save.'; }
+    catch { cloud.err = 'Couldn’t save online just now. It will try again on the next save.'; ok = false; }
     if (modal === 'account') renderModal();
+    return ok;
   }
   /* every local save schedules an upload a few seconds later, so a burst of saves becomes one write */
   function cloudTouch() {
@@ -7938,7 +8017,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         <p class="hint" style="margin:0">Your autosave, save slots, best journey and story progress are saved to your account. Log in on any computer or phone to pick up where you left off.</p>
         ${pj ? `<div class="acct-pend"><b>Your account has a newer journey</b><span>${saveSummary(pj)}</span><small>Loading it replaces the journey you’re playing now. Save this one to a slot first if you want to keep it.</small><div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="takecloud">Load it</button><button class="ghost" data-ac="keeplocal">Keep playing this one</button></div></div>` : ''}
         <p class="svmsg ${cloud.err || acct.kind === 'err' ? 'err' : 'ok'}" id="acMsg">${cloud.err || acct.msg || (cloud.busy ? 'Syncing…' : cloud.lastSync ? `Saved online ${new Date(cloud.lastSync).toLocaleTimeString()}.` : '')}</p>
-        <div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="sync"${cloud.busy ? ' disabled' : ''}>Save online now</button><button class="ghost" data-ac="logout">Log out</button></div>
+        <div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="sync"${cloud.busy ? ' disabled' : ''}>Save online now</button>${acct.armOut ? '<button class="ghost warn" data-ac="logoutforce">Log out anyway</button>' : '<button class="ghost" data-ac="logout">Log out</button>'}</div>
+        <small class="acct-note" style="margin:0">Logging out saves everything to your account first, then removes your saves from this device.</small>
       </div>`;
     }
     const up = acct.mode === 'up';
@@ -7956,6 +8036,10 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       ${up ? '' : '<button class="linkbtn" data-ac="reset">Forgot your password?</button>'}
     </div>`;
   }
+  function wipeLocalSaves() {
+    try { for (const k of [SAVE_KEY, 'lanternfall-best', 'lanternfall-progress']) localStorage.removeItem(k); for (let i = 1; i <= SLOT_N; i++) localStorage.removeItem(slotStore.key(i)); } catch {}
+    memArcs = 0;
+  }
   async function accountAction(act) {
     const email = ($('acEmail') && $('acEmail').value || '').trim(), pass = $('acPass') ? $('acPass').value : '', uname = cleanUser($('acUser') && $('acUser').value);
     if (act === 'mode-in' || act === 'mode-up') { acct = { mode: act.slice(5), msg: '', kind: '' }; renderModal(); const i = $('acEmail'); if (i) { i.value = email; i.focus(); } return; }
@@ -7971,10 +8055,21 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (act === 'sync') { cloud.busy = true; renderModal(); await cloudPush(); cloud.busy = false; return renderModal(); }
     if (act === 'takecloud' && cloud.pending) { const d = cloud.pending; cloud.pending = null; loadFromData(d, 'your account'); return; }
     if (act === 'keeplocal') { cloud.pending = null; await cloudPush(); return renderModal(); }
-    if (act === 'logout') {
-      if (cloud.t) await cloudPush();
+    /* logging out uploads everything, then wipes this device's saves so the next person starts clean */
+    if (act === 'logout' || act === 'logoutforce') {
+      if (act === 'logout') {
+        if (inGame()) save();
+        cloud.busy = true; acct = { mode: 'in', msg: 'Saving online…', kind: '' }; renderModal();
+        const ok = await cloudPush();
+        cloud.busy = false;
+        if (!ok) { cloud.err = ''; acct = { mode: 'in', msg: 'Couldn’t save online. Logging out now would lose anything since your last online save.', kind: 'err', armOut: true }; return renderModal(); }
+      }
+      const playing = !!(G && !$('game').hidden);
+      cloud.syncing = true; clearTimeout(cloud.t); cloud.t = null; cloud.pending = null;
       try { await cloud.api.signOut(); } catch {}
-      acct = { mode: 'in', msg: 'Logged out. The saves on this device are still here.', kind: 'ok' };
+      wipeLocalSaves(); cloud.syncing = false;
+      acct = { mode: 'in', msg: 'Logged out. Your saves are safe in your account and were removed from this device.', kind: 'ok' };
+      if (playing) showTitle(); else if (!$('select').hidden) renderSelect(); else if (!$('title').hidden) renderTitle();
       return renderModal();
     }
     if (act === 'reset') {
@@ -8005,7 +8100,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   function openModal(kind) {
     if (G && !G.over && !$('game').hidden && !paused) setPaused(true);
     modal = kind; eraseArm = null; svMsg = { text: '', kind: '' };
-    if (kind === 'account' && cloud.state === 'in') acct.msg = '';
+    if (kind === 'account') acct = { mode: acct.mode, msg: '', kind: '' };
     $('modal').hidden = false; renderModal();
     const f = $('acEmail') || $('modal').querySelector('button'); if (f) f.focus({ preventScroll: true });
   }
@@ -8202,14 +8297,23 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   $('skills').addEventListener('click', e => {
     const b = e.target.closest('[data-act]'); if (!b) return;
     const a = b.dataset.act;
-    if (a === 'attack') return;
+    if (a === 'attack' || performance.now() - (b._touched || 0) < 700) return;
     if (a === 'bag') return toggleInv(undefined, 'bag');
-    if (a === 'potion') drink(); else if (a === 'res') drinkRestore(); else useAbility(+a.slice(2));
+    if (a === 'dodge') dodge(); else if (a === 'potion') drink(); else if (a === 'res') drinkRestore(); else useAbility(+a.slice(2));
     stage.focus();
   });
-  $('skills').addEventListener('pointerdown', e => { if (e.target.closest('[data-act="attack"]')) { e.preventDefault(); touchAttack = true; } });
+  $('skills').addEventListener('pointerdown', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    if (b.dataset.act === 'attack') { e.preventDefault(); touchAttack = true; return; }
+    /* fingers act on touch-down, so a tap still counts while the other thumb is steering */
+    if (e.pointerType === 'mouse') return;
+    e.preventDefault(); b._touched = performance.now();
+    const a = b.dataset.act;
+    if (a === 'bag') toggleInv(undefined, 'bag'); else if (a === 'dodge') dodge(); else if (a === 'potion') drink(); else if (a === 'res') drinkRestore(); else useAbility(+a.slice(2));
+  });
   const stopTouchAttack = () => { touchAttack = false; };
   addEventListener('pointerup', stopTouchAttack); addEventListener('pointercancel', stopTouchAttack);
+  $('mPause').addEventListener('click', () => { if (G && !G.over) setPaused(!paused); });
   $('prompt').addEventListener('click', () => { const t = interactTarget(); if (t) t.act(); stage.focus(); });
   $('dlg').addEventListener('click', e => {
     const c = e.target.closest('[data-choice]');
@@ -8228,11 +8332,11 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const sl = e.target.closest('[data-where]');
     if (!sl) return;
     const where = sl.dataset.where;
-    if (where === 'row') { invSel = { where, key: sl.dataset.key }; discardArm = null; return renderInv(); }
+    if (where === 'row') { invSel = { where, key: sl.dataset.key }; discardArm = null; renderInv(); return showDetail(); }
     const i = where === 'eq' ? sl.dataset.i : +sl.dataset.i;
     const it = where === 'bag' ? G.p.bag[i] : G.p.eq[i];
     if (!it) return;
-    bagTab = 'bag'; invSel = { where, i }; discardArm = null; renderInv();
+    bagTab = 'bag'; invSel = { where, i }; discardArm = null; renderInv(); showDetail();
   });
   $('inv').addEventListener('dblclick', e => {
     const sl = e.target.closest('[data-where]');
@@ -8248,6 +8352,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     else if (e.target.id === 'wake') wake();
     else if (e.target.id === 'pSaves') openModal('saves');
     else if (e.target.id === 'pSettings') openModal('settings');
+    else if (e.target.id === 'pAcct') openModal('account');
+    else if (e.target.id === 'pFull') { setFullscreen(!fsOn); setPaused(false); }
     else if (e.target.id === 'pMenu') {
       const b = e.target;
       if (G.zone === 'dungeon' && !b.classList.contains('warn')) { b.classList.add('warn'); b.textContent = 'Leave? This dungeon run is lost'; return; }
