@@ -556,6 +556,10 @@
   if (!DIFF[SET.diff]) SET.diff = 'normal';
 
   const L10N = `
+That username is taken. Try another. ¦ Ese nombre de usuario ya está en uso. Prueba otro. ¦ 이미 쓰이는 사용자 이름이다. 다른 이름을 골라 보자.
+That username was taken while you were signing up. Pick another one here. ¦ Alguien tomó ese nombre mientras te registrabas. Elige otro aquí. ¦ 가입하는 사이에 누가 그 이름을 가져갔다. 여기서 다른 이름을 골라 보자.
+Pick a username for your account. No two players can have the same one. ¦ Elige un nombre de usuario para tu cuenta. No puede haber dos jugadores con el mismo. ¦ 계정에 쓸 사용자 이름을 정하자. 같은 이름은 두 명이 쓸 수 없다.
+Checking… ¦ Comprobando… ¦ 확인 중…
 Username ¦ Nombre de usuario ¦ 사용자 이름
 Save username ¦ Guardar nombre ¦ 이름 저장
 Username saved. ¦ Nombre de usuario guardado. ¦ 사용자 이름을 저장했다.
@@ -7820,6 +7824,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     'auth/popup-blocked': 'The browser blocked the Google window. Allow pop-ups and try again.', 'auth/unauthorized-domain': 'Logging in isn’t allowed on this website yet.',
     'auth/operation-not-allowed': 'This way of logging in isn’t turned on yet.',
   };
+  AUTH_ERR['name/taken'] = 'That username is taken. Try another.';
   const authErr = e => AUTH_ERR[e && e.code] || 'Something went wrong. Try again.';
   async function cloudInit() {
     if (window.__mockCloud) cloud.api = window.__mockCloud;
@@ -7834,11 +7839,20 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         cloud.api = {
           onUser: cb => Au.onAuthStateChanged(auth, u => cb(u ? { uid: u.uid, email: u.email || '', name: u.displayName || '' } : null)),
           signIn: (e, p) => Au.signInWithEmailAndPassword(auth, e, p),
-          signUp: (e, p) => Au.createUserWithEmailAndPassword(auth, e, p),
+          signUp: (e, p) => Au.createUserWithEmailAndPassword(auth, e, p).then(c => c.user.uid),
           google: () => Au.signInWithPopup(auth, new Au.GoogleAuthProvider()),
           reset: e => Au.sendPasswordResetEmail(auth, e),
           signOut: () => Au.signOut(auth),
           setName: name => Au.updateProfile(auth.currentUser, { displayName: name }),
+          /* usernames/{lowercase name} = { uid }: the database rules only let a name be created once, so no two accounts can hold it */
+          nameOwner: async key => { const d = await Fs.getDoc(Fs.doc(db, 'usernames', key)); return d.exists() ? d.data().uid : null; },
+          claimName: (uid, key, oldKey) => Fs.runTransaction(db, async tx => {
+            const nref = Fs.doc(db, 'usernames', key), oref = oldKey && oldKey !== key ? Fs.doc(db, 'usernames', oldKey) : null;
+            const n = await tx.get(nref), o = oref ? await tx.get(oref) : null;
+            if (n.exists() && n.data().uid !== uid) throw { code: 'name/taken' };
+            if (!n.exists()) tx.set(nref, { uid });
+            if (o && o.exists() && o.data().uid === uid) tx.delete(oref);
+          }),
           load: async uid => { const s = await Fs.getDoc(ref(uid)); return s.exists() ? s.data() : null; },
           save: (uid, data) => Fs.setDoc(ref(uid), data),
         };
@@ -7846,6 +7860,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     }
     cloud.state = 'out';
     cloud.api.onUser(async u => {
+      /* a name only counts once this account has claimed it (older accounts and Google names start unclaimed) */
+      if (u && u.name) { try { if (await cloud.api.nameOwner(nameKey(u.name)) !== u.uid) u.name = ''; } catch {} }
       cloud.user = u; cloud.state = u ? 'in' : 'out'; cloud.pending = null;
       if (u) await cloudSyncDown();
       refreshAccountUI();
@@ -7897,6 +7913,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   addEventListener('pagehide', () => { if (cloud.t) cloudPush(); });
   /* usernames: any letters (Korean too), numbers, spaces and _ - . ' up to 20 characters */
   const cleanUser = v => String(v || '').replace(/[^\p{L}\p{N} _.'-]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 20);
+  const nameKey = n => cleanUser(n).normalize('NFKC').toLowerCase();
+  const nameOk = n => (n.match(/[\p{L}\p{N}]/gu) || []).length >= 2;
   const acctLabel = () => cloud.user ? (cloud.user.name || cloud.user.email.split('@')[0] || 'Account').slice(0, 18) : 'Log in';
   function refreshAccountUI() {
     const b = $('acctBtn');
@@ -7916,10 +7934,10 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         <p class="acct-who">Signed in as <b data-notr>${cloud.user.name || cloud.user.email}</b></p>
         <label class="namelab" for="acUser">Username</label>
         <div class="namerow acct-user"><input id="acUser" class="acct-in" maxlength="20" autocomplete="nickname" spellcheck="false" value="${(cloud.user.name || '').replace(/"/g, '&quot;')}" placeholder="${cloud.user.email.split('@')[0].replace(/"/g, '&quot;')}"><button class="ghost" data-ac="setname">Save username</button></div>
-        <small class="acct-note" style="margin:0">The name shown on your account. You still log in with your email.</small>
+        <small class="acct-note" style="margin:0">${cloud.user.name ? 'The name shown on your account. You still log in with your email.' : 'Pick a username for your account. No two players can have the same one.'}</small>
         <p class="hint" style="margin:0">Your autosave, save slots, best journey and story progress are saved to your account. Log in on any computer or phone to pick up where you left off.</p>
         ${pj ? `<div class="acct-pend"><b>Your account has a newer journey</b><span>${saveSummary(pj)}</span><small>Loading it replaces the journey you’re playing now. Save this one to a slot first if you want to keep it.</small><div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="takecloud">Load it</button><button class="ghost" data-ac="keeplocal">Keep playing this one</button></div></div>` : ''}
-        <p class="svmsg ${cloud.err ? 'err' : 'ok'}" id="acMsg">${cloud.err || (cloud.busy ? 'Syncing…' : cloud.lastSync ? `Saved online ${new Date(cloud.lastSync).toLocaleTimeString()}.` : '')}</p>
+        <p class="svmsg ${cloud.err || acct.kind === 'err' ? 'err' : 'ok'}" id="acMsg">${cloud.err || acct.msg || (cloud.busy ? 'Syncing…' : cloud.lastSync ? `Saved online ${new Date(cloud.lastSync).toLocaleTimeString()}.` : '')}</p>
         <div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="sync"${cloud.busy ? ' disabled' : ''}>Save online now</button><button class="ghost" data-ac="logout">Log out</button></div>
       </div>`;
     }
@@ -7942,8 +7960,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const email = ($('acEmail') && $('acEmail').value || '').trim(), pass = $('acPass') ? $('acPass').value : '', uname = cleanUser($('acUser') && $('acUser').value);
     if (act === 'mode-in' || act === 'mode-up') { acct = { mode: act.slice(5), msg: '', kind: '' }; renderModal(); const i = $('acEmail'); if (i) { i.value = email; i.focus(); } return; }
     if (act === 'setname') {
-      if (uname.length < 2) return setAcctMsg('Pick a username with at least 2 letters or numbers.', 'err');
-      try { await cloud.api.setName(uname); cloud.user.name = uname; refreshAccountUI(); setAcctMsg('Username saved.', 'ok'); } catch { setAcctMsg('Couldn’t save your username. Try again.', 'err'); }
+      if (!nameOk(uname)) return setAcctMsg('Pick a username with at least 2 letters or numbers.', 'err');
+      setAcctMsg('Checking…');
+      try {
+        await cloud.api.claimName(cloud.user.uid, nameKey(uname), cloud.user.name ? nameKey(cloud.user.name) : '');
+        await cloud.api.setName(uname); cloud.user.name = uname; refreshAccountUI(); setAcctMsg('Username saved.', 'ok');
+      } catch (e) { const i = $('acUser'); if (i) i.value = uname; setAcctMsg(e && e.code === 'name/taken' ? 'That username is taken. Try another.' : 'Couldn’t save your username. Try again.', 'err'); }
       return;
     }
     if (act === 'sync') { cloud.busy = true; renderModal(); await cloudPush(); cloud.busy = false; return renderModal(); }
@@ -7961,13 +7983,19 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       return;
     }
     if (act === 'submit' || act === 'google') {
-      if (act === 'submit' && acct.mode === 'up' && uname.length < 2) return setAcctMsg('Pick a username with at least 2 letters or numbers.', 'err');
+      if (act === 'submit' && acct.mode === 'up' && !nameOk(uname)) return setAcctMsg('Pick a username with at least 2 letters or numbers.', 'err');
       if (act === 'submit' && (!email || !pass)) return setAcctMsg(!email ? 'Type your email address.' : 'Type your password.', 'err');
       cloud.busy = true; setAcctMsg(act === 'google' ? 'Waiting for Google…' : 'One moment…');
       $('modalBody').querySelectorAll('[data-ac="submit"],[data-ac="google"]').forEach(b => { b.disabled = true; });
       try {
         if (act === 'google') await cloud.api.google();
-        else if (acct.mode === 'up') { await cloud.api.signUp(email, pass); try { await cloud.api.setName(uname); if (cloud.user) cloud.user.name = uname; } catch {} refreshAccountUI(); }
+        else if (acct.mode === 'up') {
+          if (await cloud.api.nameOwner(nameKey(uname))) throw { code: 'name/taken' };
+          const uid = await cloud.api.signUp(email, pass);
+          try { await cloud.api.claimName(uid, nameKey(uname), ''); await cloud.api.setName(uname); if (cloud.user) cloud.user.name = uname; acct = { mode: 'in', msg: '', kind: '' }; }
+          catch { acct = { mode: 'in', msg: 'That username was taken while you were signing up. Pick another one here.', kind: 'err' }; }
+          cloud.busy = false; return refreshAccountUI();
+        }
         else await cloud.api.signIn(email, pass);
         acct = { mode: 'in', msg: '', kind: '' };
       } catch (e) { cloud.busy = false; renderModal(); const i = $('acEmail'); if (i) i.value = email; const u = $('acUser'); if (u) u.value = uname; setAcctMsg(authErr(e), 'err'); return; }
@@ -7977,6 +8005,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   function openModal(kind) {
     if (G && !G.over && !$('game').hidden && !paused) setPaused(true);
     modal = kind; eraseArm = null; svMsg = { text: '', kind: '' };
+    if (kind === 'account' && cloud.state === 'in') acct.msg = '';
     $('modal').hidden = false; renderModal();
     const f = $('acEmail') || $('modal').querySelector('button'); if (f) f.focus({ preventScroll: true });
   }
