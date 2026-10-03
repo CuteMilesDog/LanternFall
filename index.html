@@ -8,7 +8,7 @@
 <title>Lanternfall</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.cAom/css2?family=Grenze+Gotisch:wght@500;700&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@500;700&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap">
 <style>
   :root {
     color-scheme: dark;
@@ -338,6 +338,16 @@
   .continue small { display: block; color: var(--dim); font-size: 12px; margin-top: 2px; }
 
   /* ---------- motion ---------- */
+  .tut { pointer-events: auto; width: min(440px, 84vw); text-align: left; background: rgba(14,15,20,.92); border: 1px solid rgba(232,163,61,.45); border-radius: 10px; padding: 10px 14px 11px; box-shadow: 0 8px 28px rgba(0,0,0,.5); font-family: var(--body); }
+  .tut:not([hidden]) { animation: rise .25s ease-out; }
+  .tut-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .tut-top b { font-family: var(--display); font-size: 22px; line-height: 1; color: var(--torch); font-weight: 700; }
+  .tut-top span { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
+  .tut p { margin: 5px 0 9px; font-size: 15px; line-height: 1.4; color: var(--text); }
+  .tut-btns { display: flex; gap: 8px; align-items: center; justify-content: flex-end; }
+  .tut-btns button { font-size: 12px; padding: 5px 12px; }
+  .tut-ok { margin-right: auto; color: var(--life); font-family: var(--mono); font-size: 12px; letter-spacing: .08em; }
+  .tut-cnt { color: var(--gold); font-family: var(--mono); font-weight: 500; }
   @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
   @keyframes pop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
@@ -445,6 +455,7 @@
         <div class="hud-tc">
           <div class="depth" id="depthLabel"></div>
           <div class="boss" id="boss" hidden><span id="bossName">The Lantern Lich</span><div class="hbar"><i id="bossFill"></i></div></div>
+          <div class="tut" id="tut" hidden data-notr></div>
         </div>
         <canvas class="minimap" id="minimap" width="168" height="96"></canvas>
         <div class="feed" id="feed"></div>
@@ -532,6 +543,40 @@
   if (!DIFF[SET.diff]) SET.diff = 'normal';
 
   const L10N = `
+Training dummy ¦ Muñeco de entrenamiento ¦ 훈련용 허수아비
+Tutorial ¦ Tutorial ¦ 튜토리얼
+Nice! ¦ ¡Bien hecho! ¦ 잘했어!
+Finish ¦ Terminar ¦ 끝내기
+Skip tutorial ¦ Saltar tutorial ¦ 튜토리얼 건너뛰기
+New to Aldermere? A short tutorial shows you how to move, fight, heal and use your gear. It takes about two minutes. ¦ ¿Eres nuevo en Aldermere? Un breve tutorial te enseña a moverte, luchar, curarte y usar tu equipo. Dura unos dos minutos. ¦ 알더미어가 처음인가? 짧은 튜토리얼에서 이동, 전투, 치유, 장비 사용법을 알려 준다. 2분 정도 걸린다.
+Show me the basics ¦ Enséñame lo básico ¦ 기본을 알려 줘
+I know what I’m doing ¦ Ya sé lo que hago ¦ 이미 알고 있어
+Moving ¦ Moverse ¦ 이동
+Use {WASD} or the {arrow keys} to walk around the square. ¦ Usa {WASD} o las {arrow keys} para caminar por la plaza. ¦ {WASD} 또는 {arrow keys}로 광장을 걸어 다녀 보자.
+Drag anywhere on the map to walk. Your hero follows your finger. ¦ Arrastra en cualquier parte del mapa para caminar. Tu héroe sigue tu dedo. ¦ 지도 아무 곳이나 끌면 걷는다. 영웅이 손가락을 따라간다.
+Sprinting ¦ Correr ¦ 달리기
+Hold {Shift} while you walk to sprint. Sprinting uses stamina, the green bar under your health. ¦ Mantén {Shift} mientras caminas para correr. Correr gasta aguante, la barra verde bajo tu salud. ¦ 걸으면서 {Shift}를 누르고 있으면 달린다. 달리기는 체력 아래의 초록색 막대인 기력을 쓴다.
+Dodging ¦ Esquivar ¦ 구르기
+Press {Space} to dodge roll. Nothing can hurt you in the middle of a roll, so roll through attacks. ¦ Pulsa {Space} para esquivar rodando. Nada puede herirte en mitad de una voltereta, así que rueda a través de los ataques. ¦ {Space}를 누르면 구른다. 구르는 도중에는 아무것도 당신을 다치게 할 수 없으니, 공격을 뚫고 굴러 피하자.
+Fighting ¦ Luchar ¦ 전투
+Three training dummies! Aim with the mouse and click, or hold {F}, to attack. Break all three. ¦ ¡Tres muñecos de entrenamiento! Apunta con el ratón y haz clic, o mantén {F}, para atacar. Rompe los tres. ¦ 훈련용 허수아비 세 개! 마우스로 조준하고 클릭하거나 {F}를 누르고 있으면 공격한다. 셋 다 부숴 보자.
+Three training dummies! Hold the attack button to fight. Your hero aims at the nearest enemy. Break all three. ¦ ¡Tres muñecos de entrenamiento! Mantén pulsado el botón de ataque para luchar. Tu héroe apunta al enemigo más cercano. Rompe los tres. ¦ 훈련용 허수아비 세 개! 공격 버튼을 누르고 있으면 싸운다. 영웅이 가장 가까운 적을 조준한다. 셋 다 부숴 보자.
+Abilities ¦ Habilidades ¦ 능력
+Press {1} or {2} to use your class abilities. Each one needs a moment to recharge after you use it. ¦ Pulsa {1} o {2} para usar las habilidades de tu clase. Cada una tarda un momento en recargarse después de usarla. ¦ {1} 또는 {2}를 누르면 직업 능력을 쓴다. 쓰고 나면 다시 쓸 수 있을 때까지 잠시 기다려야 한다.
+Press {1} or {2} to cast a spell. Spells cost magic, the blue bar, and recharge after each cast. ¦ Pulsa {1} o {2} para lanzar un hechizo. Los hechizos gastan magia, la barra azul, y se recargan después de cada uso. ¦ {1} 또는 {2}를 누르면 주문을 건다. 주문은 파란 막대인 마력을 쓰고, 시전 후 다시 충전된다.
+Tap the {1} or {2} button to use an ability. Each one needs a moment to recharge. ¦ Toca el botón {1} o {2} para usar una habilidad. Cada una tarda un momento en recargarse. ¦ {1} 또는 {2} 버튼을 누르면 능력을 쓴다. 다시 쓰려면 잠시 기다려야 한다.
+Ouch, a splinter from that last dummy! Your health is the red bar. Press {Q} to drink a healing potion. ¦ ¡Ay, una astilla del último muñeco! Tu salud es la barra roja. Pulsa {Q} para beber una poción de curación. ¦ 아야, 마지막 허수아비에서 가시가 박혔다! 체력은 빨간 막대다. {Q}를 눌러 치유 물약을 마시자.
+Ouch, a splinter from that last dummy! Your health is the red bar. Tap the potion button to drink a healing potion. ¦ ¡Ay, una astilla del último muñeco! Tu salud es la barra roja. Toca el botón de poción para beber una poción de curación. ¦ 아야, 마지막 허수아비에서 가시가 박혔다! 체력은 빨간 막대다. 물약 버튼을 눌러 치유 물약을 마시자.
+Sister Maren tucks a spare potion into your bag. ¦ La hermana Maren mete una poción de repuesto en tu bolsa. ¦ 마렌 수녀가 여분의 물약을 가방에 넣어 준다.
+Your bag ¦ Tu bolsa ¦ 가방
+Press {I} to open your bag. Equip new gear, compare stats, and spend the skill point you get every level ({T} opens the skill tree). ¦ Pulsa {I} para abrir tu bolsa. Equipa equipo nuevo, compara estadísticas y gasta el punto de habilidad que ganas en cada nivel ({T} abre el árbol de habilidades). ¦ {I}를 누르면 가방이 열린다. 새 장비를 장착하고, 능력치를 비교하고, 레벨마다 얻는 기술 점수를 쓰자({T}는 기술 트리를 연다).
+Tap the bag button to open your bag. Equip new gear, compare stats, and spend the skill point you get every level. ¦ Toca el botón de la bolsa para abrirla. Equipa equipo nuevo, compara estadísticas y gasta el punto de habilidad que ganas en cada nivel. ¦ 가방 버튼을 누르면 가방이 열린다. 새 장비를 장착하고, 능력치를 비교하고, 레벨마다 얻는 기술 점수를 쓰자.
+The town ¦ La ciudad ¦ 마을
+Walk up to people and stations and press {E} to talk, trade or craft. Brann and Greta upgrade gear, Tobin sells potions, and Sister Maren heals you for free. ¦ Acércate a la gente y a los puestos y pulsa {E} para hablar, comerciar o fabricar. Brann y Greta mejoran el equipo, Tobin vende pociones y la hermana Maren te cura gratis. ¦ 사람이나 작업대에 다가가 {E}를 누르면 대화, 거래, 제작을 할 수 있다. 브랜과 그레타는 장비를 강화해 주고, 토빈은 물약을 팔고, 마렌 수녀는 공짜로 치료해 준다.
+Walk up to people and stations and tap the prompt that appears to talk, trade or craft. Brann and Greta upgrade gear, Tobin sells potions, and Sister Maren heals you for free. ¦ Acércate a la gente y a los puestos y toca el aviso que aparece para hablar, comerciar o fabricar. Brann y Greta mejoran el equipo, Tobin vende pociones y la hermana Maren te cura gratis. ¦ 사람이나 작업대에 다가가 나타나는 안내를 누르면 대화, 거래, 제작을 할 수 있다. 브랜과 그레타는 장비를 강화해 주고, 토빈은 물약을 팔고, 마렌 수녀는 공짜로 치료해 준다.
+When night falls, monsters come up the forest road and attack the city. Hold them off and the watch pays you in gold. If you fall, you wake in the chapel and keep your level and gear. ¦ Cuando cae la noche, los monstruos suben por el camino del bosque y atacan la ciudad. Contenlos y la guardia te pagará en oro. Si caes, despiertas en la capilla y conservas tu nivel y tu equipo. ¦ 밤이 되면 괴물들이 숲길을 따라 올라와 도시를 공격한다. 막아 내면 경비대가 금화를 준다. 쓰러져도 예배당에서 깨어나며 레벨과 장비는 그대로다.
+Ready ¦ Listo ¦ 준비 완료
+That’s everything, {name}. Leave by the south gate and follow the western forest path to the Rat Warrens. Good luck! ¦ Eso es todo, {name}. Sal por la puerta sur y sigue el sendero del bosque hacia el oeste hasta las Madrigueras de Ratas. ¡Buena suerte! ¦ 이게 전부다, {name}. 남문으로 나가 서쪽 숲길을 따라 쥐 굴로 가자. 행운을 빈다!
 Easy ¦ Fácil ¦ 쉬움
 Normal ¦ Normal ¦ 보통
 Hard ¦ Difícil ¦ 어려움
@@ -1733,6 +1778,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     document.documentElement.lang = code;
     trCache.clear(); trTree(document.body, true);
     const sel = $('langSel'); if (sel && sel.value !== code) sel.value = code;
+    if (G && G.tut) renderTut();
     if (dlg && !$('dlg').hidden) { dlg.lines = dlg.lines.map(l => ({ ...l, text: fillName(trLine(l.en)) })); dlg.btnKey = null; renderDlg(); }
   }
 
@@ -1829,6 +1875,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     dw_shaman: { name: 'Deepwatch Mystic', hp: 400, dmg: 20, spd: 85, r: 13, col: '#7ad0d8', rate: 1.7, reach: 14, xp: 80, d: [1, 99], squadOf: 'deepwatch', art: 1.15, ranged: { range: 320, speed: 280, proj: 'hex' }, heals: { every: 5, amt: .15, r: 260 } },
     ancient: { name: 'the Ancient Guardian', hp: 2100, dmg: 34, spd: 60, r: 30, col: '#5ad8c0', rate: 1.6, reach: 34, xp: 600, d: [99, 99], boss: true, mid: true, adds: 'orc',
                 slam: { every: 5, r: 150 }, nova: { every: 7, n: 18, speed: 220, proj: 'rock' }, summon: { type: 'golem', n: 1, every: 15, max: 1, fx: '#5ad8c0', text: 'The Ancient Guardian wakes a stone servant.' } },
+    dummy: { name: 'Training dummy', hp: 40, dmg: 0, spd: 0, r: 14, col: '#c8a060', rate: 99, reach: 0, xp: 0, d: [1, 99], passive: true, dummy: true },
     phylactery: { name: 'Phylactery', hp: 260, dmg: 0, spd: 0, r: 12, col: '#7dff7d', rate: 99, reach: 0, xp: 10, d: [1, 99], passive: true, fly: true },
     lich:     { name: 'the Lantern Lich', hp: 3000, dmg: 34, spd: 70, r: 22, col: '#9a5fc2', rate: 1.2, reach: 24, xp: 0, d: [99, 99], boss: true, undead: true, ranged: { range: 440, speed: 300, spread: 3 },
                 abil: ['raise', 'deathnova', 'shadowstep', 'beam', 'grip', 'ward', 'hunger'] },
@@ -2622,6 +2669,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     G.mons = G.mons.filter(x => x !== m); G.kills++;
     dying.push({ m: { ...m, hp: m.max, awake: true, flash: 0, frozen: 0, stun: 0, poison: 0, burn: 0, bleed: 0, chill: 0, stopT: 0, wind: 0, slamWind: 0, chargeWind: 0, lunge: 0, born: 0, hitT: 0, castT: 0, moveAmt: 0, beam: null, drain: null, spin: 0 }, t: 0, dur: d.boss ? 1.4 : .7, dir: m.x >= P.x ? 1 : -1 });
     burst(m.x, m.y, d.col, 22, 200, 4); burst(m.x, m.y, '#000', 8, 80, 5);
+    if (d.dummy) { G.kills--; burst(m.x, m.y, '#e8d090', 16, 140, 3, -30); return; }
     if (F.healOnKill && P.hp < P.max) { const h = Math.round(P.max * F.healOnKill); P.hp = Math.min(P.max, P.hp + h); float(P.x, P.y - 26, '+' + h, '#50f0c0'); }
     if (F.invisOnKill && G.cls === 'assassin' && !d.boss) { P.invis = Math.max(P.invis, F.invisOnKill); burst(P.x, P.y, '#2e362b', 16, 90, 7, -20, 18, .8); }
     const drop = (sub, n = 1) => G.items.push({ t: 'mat', sub, n, x: m.x + rf(-16, 16), y: m.y + rf(-16, 16) });
@@ -2929,13 +2977,13 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       const SP = SPELLS[id];
       if ((P.scd[id] || 0) > 0) return;
       if (P.mp < spellCost(id)) return warn('Not enough magic.');
-      if (SPELLFX[id]() !== false) { P.mp -= spellCost(id); P.scd[id] = SP.cd / (buffOn('quick') ? 1.4 : 1) * (1 - ((P.sk || {}).cdr || 0)); }
+      if (SPELLFX[id]() !== false) { P.mp -= spellCost(id); P.scd[id] = SP.cd / (buffOn('quick') ? 1.4 : 1) * (1 - ((P.sk || {}).cdr || 0)); tutEvent('ability'); }
       return;
     }
     const a = CLASSES[G.cls].abilities[i];
     if (!a || P.cd[i] > 0) return;
     if (P.st < a.st) return warn('Too tired. Catch your breath first.');
-    if (ABIL[a.id]()) { P.cd[i] = a.cd * (1 - ((P.sk || {}).cdr || 0)); spendSt(a.st); }
+    if (ABIL[a.id]()) { P.cd[i] = a.cd * (1 - ((P.sk || {}).cdr || 0)); spendSt(a.st); tutEvent('ability'); }
   }
   function dodge() {
     if (!G || G.over || paused || invOpen || dlg || fadeCb) return;
@@ -2946,6 +2994,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     P.roll = { t: .28, dur: .28, ang: P.moving ? P.moveAng : P.aim, dir: Math.cos(P.moving ? P.moveAng : P.aim) < 0 ? -1 : 1 };
     P.iframe = Math.max(P.iframe, .32); P.rollCd = .45;
     burst(P.x, P.y + 10, '#8a7a62', 10, 90, 4, 0, 8, .5);
+    tutEvent('roll');
   }
   /* ---------------- gear, materials & crafting ---------------- */
   const RAR = [
@@ -3343,6 +3392,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       const missing = (P.max - P.hp) / P.max;
       pots.sort((a, b) => potPower(a) - potPower(b));
       consume(pots.find(p => potPower(p) >= missing) || pots[pots.length - 1]);
+      tutEvent('drink');
     } else { pots.sort((a, b) => (CONS[a.sub].mana || 0) - (CONS[b.sub].mana || 0)); consume(pots[0]); }
   }
   const drink = () => drinkKind('hp');
@@ -3991,7 +4041,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (mode === 'bag') bagTab = tab || 'bag'; else tradeTab = tab || STATIONS[mode].tabs[0][0];
     keys.clear(); mouse.down = false; touchAttack = false;
     $('inv').hidden = !invOpen;
-    if (invOpen) renderInv(); else $('stage').focus();
+    if (invOpen) { renderInv(); if (mode === 'bag') tutEvent('inv'); } else $('stage').focus();
   }
 
   function onStairs() { const P = G.p; return G.stairs && Math.floor(P.x / TS) === G.stairs.x && Math.floor(P.y / TS) === G.stairs.y; }
@@ -4140,7 +4190,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   function snapshot() {
     const P = G.p;
     return ({ cls: G.cls, gold: G.gold, kills: G.kills, time: G.time, deaths: G.deaths, clock: G.clock, cleared: G.cleared, checkpoint: G.checkpoint, shards: G.shards,
-      introSeen: G.introSeen, kingNews: G.kingNews, hannaGift: !!G.hannaGift, guardians: G.guardians || {}, name: G.name, arcsDone: arcsDone(), nextId,
+      introSeen: G.introSeen, kingNews: G.kingNews, hannaGift: !!G.hannaGift, guardians: G.guardians || {}, name: G.name, tut: G.tut, arcsDone: arcsDone(), nextId,
       p: { hp: P.hp, baseAtk: P.baseAtk, baseDef: P.baseDef, baseMax: P.baseMax, bag: P.bag, eq: P.eq, mats: P.mats, spells: P.spells, learned: P.learned, berry: P.berry || 0, skills: P.skills || {}, lvl: P.lvl, xp: P.xp } });
   }
   function recordBest(won) {
@@ -4916,7 +4966,84 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   function intro() {
     G.introSeen = true; save();
-    say(STORY.intro.map(t => say1(KING.who, t, KING.col)), null, () => msg('Leave the city by the south gate, then follow the forest path west to the Rat Warrens.', '#e8a33d'));
+    say(STORY.intro.map(t => say1(KING.who, t, KING.col)), null, offerTut);
+  }
+  /* ---------------- beginner tutorial: short guided steps after the king's speech ---------------- */
+  const touchy = () => matchMedia('(pointer: coarse)').matches;
+  /* touch: text for phones (null skips the step there); goal: checked every frame; ev: finished by tutEvent(); next: read-only, finished with a button */
+  const TUT = [
+    { id: 'move', title: 'Moving', text: 'Use {WASD} or the {arrow keys} to walk around the square.', touch: 'Drag anywhere on the map to walk. Your hero follows your finger.', goal: T => T.walked >= 260 },
+    { id: 'sprint', title: 'Sprinting', text: 'Hold {Shift} while you walk to sprint. Sprinting uses stamina, the green bar under your health.', touch: null, goal: T => T.sprint >= .8 },
+    { id: 'roll', title: 'Dodging', text: 'Press {Space} to dodge roll. Nothing can hurt you in the middle of a roll, so roll through attacks.', touch: null, ev: 'roll' },
+    { id: 'attack', title: 'Fighting', text: 'Three training dummies! Aim with the mouse and click, or hold {F}, to attack. Break all three.', touch: 'Three training dummies! Hold the attack button to fight. Your hero aims at the nearest enemy. Break all three.',
+      setup: () => spawnDummies(), goal: () => !G.mons.some(m => m.t === 'dummy'), count: () => 3 - G.mons.filter(m => m.t === 'dummy').length },
+    { id: 'ability', title: 'Abilities', text: 'Press {1} or {2} to use your class abilities. Each one needs a moment to recharge after you use it.', mage: 'Press {1} or {2} to cast a spell. Spells cost magic, the blue bar, and recharge after each cast.', touch: 'Tap the {1} or {2} button to use an ability. Each one needs a moment to recharge.', ev: 'ability' },
+    { id: 'potion', title: 'Healing', text: 'Ouch, a splinter from that last dummy! Your health is the red bar. Press {Q} to drink a healing potion.', touch: 'Ouch, a splinter from that last dummy! Your health is the red bar. Tap the potion button to drink a healing potion.',
+      setup: () => { const P = G.p, h = Math.round(P.max * .55); if (P.hp > h) { float(P.x, P.y - 24, '−' + Math.round(P.hp - h), '#ff6a5a'); P.hp = h; P.hitT = .25; addShake(4); } },
+      ev: 'drink', after: () => { addToBag(makeCons('potion', 1)); msg('Sister Maren tucks a spare potion into your bag.', '#9fc4ec'); } },
+    { id: 'bag', title: 'Your bag', text: 'Press {I} to open your bag. Equip new gear, compare stats, and spend the skill point you get every level ({T} opens the skill tree).', touch: 'Tap the bag button to open your bag. Equip new gear, compare stats, and spend the skill point you get every level.', ev: 'inv' },
+    { id: 'talk', title: 'The town', text: 'Walk up to people and stations and press {E} to talk, trade or craft. Brann and Greta upgrade gear, Tobin sells potions, and Sister Maren heals you for free.', touch: 'Walk up to people and stations and tap the prompt that appears to talk, trade or craft. Brann and Greta upgrade gear, Tobin sells potions, and Sister Maren heals you for free.', next: true },
+    { id: 'night', title: 'Night', text: 'When night falls, monsters come up the forest road and attack the city. Hold them off and the watch pays you in gold. If you fall, you wake in the chapel and keep your level and gear.', next: true },
+    { id: 'go', title: 'Ready', text: 'That’s everything, {name}. Leave by the south gate and follow the western forest path to the Rat Warrens. Good luck!', next: true },
+  ];
+  const tutOn = () => !!(G && G.tut && !G.tut.done && TUT[G.tut.step]);
+  const tutStep = () => tutOn() ? TUT[G.tut.step] : null;
+  const tutSteps = () => TUT.filter(s => !(touchy() && s.touch === null));
+  function offerTut() {
+    say([say1('', 'New to Aldermere? A short tutorial shows you how to move, fight, heal and use your gear. It takes about two minutes.')],
+      [{ label: 'Show me the basics', fn: () => { G.tut = { step: 0 }; tutGo(0); } }, { label: 'I know what I’m doing', fn: () => endTut() }]);
+  }
+  function tutGo(i) {
+    while (i < TUT.length && touchy() && TUT[i].touch === null) i++;
+    if (i >= TUT.length) return endTut();
+    G.tut = { step: i, walked: 0, sprint: 0, ok: 0, c: -1 };
+    if (TUT[i].setup) TUT[i].setup();
+    save(); renderTut();
+  }
+  function endTut(silent) {
+    G.mons = G.mons.filter(m => m.t !== 'dummy');
+    G.tut = { done: true }; save(); renderTut();
+    if (!silent) msg('Leave the city by the south gate, then follow the forest path west to the Rat Warrens.', '#e8a33d');
+  }
+  function tutNext() { const s = tutStep(); if (!s || !s.next) return; s.id === 'go' ? endTut() : tutGo(G.tut.step + 1); }
+  function tutEvent(ev) { const s = tutStep(); if (s && s.ev === ev && !G.tut.ok) tutPass(); }
+  function tutPass() {
+    const s = tutStep(), P = G.p;
+    G.tut.ok = 1; if (s.after) s.after();
+    ring(P.x, P.y, 46, .4, '#7db870'); burst(P.x, P.y, '#b8ffb0', 12, 90, 2.5, -50);
+    renderTut();
+  }
+  function tutTick(dt) {
+    if (!tutOn()) return;
+    if (G.zone !== 'town') return endTut(true);
+    const T = G.tut, s = TUT[T.step], P = G.p;
+    if (T.ok) { if ((T.ok -= dt) <= 0) tutGo(T.step + 1); return; }
+    if (T.px !== undefined) T.walked += Math.min(30, Math.hypot(P.x - T.px, P.y - T.py));
+    T.px = P.x; T.py = P.y;
+    if (P.sprinting) T.sprint += dt;
+    if (s.count && s.count() !== T.c) { T.c = s.count(); renderTut(); }
+    if (s.goal && s.goal(T)) tutPass();
+  }
+  function renderTut() {
+    const el = $('tut'), s = tutStep();
+    el.hidden = !s;
+    if (!s) return;
+    const T = G.tut, steps = tutSteps(), n = steps.indexOf(s) + 1;
+    const raw = touchy() && s.touch ? s.touch : G.cls === 'mage' && s.mage ? s.mage : s.text;
+    const text = fillName(tr(raw)).replace(/\{([^}]+)\}/g, (_, k) => `<span class="kbd">${tr(k)}</span>`);
+    const cnt = s.count && !T.ok ? ` <b class="tut-cnt">${Math.max(0, s.count())}/3</b>` : '';
+    el.innerHTML = `<div class="tut-top"><b>${tr(s.title)}</b><span>${tr('Tutorial')} · ${n}/${steps.length}</span></div><p>${text}${cnt}</p>
+      <div class="tut-btns">${T.ok ? `<span class="tut-ok">✓ ${tr('Nice!')}</span>` : ''}${s.next && !T.ok ? `<button class="primary" data-tut="next">${tr(s.id === 'go' ? 'Finish' : 'Next')} <span class="kbd">Enter</span></button>` : ''}<button class="ghost" data-tut="skip">${tr('Skip tutorial')}</button></div>`;
+  }
+  function spawnDummies() {
+    const P = G.p; G.mons = G.mons.filter(m => m.t !== 'dummy');
+    let made = 0;
+    for (let k = 0; k < 60 && made < 3; k++) {
+      const a = k < 20 ? Math.PI / 2 + (made - 1) * .8 + rf(-.25, .25) : rf(0, 6.283), rr = rf(120, 175), x = P.x + Math.cos(a) * rr, y = P.y + Math.sin(a) * rr;
+      if (blocked(x, y, 18) || G.mons.some(m => dist(m, { x, y }) < 60)) continue;
+      spawnMon('dummy', x, y, true); made++;
+      burst(x, y, '#d8b870', 14, 110, 3); ring(x, y, 30, .35, '#e8a33d');
+    }
   }
   function gateDialog(d) {
     const D = DUNGEONS[d];
@@ -5005,7 +5132,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   /* ---------------- update ---------------- */
   function update(dt) {
     const P = G.p, c = CLASSES[G.cls];
-    G.time += dt; G.clock = (G.clock || 0) + dt;
+    G.time += dt; if (!tutOn()) G.clock = (G.clock || 0) + dt;
+    tutTick(dt);
     let ix = 0, iy = 0;
     if (keys.has('left')) ix -= 1; if (keys.has('right')) ix += 1;
     if (keys.has('up')) iy -= 1; if (keys.has('down')) iy += 1;
@@ -5181,6 +5309,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       if (m.chill > 0) m.chill -= dt0; if (m.stopT > 0) m.stopT -= dt0;
       const dt = m.chill > 0 ? dt0 * .5 : dt0;
       m.flash = Math.max(0, m.flash - dt); m.ph += dt; m.lunge = Math.max(0, (m.lunge || 0) - dt); m.born = Math.max(0, (m.born || 0) - dt);
+      if (d.dummy) m.kx = m.ky = 0;
       if (m.kx || m.ky) { moveEnt(m, m.kx * dt, m.ky * dt); const f = Math.exp(-9 * dt); m.kx *= f; m.ky *= f; if (Math.abs(m.kx) + Math.abs(m.ky) < 2) m.kx = m.ky = 0; }
       let dead = false;
       for (const k in DOTS) {
@@ -6411,6 +6540,20 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       case 'skelguard': ctx.save(); ctx.scale(1.4, 1.4); drawSkeleton(f, sw, t, { tabard: true, shield: true, halberd: true, eyes: '#ff6a4a', bone: '#e8dcc0' }); ctx.restore(); break;
       case 'dw_archer': drawGoblin(f, sw, t, { weapon: 'bow', hood: true, skin: '#7a9a6a', dark: '#4a6a3a', cloth: '#6a4a2a' }); break;
       case 'dw_shaman': drawGoblin(f, sw, t, { weapon: 'staff', mask: true, skin: '#7a9a8a', dark: '#4a6a5a', cloth: '#2a4a5a' }); break;
+      case 'dummy': {
+        /* a straw training dummy on a post, with a painted target; it wobbles when hit */
+        ctx.rotate(Math.sin(t * 24) * (m.hitT || 0) * .9 * (m.hitDir || 1));
+        pfs(() => ctx.rect(-2.5, -8, 5, 20), vg(-8, 12, '#8a6a42', '#4a3420'), 1.2);
+        pfs(() => ctx.rect(-18, -27, 36, 4.5), vg(-27, -22, '#9a7a4a', '#5a4228'), 1.2);
+        eO(0, -17, 11, 13, '#d8b870', 1.6);
+        ctx.strokeStyle = 'rgba(120,90,40,.55)'; ctx.lineWidth = 1;
+        for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(k * 3.6, -28); ctx.lineTo(k * 4.2, -6); ctx.stroke(); }
+        eO(0, -16, 6.5, 6.5, '#c0392b', 1); eO(0, -16, 3.6, 3.6, '#f4ead0', 0); circ(0, -16, 1.6, '#c0392b');
+        ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(-10, -26); ctx.lineTo(10, -26); ctx.moveTo(-9, -7); ctx.lineTo(9, -7); ctx.stroke();
+        eO(0, -36, 7.5, 7, '#e0c27a', 1.5);
+        ctx.strokeStyle = 'rgba(120,90,40,.6)'; ctx.beginPath(); ctx.moveTo(-3, -41); ctx.lineTo(-5, -45); ctx.moveTo(1, -42); ctx.lineTo(1, -46); ctx.moveTo(4, -41); ctx.lineTo(6, -44); ctx.stroke();
+        break;
+      }
       case 'phylactery': {
         const g = .6 + .4 * Math.sin(t * 4), hov = Math.sin(t * 2) * 3;
         ctx.translate(0, -6 + hov);
@@ -7385,7 +7528,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     G.p.mats = { oak: 2, linen: 2, redcap: 2, vial: 2 };
     recalc(); G.p.hp = G.p.max; G.p.mp = G.p.maxMp; G.p.st = G.p.maxSt;
     buildTown(false);
-    showGame();
+    showGame(); renderTut();
     fadeA = 1; fadeTo = 0; titleCard = { title: 'Aldermere', sub: 'Arc I · The Lantern of a Forgotten Kingdom', t: 0 };
     intro();
   }
@@ -7396,7 +7539,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   function loadState(sv) {
     if (sv.arcsDone > arcsDone()) progress.finish(Math.min(5, +sv.arcsDone || 0));
     G = baseState(sv.cls); msgs = [];
-    Object.assign(G, { gold: sv.gold, kills: sv.kills, time: sv.time, deaths: sv.deaths || 0, clock: sv.clock || 20, cleared: sv.cleared, checkpoint: sv.checkpoint || DUNGEONS.map(() => 0), shards: sv.shards, introSeen: sv.introSeen, kingNews: sv.kingNews, hannaGift: !!sv.hannaGift, guardians: sv.guardians || {}, name: cleanName(sv.name) || 'Traveler' });
+    Object.assign(G, { gold: sv.gold, kills: sv.kills, time: sv.time, deaths: sv.deaths || 0, clock: sv.clock || 20, cleared: sv.cleared, checkpoint: sv.checkpoint || DUNGEONS.map(() => 0), shards: sv.shards, introSeen: sv.introSeen, kingNews: sv.kingNews, hannaGift: !!sv.hannaGift, guardians: sv.guardians || {}, name: cleanName(sv.name) || 'Traveler', tut: sv.tut });
     Object.assign(G.p, sv.p);
     nextId = Math.max(nextId, sv.nextId || 0);
     migrate();
@@ -7405,6 +7548,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     fadeA = 1; fadeTo = 0; titleCard = { title: 'Aldermere', sub: `${G.shards} of 5 shards recovered`, t: 0 };
     msg(`Welcome back to Aldermere. ${G.shards} of 5 shards are home.`, '#e8a33d');
     if (G.kingNews) msg('King Aldric wants to see you.', '#e3c46a');
+    if (tutOn()) tutGo(G.tut.step); else renderTut();
   }
   function showGame() {
     $('select').hidden = true; $('title').hidden = true; $('game').hidden = false; $('abandon').hidden = false; $('pauseBtn').hidden = false; $('fsBtn').hidden = false;
@@ -7720,6 +7864,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && fsOn) setFullscreen(false); else if (G) resize(); });
   $('fsBtn').addEventListener('click', () => setFullscreen(!fsOn));
+  $('tut').addEventListener('click', e => { const b = e.target.closest('[data-tut]'); if (!b) return; b.dataset.tut === 'skip' ? endTut() : tutNext(); $('stage').focus(); });
   $('langSel').addEventListener('change', e => { setLang(e.target.value); if (modal === 'settings') renderModal(); });
 
   addEventListener('keydown', e => {
@@ -7754,6 +7899,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (e.key === '3') { e.preventDefault(); return useAbility(2); }
     if (e.key === 'q' || e.key === 'Q') { e.preventDefault(); return drink(); }
     if (e.key === 'r' || e.key === 'R') { e.preventDefault(); return drinkRestore(); }
+    if (e.key === 'Enter' && tutStep() && tutStep().next) { e.preventDefault(); return tutNext(); }
     if (e.key === 'Enter' || e.key === '>') { e.preventDefault(); return descend(); }
   });
   addEventListener('keyup', e => { const d = keyDir(e); if (d) keys.delete(d); if (e.key === 'Shift') keys.delete('sprint'); if (e.code === 'KeyF' || (e.key || '').toLowerCase() === 'f') keys.delete('attack'); });
@@ -7761,7 +7907,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
 
   const stage = $('stage');
   stage.addEventListener('pointerdown', e => {
-    if (e.target.closest('.slot, .prompt, .veil-card, .inv, .dlg')) return;
+    if (e.target.closest('.slot, .prompt, .veil-card, .inv, .dlg, .tut')) return;
     if (paused && G && !G.over) { setPaused(false); return; }
     if (dlg) { dlgNext(); return; }
     stage.focus();
