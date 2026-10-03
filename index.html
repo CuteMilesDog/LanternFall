@@ -348,6 +348,17 @@
   .tut-btns button { font-size: 12px; padding: 5px 12px; }
   .tut-ok { margin-right: auto; color: var(--life); font-family: var(--mono); font-size: 12px; letter-spacing: .08em; }
   .tut-cnt { color: var(--gold); font-family: var(--mono); font-weight: 500; }
+  #acctBtn.on { color: var(--life); border-color: rgba(125,184,112,.45); }
+  .acct { display: flex; flex-direction: column; gap: 8px; max-width: 520px; }
+  .acct .seg { align-self: flex-start; margin: 4px 0; }
+  .acct-in { background: var(--deep); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: 500 16px var(--body); }
+  .acct-in:focus { outline: 2px solid var(--torch); outline-offset: 1px; }
+  .acct-note { color: var(--dim); font-size: 13px; margin-top: -4px; }
+  .acct-who { margin: 0; font-size: 17px; } .acct-who b { color: var(--torch); }
+  .acct-pend { display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(232,163,61,.4); border-radius: 10px; padding: 10px 12px; background: rgba(232,163,61,.06); }
+  .acct-pend b { color: var(--torch); } .acct-pend small { color: var(--muted); }
+  .linkbtn { align-self: flex-start; background: none; border: 0; padding: 2px 0; color: var(--muted); text-decoration: underline; font: 14px var(--body); cursor: pointer; }
+  .linkbtn:hover { color: var(--text); }
   @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
   @keyframes pop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
@@ -396,6 +407,7 @@
   <header class="top">
     <h1 class="brand">Lanternfall</h1>
     <div class="top-right">
+      <button class="ghost" id="acctBtn" hidden>Log in</button>
       <select class="langsel" id="langSel" data-notr aria-label="Language / Idioma / 언어"><option value="en">English</option><option value="es">Español</option><option value="ko">한국어</option></select>
       <button class="ghost" id="fsBtn" hidden title="Fill the screen with the game. Press Esc to leave.">Fullscreen</button>
       <button class="ghost" id="pauseBtn" hidden>Pause</button>
@@ -543,6 +555,50 @@
   if (!DIFF[SET.diff]) SET.diff = 'normal';
 
   const L10N = `
+Log in ¦ Iniciar sesión ¦ 로그인
+Log out ¦ Cerrar sesión ¦ 로그아웃
+Account ¦ Cuenta ¦ 계정
+Create account ¦ Crear cuenta ¦ 계정 만들기
+Email ¦ Correo electrónico ¦ 이메일
+Password ¦ Contraseña ¦ 비밀번호
+At least 6 characters. ¦ Al menos 6 caracteres. ¦ 6자 이상.
+Continue with Google ¦ Continuar con Google ¦ Google로 계속하기
+Forgot your password? ¦ ¿Olvidaste tu contraseña? ¦ 비밀번호를 잊었나요?
+Signed in as ¦ Sesión iniciada como ¦ 로그인 계정:
+Log in to save your journey online. Your saves follow you to any computer or phone where you log in. Save slots and save codes keep working either way. ¦ Inicia sesión para guardar tu viaje en línea. Tus partidas te seguirán a cualquier ordenador o móvil donde inicies sesión. Las ranuras y los códigos de guardado siguen funcionando igual. ¦ 로그인하면 여정이 온라인에 저장된다. 로그인한 어느 컴퓨터나 휴대폰에서든 저장을 이어 갈 수 있다. 저장 슬롯과 저장 코드는 그대로 쓸 수 있다.
+Your autosave, save slots, best journey and story progress are saved to your account. Log in on any computer or phone to pick up where you left off. ¦ Tu guardado automático, tus ranuras, tu mejor viaje y tu progreso en la historia se guardan en tu cuenta. Inicia sesión en cualquier ordenador o móvil para seguir donde lo dejaste. ¦ 자동 저장, 저장 슬롯, 최고 기록, 이야기 진행 상황이 계정에 저장된다. 어느 컴퓨터나 휴대폰에서든 로그인하면 이어서 할 수 있다.
+Your account has a newer journey ¦ Tu cuenta tiene un viaje más reciente ¦ 계정에 더 최근 여정이 있다
+Loading it replaces the journey you’re playing now. Save this one to a slot first if you want to keep it. ¦ Cargarlo sustituye el viaje que estás jugando. Guarda este en una ranura antes si quieres conservarlo. ¦ 불러오면 지금 하는 여정이 바뀐다. 남기고 싶다면 먼저 슬롯에 저장하자.
+Load it ¦ Cargarlo ¦ 불러오기
+Keep playing this one ¦ Seguir con este ¦ 지금 여정 계속하기
+Save online now ¦ Guardar en línea ahora ¦ 지금 온라인에 저장
+Syncing… ¦ Sincronizando… ¦ 동기화 중…
+Connecting… ¦ Conectando… ¦ 연결 중…
+One moment… ¦ Un momento… ¦ 잠시만…
+Waiting for Google… ¦ Esperando a Google… ¦ Google 기다리는 중…
+Logged out. The saves on this device are still here. ¦ Sesión cerrada. Las partidas de este dispositivo siguen aquí. ¦ 로그아웃했다. 이 기기의 저장은 그대로 남아 있다.
+Type your email above first. ¦ Escribe antes tu correo arriba. ¦ 먼저 위에 이메일을 입력하자.
+Type your email address. ¦ Escribe tu correo electrónico. ¦ 이메일 주소를 입력하자.
+Type your password. ¦ Escribe tu contraseña. ¦ 비밀번호를 입력하자.
+Check your email for a link to reset your password. ¦ Revisa tu correo: te hemos enviado un enlace para restablecer la contraseña. ¦ 이메일에서 비밀번호 재설정 링크를 확인하자.
+That email address doesn’t look right. ¦ Esa dirección de correo no parece correcta. ¦ 이메일 주소가 올바르지 않은 것 같다.
+Wrong email or password. ¦ Correo o contraseña incorrectos. ¦ 이메일 또는 비밀번호가 틀렸다.
+There’s already an account with that email. Try logging in. ¦ Ya existe una cuenta con ese correo. Prueba a iniciar sesión. ¦ 그 이메일로 된 계정이 이미 있다. 로그인해 보자.
+Passwords need at least 6 characters. ¦ La contraseña necesita al menos 6 caracteres. ¦ 비밀번호는 6자 이상이어야 한다.
+Too many tries. Wait a minute and try again. ¦ Demasiados intentos. Espera un minuto y vuelve a probar. ¦ 시도가 너무 많다. 잠시 후 다시 해 보자.
+Couldn’t reach the login service. Check your connection. ¦ No se pudo conectar con el servicio de inicio de sesión. Revisa tu conexión. ¦ 로그인 서비스에 연결할 수 없다. 인터넷 연결을 확인하자.
+The Google window closed before you finished. ¦ La ventana de Google se cerró antes de terminar. ¦ 끝내기 전에 Google 창이 닫혔다.
+The browser blocked the Google window. Allow pop-ups and try again. ¦ El navegador bloqueó la ventana de Google. Permite las ventanas emergentes y vuelve a probar. ¦ 브라우저가 Google 창을 막았다. 팝업을 허용하고 다시 해 보자.
+Logging in isn’t allowed on this website yet. ¦ Todavía no se puede iniciar sesión en este sitio web. ¦ 이 웹사이트에서는 아직 로그인할 수 없다.
+This way of logging in isn’t turned on yet. ¦ Este método de inicio de sesión aún no está activado. ¦ 이 로그인 방법은 아직 켜져 있지 않다.
+Something went wrong. Try again. ¦ Algo salió mal. Vuelve a intentarlo. ¦ 문제가 생겼다. 다시 해 보자.
+Couldn’t reach the login service right now. Your saves stay on this device, and save codes still work. ¦ Ahora mismo no se puede conectar con el servicio de inicio de sesión. Tus partidas se quedan en este dispositivo y los códigos de guardado siguen funcionando. ¦ 지금은 로그인 서비스에 연결할 수 없다. 저장은 이 기기에 남고, 저장 코드도 그대로 쓸 수 있다.
+Accounts aren’t set up in this copy of the game. Your saves stay on this device, and save codes still work. ¦ Las cuentas no están configuradas en esta copia del juego. Tus partidas se quedan en este dispositivo y los códigos de guardado siguen funcionando. ¦ 이 게임 사본에는 계정 기능이 설정되어 있지 않다. 저장은 이 기기에 남고, 저장 코드도 그대로 쓸 수 있다.
+Couldn’t load your online saves. Your saves on this device are safe. ¦ No se pudieron cargar tus partidas en línea. Las de este dispositivo están a salvo. ¦ 온라인 저장을 불러오지 못했다. 이 기기의 저장은 안전하다.
+Couldn’t save online just now. It will try again on the next save. ¦ No se pudo guardar en línea ahora mismo. Se volverá a intentar en el próximo guardado. ¦ 방금은 온라인에 저장하지 못했다. 다음 저장 때 다시 시도한다.
+Log in to keep your journey safe online and play on any device ¦ Inicia sesión para guardar tu viaje en línea y jugar en cualquier dispositivo ¦ 로그인하면 여정을 온라인에 안전하게 보관하고 어느 기기에서든 할 수 있다
+saved online ¦ guardado en línea ¦ 온라인 저장됨
+your account ¦ tu cuenta ¦ 내 계정
 Training dummy ¦ Muñeco de entrenamiento ¦ 훈련용 허수아비
 Tutorial ¦ Tutorial ¦ 튜토리얼
 Nice! ¦ ¡Bien hecho! ¦ 잘했어!
@@ -1489,6 +1545,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
 `;
   /* [pattern, Spanish, Korean]; $1.. are translated again on their own, $L1 as a list */
   const TXP = [
+    [/^Saved online (.+)\.$/, 'Guardado en línea a las $1.', '$1에 온라인 저장됨.'],
+    [/^Signed in as (.+)$/, 'Sesión iniciada: $1', '로그인: $1'],
     [/^(.+) uses (.+)!$/, '¡$1 usa $2!', '$1의 $2!'],
     [/^(.+) is enraged!$/, '¡$1 se enfurece!', '$1이(가) 격노했다!'],
     [/^Level (\d+)\. You feel stronger, and you have a skill point to spend \(T\)\.$/, 'Nivel $1. Te sientes más fuerte y tienes un punto de habilidad para gastar (T).', '레벨 $1. 더 강해졌고, 쓸 수 있는 기술 점수가 생겼다(T).'],
@@ -1973,14 +2031,14 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   const ARC_N = ['I', 'II', 'III', 'IV', 'V'], ARC_NAMES = ['The Lantern of a Forgotten Kingdom'];
   const progress = {
     get() { try { const v = JSON.parse(localStorage.getItem('lanternfall-progress') || 'null'); return { arcs: Math.max(0, Math.min(5, (v && +v.arcs) || 0)) }; } catch { return { arcs: 0 }; } },
-    finish(n) { const cur = this.get(); if (n > cur.arcs) { try { localStorage.setItem('lanternfall-progress', JSON.stringify({ arcs: n })); } catch {} } memArcs = Math.max(memArcs, n); },
+    finish(n) { const cur = this.get(); if (n > cur.arcs) { try { localStorage.setItem('lanternfall-progress', JSON.stringify({ arcs: n })); } catch {} cloudTouch(); } memArcs = Math.max(memArcs, n); },
   };
   let memArcs = 0;
   const arcsDone = () => Math.max(progress.get().arcs, memArcs);
   const arcState = i => i < arcsDone() ? 'done' : i === 0 || i <= arcsDone() ? 'open' : 'locked';
   const store = {
     get() { try { return JSON.parse(localStorage.getItem('lanternfall-best') || 'null'); } catch { return null; } },
-    set(v) { try { localStorage.setItem('lanternfall-best', JSON.stringify(v)); } catch {} },
+    set(v) { try { localStorage.setItem('lanternfall-best', JSON.stringify(v)); } catch {} cloudTouch(); },
   };
 
   let G = null; /* persistent run state (plain data) */
@@ -4180,8 +4238,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   const SAVE_KEY = 'lanternfall-journey';
   const saveStore = {
     get() { try { const s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); return s && CLASSES[s.cls] ? s : null; } catch { return null; } },
-    set(v) { try { localStorage.setItem(SAVE_KEY, JSON.stringify(v)); } catch {} },
-    clear() { try { localStorage.removeItem(SAVE_KEY); } catch {} },
+    set(v) { try { localStorage.setItem(SAVE_KEY, JSON.stringify(v)); } catch {} cloudTouch(); },
+    clear() { try { localStorage.removeItem(SAVE_KEY); } catch {} cloudTouch(); },
   };
   function save() {
     if (!G || G.over === 'win') return;
@@ -4189,7 +4247,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   function snapshot() {
     const P = G.p;
-    return ({ cls: G.cls, gold: G.gold, kills: G.kills, time: G.time, deaths: G.deaths, clock: G.clock, cleared: G.cleared, checkpoint: G.checkpoint, shards: G.shards,
+    return ({ savedAt: Date.now(), cls: G.cls, gold: G.gold, kills: G.kills, time: G.time, deaths: G.deaths, clock: G.clock, cleared: G.cleared, checkpoint: G.checkpoint, shards: G.shards,
       introSeen: G.introSeen, kingNews: G.kingNews, hannaGift: !!G.hannaGift, guardians: G.guardians || {}, name: G.name, tut: G.tut, arcsDone: arcsDone(), nextId,
       p: { hp: P.hp, baseAtk: P.baseAtk, baseDef: P.baseDef, baseMax: P.baseMax, bag: P.bag, eq: P.eq, mats: P.mats, spells: P.spells, learned: P.learned, berry: P.berry || 0, skills: P.skills || {}, lvl: P.lvl, xp: P.xp } });
   }
@@ -7606,6 +7664,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     items.push(['new', 'New journey', 'Choose a hero and set out from Aldermere', !sv]);
     items.push(['saves', 'Save states', 'Save slots, and save codes you can copy, paste and export']);
     items.push(['settings', 'Settings', `Difficulty: ${DIFF[SET.diff].name} · camera, effects and more`]);
+    if (cloud.state !== 'off') items.push(['account', cloud.state === 'in' ? acctLabel() : 'Account', cloud.state === 'in' ? `Signed in as ${cloud.user.email || cloud.user.name} · saved online` : 'Log in to keep your journey safe online and play on any device']);
     items.push(['credits', 'Credits', 'Who made this, and with what']);
     $('titleMenu').innerHTML = items.map(([id, name, sub, main]) => `<button class="mbtn${main ? ' main' : ''}" data-go="${id}"><span><b>${name}</b><small>${sub}</small></span><span class="arrow">→</span></button>`).join('');
     $('arcs').innerHTML = ARC_N.map((n, i) => {
@@ -7692,8 +7751,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   const slotStore = {
     key: i => 'lanternfall-slot-' + i,
     get(i) { try { const v = JSON.parse(localStorage.getItem(this.key(i)) || 'null'); return v && v.data && CLASSES[v.data.cls] ? v : null; } catch { return null; } },
-    set(i, v) { try { localStorage.setItem(this.key(i), JSON.stringify(v)); return true; } catch { return false; } },
-    clear(i) { try { localStorage.removeItem(this.key(i)); } catch {} },
+    set(i, v) { try { localStorage.setItem(this.key(i), JSON.stringify(v)); cloudTouch(); return true; } catch { return false; } },
+    clear(i) { try { localStorage.removeItem(this.key(i)); } catch {} cloudTouch(); },
   };
   const CODE_PREFIX = 'LANTERNFALL1:';
   const encodeSave = d => CODE_PREFIX + btoa(unescape(encodeURIComponent(JSON.stringify(d))));
@@ -7730,11 +7789,168 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       return true;
     } catch { return false; }
   }
+  /* ---------------- accounts: an optional login that keeps every save online (Firebase) ---------------- */
+  /* Paste the web app config from the Firebase console here to turn accounts on, e.g. { apiKey: '…', authDomain: '…', projectId: '…', appId: '…' }.
+     Left as null, the login button stays hidden and the game saves only on this device, exactly as before. */
+  const FIREBASE_CONFIG = null;
+  const FB_VER = '10.12.2';
+  const cloud = { state: 'off', user: null, api: null, busy: false, syncing: false, pending: null, lastSync: 0, t: null, err: '' };
+  let acct = { mode: 'in', msg: '', kind: '' };
+  const AUTH_ERR = {
+    'auth/invalid-email': 'That email address doesn’t look right.', 'auth/missing-email': 'Type your email address.', 'auth/missing-password': 'Type your password.',
+    'auth/invalid-credential': 'Wrong email or password.', 'auth/wrong-password': 'Wrong email or password.', 'auth/user-not-found': 'Wrong email or password.',
+    'auth/email-already-in-use': 'There’s already an account with that email. Try logging in.', 'auth/weak-password': 'Passwords need at least 6 characters.',
+    'auth/too-many-requests': 'Too many tries. Wait a minute and try again.', 'auth/network-request-failed': 'Couldn’t reach the login service. Check your connection.',
+    'auth/popup-closed-by-user': 'The Google window closed before you finished.', 'auth/cancelled-popup-request': 'The Google window closed before you finished.',
+    'auth/popup-blocked': 'The browser blocked the Google window. Allow pop-ups and try again.', 'auth/unauthorized-domain': 'Logging in isn’t allowed on this website yet.',
+    'auth/operation-not-allowed': 'This way of logging in isn’t turned on yet.',
+  };
+  const authErr = e => AUTH_ERR[e && e.code] || 'Something went wrong. Try again.';
+  async function cloudInit() {
+    if (window.__mockCloud) cloud.api = window.__mockCloud;
+    else if (!FIREBASE_CONFIG) { cloud.state = 'off'; return refreshAccountUI(); }
+    else {
+      cloud.state = 'loading'; refreshAccountUI();
+      try {
+        const base = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
+        const [A, Au, Fs] = await Promise.all(['firebase-app.js', 'firebase-auth.js', 'firebase-firestore.js'].map(f => import(base + f)));
+        const app = A.initializeApp(FIREBASE_CONFIG), auth = Au.getAuth(app), db = Fs.getFirestore(app);
+        const ref = uid => Fs.doc(db, 'players', uid);
+        cloud.api = {
+          onUser: cb => Au.onAuthStateChanged(auth, u => cb(u ? { uid: u.uid, email: u.email || '', name: u.displayName || '' } : null)),
+          signIn: (e, p) => Au.signInWithEmailAndPassword(auth, e, p),
+          signUp: (e, p) => Au.createUserWithEmailAndPassword(auth, e, p),
+          google: () => Au.signInWithPopup(auth, new Au.GoogleAuthProvider()),
+          reset: e => Au.sendPasswordResetEmail(auth, e),
+          signOut: () => Au.signOut(auth),
+          load: async uid => { const s = await Fs.getDoc(ref(uid)); return s.exists() ? s.data() : null; },
+          save: (uid, data) => Fs.setDoc(ref(uid), data),
+        };
+      } catch { cloud.state = 'error'; return refreshAccountUI(); }
+    }
+    cloud.state = 'out';
+    cloud.api.onUser(async u => {
+      cloud.user = u; cloud.state = u ? 'in' : 'out'; cloud.pending = null;
+      if (u) await cloudSyncDown();
+      refreshAccountUI();
+    });
+    refreshAccountUI();
+  }
+  const parseJ = s => { try { return s ? JSON.parse(s) : null; } catch { return null; } };
+  /* everything a player would miss: the autosave, the three slots, the best journey and how far the story has gone */
+  function cloudPayload() {
+    const j = cloud.pending || saveStore.get(), out = { v: 1, updated: Date.now(), journey: j ? JSON.stringify(j) : '', arcs: arcsDone() };
+    for (let i = 1; i <= SLOT_N; i++) { const v = slotStore.get(i); out['slot' + i] = v ? JSON.stringify(v) : ''; }
+    const b = store.get(); out.best = b ? JSON.stringify(b) : '';
+    return out;
+  }
+  /* on login, the newer copy of each save wins, whether it lives online or on this device */
+  async function cloudSyncDown() {
+    cloud.busy = true; cloud.syncing = true; cloud.err = ''; refreshAccountUI();
+    try {
+      const c = (await cloud.api.load(cloud.user.uid)) || {};
+      const cj = parseJ(c.journey), lj = saveStore.get();
+      if (cj && CLASSES[cj.cls] && (!lj || (cj.savedAt || 0) > (lj.savedAt || 0))) { if (inGame()) cloud.pending = cj; else saveStore.set(cj); }
+      for (let i = 1; i <= SLOT_N; i++) {
+        const cs = parseJ(c['slot' + i]), ls = slotStore.get(i);
+        if (cs && cs.data && CLASSES[cs.data.cls] && (!ls || (cs.when || 0) > (ls.when || 0))) slotStore.set(i, cs);
+      }
+      const cb = parseJ(c.best), lb = store.get();
+      if (cb && CLASSES[cb.cls] && (!lb || (cb.score || 0) > (lb.score || 0))) store.set(cb);
+      if (+c.arcs > arcsDone()) progress.finish(Math.min(5, +c.arcs));
+      cloud.syncing = false;
+      await cloudPush();
+    } catch { cloud.err = 'Couldn’t load your online saves. Your saves on this device are safe.'; }
+    cloud.busy = false; cloud.syncing = false;
+    if (!$('title').hidden) renderTitle();
+    if (!$('select').hidden) renderSelect();
+    if (cloud.pending && !modal) openModal('account');
+  }
+  async function cloudPush() {
+    clearTimeout(cloud.t); cloud.t = null;
+    if (cloud.state !== 'in' || !cloud.user) return;
+    try { await cloud.api.save(cloud.user.uid, cloudPayload()); cloud.lastSync = Date.now(); cloud.err = ''; }
+    catch { cloud.err = 'Couldn’t save online just now. It will try again on the next save.'; }
+    if (modal === 'account') renderModal();
+  }
+  /* every local save schedules an upload a few seconds later, so a burst of saves becomes one write */
+  function cloudTouch() {
+    if (cloud.state !== 'in' || cloud.syncing) return;
+    clearTimeout(cloud.t); cloud.t = setTimeout(cloudPush, 3000);
+  }
+  addEventListener('pagehide', () => { if (cloud.t) cloudPush(); });
+  const acctLabel = () => cloud.user ? (cloud.user.name || cloud.user.email.split('@')[0] || 'Account').slice(0, 18) : 'Log in';
+  function refreshAccountUI() {
+    const b = $('acctBtn');
+    b.hidden = cloud.state === 'off';
+    b.textContent = cloud.state === 'in' ? acctLabel() : 'Log in';
+    b.classList.toggle('on', cloud.state === 'in');
+    if (!$('title').hidden) renderTitle();
+    if (modal === 'account') renderModal();
+  }
+  function setAcctMsg(msg, kind = '') { acct.msg = msg; acct.kind = kind; const el = $('acMsg'); if (el) { el.textContent = msg; el.className = 'svmsg ' + kind; } }
+  function accountHtml() {
+    if (cloud.state === 'off' || cloud.state === 'error') return `<p class="hint">${cloud.state === 'error' ? 'Couldn’t reach the login service right now. Your saves stay on this device, and save codes still work.' : 'Accounts aren’t set up in this copy of the game. Your saves stay on this device, and save codes still work.'}</p>`;
+    if (cloud.state === 'loading') return '<p class="hint">Connecting…</p>';
+    if (cloud.state === 'in') {
+      const pj = cloud.pending;
+      return `<div class="acct">
+        <p class="acct-who">Signed in as <b data-notr>${cloud.user.email || cloud.user.name}</b></p>
+        <p class="hint" style="margin:0">Your autosave, save slots, best journey and story progress are saved to your account. Log in on any computer or phone to pick up where you left off.</p>
+        ${pj ? `<div class="acct-pend"><b>Your account has a newer journey</b><span>${saveSummary(pj)}</span><small>Loading it replaces the journey you’re playing now. Save this one to a slot first if you want to keep it.</small><div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="takecloud">Load it</button><button class="ghost" data-ac="keeplocal">Keep playing this one</button></div></div>` : ''}
+        <p class="svmsg ${cloud.err ? 'err' : 'ok'}" id="acMsg">${cloud.err || (cloud.busy ? 'Syncing…' : cloud.lastSync ? `Saved online ${new Date(cloud.lastSync).toLocaleTimeString()}.` : '')}</p>
+        <div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="sync"${cloud.busy ? ' disabled' : ''}>Save online now</button><button class="ghost" data-ac="logout">Log out</button></div>
+      </div>`;
+    }
+    const up = acct.mode === 'up';
+    return `<div class="acct">
+      <p class="hint" style="margin:0">Log in to save your journey online. Your saves follow you to any computer or phone where you log in. Save slots and save codes keep working either way.</p>
+      <div class="seg" role="tablist"><button data-ac="mode-in" class="${up ? '' : 'on'}" aria-pressed="${!up}">Log in</button><button data-ac="mode-up" class="${up ? 'on' : ''}" aria-pressed="${up}">Create account</button></div>
+      <label class="namelab" for="acEmail">Email</label>
+      <input id="acEmail" class="acct-in" type="email" autocomplete="email" spellcheck="false" maxlength="120">
+      <label class="namelab" for="acPass">Password</label>
+      <input id="acPass" class="acct-in" type="password" autocomplete="${up ? 'new-password' : 'current-password'}" maxlength="128">
+      ${up ? '<small class="acct-note">At least 6 characters.</small>' : ''}
+      <p class="svmsg ${acct.kind}" id="acMsg" role="status">${acct.msg}</p>
+      <div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="submit"${cloud.busy ? ' disabled' : ''}>${up ? 'Create account' : 'Log in'}</button><button class="ghost" data-ac="google"${cloud.busy ? ' disabled' : ''}>Continue with Google</button></div>
+      ${up ? '' : '<button class="linkbtn" data-ac="reset">Forgot your password?</button>'}
+    </div>`;
+  }
+  async function accountAction(act) {
+    const email = ($('acEmail') && $('acEmail').value || '').trim(), pass = $('acPass') ? $('acPass').value : '';
+    if (act === 'mode-in' || act === 'mode-up') { acct = { mode: act.slice(5), msg: '', kind: '' }; renderModal(); const i = $('acEmail'); if (i) { i.value = email; i.focus(); } return; }
+    if (act === 'sync') { cloud.busy = true; renderModal(); await cloudPush(); cloud.busy = false; return renderModal(); }
+    if (act === 'takecloud' && cloud.pending) { const d = cloud.pending; cloud.pending = null; loadFromData(d, 'your account'); return; }
+    if (act === 'keeplocal') { cloud.pending = null; await cloudPush(); return renderModal(); }
+    if (act === 'logout') {
+      if (cloud.t) await cloudPush();
+      try { await cloud.api.signOut(); } catch {}
+      acct = { mode: 'in', msg: 'Logged out. The saves on this device are still here.', kind: 'ok' };
+      return renderModal();
+    }
+    if (act === 'reset') {
+      if (!email) return setAcctMsg('Type your email above first.', 'err');
+      try { await cloud.api.reset(email); setAcctMsg('Check your email for a link to reset your password.', 'ok'); } catch (e) { setAcctMsg(authErr(e), 'err'); }
+      return;
+    }
+    if (act === 'submit' || act === 'google') {
+      if (act === 'submit' && (!email || !pass)) return setAcctMsg(!email ? 'Type your email address.' : 'Type your password.', 'err');
+      cloud.busy = true; setAcctMsg(act === 'google' ? 'Waiting for Google…' : 'One moment…');
+      $('modalBody').querySelectorAll('[data-ac="submit"],[data-ac="google"]').forEach(b => { b.disabled = true; });
+      try {
+        if (act === 'google') await cloud.api.google();
+        else if (acct.mode === 'up') await cloud.api.signUp(email, pass);
+        else await cloud.api.signIn(email, pass);
+        acct = { mode: 'in', msg: '', kind: '' };
+      } catch (e) { cloud.busy = false; renderModal(); const i = $('acEmail'); if (i) i.value = email; setAcctMsg(authErr(e), 'err'); return; }
+      cloud.busy = false;
+    }
+  }
   function openModal(kind) {
     if (G && !G.over && !$('game').hidden && !paused) setPaused(true);
     modal = kind; eraseArm = null; svMsg = { text: '', kind: '' };
     $('modal').hidden = false; renderModal();
-    const f = $('modal').querySelector('button'); if (f) f.focus({ preventScroll: true });
+    const f = $('acEmail') || $('modal').querySelector('button'); if (f) f.focus({ preventScroll: true });
   }
   function closeModal() {
     if ($('modal').hidden) return;
@@ -7745,7 +7961,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   function inGame() { return !!(G && !G.over && !$('game').hidden); }
   function renderModal() {
     const body = $('modalBody');
-    $('modalTitle').textContent = { settings: 'Settings', saves: 'Save states', credits: 'Credits', name: 'Name your hero' }[modal];
+    $('modalTitle').textContent = { settings: 'Settings', saves: 'Save states', credits: 'Credits', name: 'Name your hero', account: 'Account' }[modal];
     if (modal === 'name') {
       const c = CLASSES[nameCls];
       body.innerHTML = `<div class="namebox"><span data-nameportrait></span><div class="namecol">
@@ -7763,6 +7979,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       body.innerHTML = SETTING_ROWS.map(([k, label, opts, desc]) => `<div class="setrow"><div><b>${label}</b><small>${desc}</small></div><div class="seg" role="group" aria-label="${label}">${opts.map(([v, name], i) => `<button data-set="${k}" data-i="${i}" class="${SET[k] === v ? 'on' : ''}" aria-pressed="${SET[k] === v}">${name}</button>`).join('')}</div></div>`).join('') +
         `<div class="setrow"><div><b>Start fresh</b><small>${storageOK ? 'Reset these settings, or erase the autosave that Continue uses. Save slots are kept.' : 'This browser isn’t letting the game store anything, so settings and saves last only until you close the page. Use save codes to keep your progress.'}</small></div>
         <div class="rowbtns"><button class="ghost" data-set="reset">Reset settings</button>${storageOK ? `<button class="ghost${eraseArm === 'auto' ? ' warn' : ''}" data-set="erase">${eraseArm === 'auto' ? 'Click again to erase' : 'Erase autosave'}</button>` : ''}</div></div>`;
+    } else if (modal === 'account') {
+      body.innerHTML = accountHtml();
     } else if (modal === 'credits') {
       body.innerHTML = `<div class="credits">
         <div><p class="big">Lanternfall</p><p style="color:var(--torch);font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-top:6px">Arc I · The Lantern of a Forgotten Kingdom</p><p style="color:var(--muted)">A lantern-lit dungeon crawl through the kingdom of Aldermere</p></div>
@@ -7995,12 +8213,17 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const st = e.target.closest('[data-set]'); if (st) return settingAction(st.dataset.set, +st.dataset.i);
     const sv = e.target.closest('[data-sv]'); if (sv) return saveAction(sv.dataset.sv, +sv.dataset.i);
     const nm = e.target.closest('[data-nm]'); if (nm) return nameAction(nm.dataset.nm);
+    const ac = e.target.closest('[data-ac]'); if (ac && !ac.disabled) return accountAction(ac.dataset.ac);
   });
   $('modal').addEventListener('input', e => {
     if (e.target.id === 'codeIn') checkCode();
     if (e.target.id === 'nameIn') { const c = cleanName(e.target.value); $('nameMsg').textContent = e.target.value && c !== e.target.value.trim() ? `Letters, numbers, spaces and - ' . only. You’ll be called “${c || e.target.placeholder}”.` : ''; }
   });
-  $('modal').addEventListener('keydown', e => { if (e.target.id === 'nameIn' && e.key === 'Enter') { e.preventDefault(); nameAction('go'); } });
+  $('modal').addEventListener('keydown', e => {
+    if (e.target.id === 'nameIn' && e.key === 'Enter') { e.preventDefault(); nameAction('go'); }
+    if ((e.target.id === 'acEmail' || e.target.id === 'acPass') && e.key === 'Enter') { e.preventDefault(); if (!cloud.busy) accountAction('submit'); }
+  });
+  $('acctBtn').addEventListener('click', () => openModal('account'));
   $('modal').addEventListener('focusin', e => { if (e.target.id === 'codeOut') e.target.select(); });
   $('fileIn').addEventListener('change', () => {
     const f = $('fileIn').files[0]; if (!f) return;
@@ -8045,6 +8268,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     requestAnimationFrame(frame);
   }
   $('langSel').value = SET.lang; document.documentElement.lang = SET.lang; trTree(document.body, true);
+  cloudInit();
   try { window.claude?.hot?.snapshot?.(() => ({ G })); } catch {}
   window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 })();
