@@ -353,6 +353,7 @@
   .acct .seg { align-self: flex-start; margin: 4px 0; }
   .acct-in { background: var(--deep); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: 500 16px var(--body); }
   .acct-in:focus { outline: 2px solid var(--torch); outline-offset: 1px; }
+  .acct-user input { font: 500 16px var(--body); }
   .acct-note { color: var(--dim); font-size: 13px; margin-top: -4px; }
   .acct-who { margin: 0; font-size: 17px; } .acct-who b { color: var(--torch); }
   .acct-pend { display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(232,163,61,.4); border-radius: 10px; padding: 10px 12px; background: rgba(232,163,61,.06); }
@@ -555,6 +556,13 @@
   if (!DIFF[SET.diff]) SET.diff = 'normal';
 
   const L10N = `
+Username ¦ Nombre de usuario ¦ 사용자 이름
+Save username ¦ Guardar nombre ¦ 이름 저장
+Username saved. ¦ Nombre de usuario guardado. ¦ 사용자 이름을 저장했다.
+Pick a username with at least 2 letters or numbers. ¦ Elige un nombre de usuario con al menos 2 letras o números. ¦ 글자나 숫자 2개 이상으로 된 사용자 이름을 정하자.
+Couldn’t save your username. Try again. ¦ No se pudo guardar tu nombre de usuario. Vuelve a intentarlo. ¦ 사용자 이름을 저장하지 못했다. 다시 해 보자.
+Letters, numbers, spaces and _ - . only, up to 20. ¦ Solo letras, números, espacios y _ - . , hasta 20. ¦ 글자, 숫자, 띄어쓰기와 _ - . 만, 최대 20자.
+The name shown on your account. You still log in with your email. ¦ El nombre que se muestra en tu cuenta. Sigues iniciando sesión con tu correo. ¦ 계정에 표시되는 이름. 로그인은 그대로 이메일로 한다.
 Log in ¦ Iniciar sesión ¦ 로그인
 Log out ¦ Cerrar sesión ¦ 로그아웃
 Account ¦ Cuenta ¦ 계정
@@ -1807,7 +1815,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (t !== cur) n.data = t;
   }
   function trAttr(el, a, force) {
-    const cur = el.getAttribute(a); if (cur == null || el.id === 'nameIn') return;
+    const cur = el.getAttribute(a); if (cur == null || el.id === 'nameIn' || el.id === 'acUser') return;
     let st = trOrig.get(el); if (!st) trOrig.set(el, st = {});
     const s = st[a];
     if (!force && s && s.done === cur) return;
@@ -7830,6 +7838,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
           google: () => Au.signInWithPopup(auth, new Au.GoogleAuthProvider()),
           reset: e => Au.sendPasswordResetEmail(auth, e),
           signOut: () => Au.signOut(auth),
+          setName: name => Au.updateProfile(auth.currentUser, { displayName: name }),
           load: async uid => { const s = await Fs.getDoc(ref(uid)); return s.exists() ? s.data() : null; },
           save: (uid, data) => Fs.setDoc(ref(uid), data),
         };
@@ -7886,6 +7895,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     clearTimeout(cloud.t); cloud.t = setTimeout(cloudPush, 3000);
   }
   addEventListener('pagehide', () => { if (cloud.t) cloudPush(); });
+  /* usernames: any letters (Korean too), numbers, spaces and _ - . ' up to 20 characters */
+  const cleanUser = v => String(v || '').replace(/[^\p{L}\p{N} _.'-]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 20);
   const acctLabel = () => cloud.user ? (cloud.user.name || cloud.user.email.split('@')[0] || 'Account').slice(0, 18) : 'Log in';
   function refreshAccountUI() {
     const b = $('acctBtn');
@@ -7902,7 +7913,10 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (cloud.state === 'in') {
       const pj = cloud.pending;
       return `<div class="acct">
-        <p class="acct-who">Signed in as <b data-notr>${cloud.user.email || cloud.user.name}</b></p>
+        <p class="acct-who">Signed in as <b data-notr>${cloud.user.name || cloud.user.email}</b></p>
+        <label class="namelab" for="acUser">Username</label>
+        <div class="namerow acct-user"><input id="acUser" class="acct-in" maxlength="20" autocomplete="nickname" spellcheck="false" value="${(cloud.user.name || '').replace(/"/g, '&quot;')}" placeholder="${cloud.user.email.split('@')[0].replace(/"/g, '&quot;')}"><button class="ghost" data-ac="setname">Save username</button></div>
+        <small class="acct-note" style="margin:0">The name shown on your account. You still log in with your email.</small>
         <p class="hint" style="margin:0">Your autosave, save slots, best journey and story progress are saved to your account. Log in on any computer or phone to pick up where you left off.</p>
         ${pj ? `<div class="acct-pend"><b>Your account has a newer journey</b><span>${saveSummary(pj)}</span><small>Loading it replaces the journey you’re playing now. Save this one to a slot first if you want to keep it.</small><div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-ac="takecloud">Load it</button><button class="ghost" data-ac="keeplocal">Keep playing this one</button></div></div>` : ''}
         <p class="svmsg ${cloud.err ? 'err' : 'ok'}" id="acMsg">${cloud.err || (cloud.busy ? 'Syncing…' : cloud.lastSync ? `Saved online ${new Date(cloud.lastSync).toLocaleTimeString()}.` : '')}</p>
@@ -7913,6 +7927,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     return `<div class="acct">
       <p class="hint" style="margin:0">Log in to save your journey online. Your saves follow you to any computer or phone where you log in. Save slots and save codes keep working either way.</p>
       <div class="seg" role="tablist"><button data-ac="mode-in" class="${up ? '' : 'on'}" aria-pressed="${!up}">Log in</button><button data-ac="mode-up" class="${up ? 'on' : ''}" aria-pressed="${up}">Create account</button></div>
+      ${up ? '<label class="namelab" for="acUser">Username</label><input id="acUser" class="acct-in" maxlength="20" autocomplete="nickname" spellcheck="false"><small class="acct-note">Letters, numbers, spaces and _ - . only, up to 20.</small>' : ''}
       <label class="namelab" for="acEmail">Email</label>
       <input id="acEmail" class="acct-in" type="email" autocomplete="email" spellcheck="false" maxlength="120">
       <label class="namelab" for="acPass">Password</label>
@@ -7924,8 +7939,13 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     </div>`;
   }
   async function accountAction(act) {
-    const email = ($('acEmail') && $('acEmail').value || '').trim(), pass = $('acPass') ? $('acPass').value : '';
+    const email = ($('acEmail') && $('acEmail').value || '').trim(), pass = $('acPass') ? $('acPass').value : '', uname = cleanUser($('acUser') && $('acUser').value);
     if (act === 'mode-in' || act === 'mode-up') { acct = { mode: act.slice(5), msg: '', kind: '' }; renderModal(); const i = $('acEmail'); if (i) { i.value = email; i.focus(); } return; }
+    if (act === 'setname') {
+      if (uname.length < 2) return setAcctMsg('Pick a username with at least 2 letters or numbers.', 'err');
+      try { await cloud.api.setName(uname); cloud.user.name = uname; refreshAccountUI(); setAcctMsg('Username saved.', 'ok'); } catch { setAcctMsg('Couldn’t save your username. Try again.', 'err'); }
+      return;
+    }
     if (act === 'sync') { cloud.busy = true; renderModal(); await cloudPush(); cloud.busy = false; return renderModal(); }
     if (act === 'takecloud' && cloud.pending) { const d = cloud.pending; cloud.pending = null; loadFromData(d, 'your account'); return; }
     if (act === 'keeplocal') { cloud.pending = null; await cloudPush(); return renderModal(); }
@@ -7941,15 +7961,16 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       return;
     }
     if (act === 'submit' || act === 'google') {
+      if (act === 'submit' && acct.mode === 'up' && uname.length < 2) return setAcctMsg('Pick a username with at least 2 letters or numbers.', 'err');
       if (act === 'submit' && (!email || !pass)) return setAcctMsg(!email ? 'Type your email address.' : 'Type your password.', 'err');
       cloud.busy = true; setAcctMsg(act === 'google' ? 'Waiting for Google…' : 'One moment…');
       $('modalBody').querySelectorAll('[data-ac="submit"],[data-ac="google"]').forEach(b => { b.disabled = true; });
       try {
         if (act === 'google') await cloud.api.google();
-        else if (acct.mode === 'up') await cloud.api.signUp(email, pass);
+        else if (acct.mode === 'up') { await cloud.api.signUp(email, pass); try { await cloud.api.setName(uname); if (cloud.user) cloud.user.name = uname; } catch {} refreshAccountUI(); }
         else await cloud.api.signIn(email, pass);
         acct = { mode: 'in', msg: '', kind: '' };
-      } catch (e) { cloud.busy = false; renderModal(); const i = $('acEmail'); if (i) i.value = email; setAcctMsg(authErr(e), 'err'); return; }
+      } catch (e) { cloud.busy = false; renderModal(); const i = $('acEmail'); if (i) i.value = email; const u = $('acUser'); if (u) u.value = uname; setAcctMsg(authErr(e), 'err'); return; }
       cloud.busy = false;
     }
   }
@@ -7974,7 +7995,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       body.innerHTML = `<div class="namebox"><span data-nameportrait></span><div class="namecol">
         <p class="hint" style="margin:0">Every tale needs a name. King Aldric, Sister Maren and the people of Aldermere will call you by it.</p>
         <label class="namelab" for="nameIn">Your ${c.name.toLowerCase()}’s name</label>
-        <div class="namerow"><input id="nameIn" maxlength="16" autocomplete="off" spellcheck="false" placeholder="${pick(HERO_NAMES)}"><button class="ghost" data-nm="random" title="Pick a random name">Random</button></div>
+        <div class="namerow"><input id="nameIn" maxlength="16" autocomplete="off" spellcheck="false" placeholder="${cloud.user && cloud.user.name ? cleanName(cloud.user.name) || pick(HERO_NAMES) : pick(HERO_NAMES)}"><button class="ghost" data-nm="random" title="Pick a random name">Random</button></div>
         <p class="svmsg" id="nameMsg"></p>
         <div class="rowbtns" style="justify-content:flex-start"><button class="primary" data-nm="go">Begin as this ${c.name.toLowerCase()} →</button><button class="ghost" data-nm="back">Choose another class</button></div>
       </div></div>`;
@@ -8228,7 +8249,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   });
   $('modal').addEventListener('keydown', e => {
     if (e.target.id === 'nameIn' && e.key === 'Enter') { e.preventDefault(); nameAction('go'); }
-    if ((e.target.id === 'acEmail' || e.target.id === 'acPass') && e.key === 'Enter') { e.preventDefault(); if (!cloud.busy) accountAction('submit'); }
+    if ((e.target.id === 'acEmail' || e.target.id === 'acPass' || (e.target.id === 'acUser' && cloud.state !== 'in')) && e.key === 'Enter') { e.preventDefault(); if (!cloud.busy) accountAction('submit'); }
+    if (e.target.id === 'acUser' && cloud.state === 'in' && e.key === 'Enter') { e.preventDefault(); accountAction('setname'); }
   });
   $('acctBtn').addEventListener('click', () => openModal('account'));
   $('modal').addEventListener('focusin', e => { if (e.target.id === 'codeOut') e.target.select(); });
