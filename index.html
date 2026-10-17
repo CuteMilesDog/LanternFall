@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Lanternfall: a lantern-lit dungeon RPG. Pick a hero, craft your gear, and bring the light back to Aldermere.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23111218'/%3E%3Cpath d='M22 20h20l4 8v18a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V28z' fill='%232a2622'/%3E%3Cellipse cx='32' cy='36' rx='7' ry='10' fill='%23ffb040'/%3E%3Cellipse cx='32' cy='38' rx='3.5' ry='6' fill='%23fff0b0'/%3E%3Crect x='28' y='12' width='8' height='8' rx='2' fill='%232a2622'/%3E%3C/svg%3E">
 <title>Lanternfall</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,14 +92,16 @@
   .hud { position: absolute; inset: 0; pointer-events: none; font-family: var(--mono); }
   .hud-tl {
     position: absolute; left: 14px; top: 12px; width: min(300px, 46%); display: flex; flex-direction: column; gap: 6px; padding: 10px 11px 9px;
-    border: 1px solid rgba(255,255,255,.09); border-radius: 10px; background: linear-gradient(180deg, rgba(9,10,14,.72), rgba(9,10,14,.50));
-    backdrop-filter: blur(8px); box-shadow: 0 10px 22px rgba(0,0,0,.18);
+    border: 1px solid rgba(232,163,61,.2); border-radius: 12px; background: linear-gradient(180deg, rgba(24,20,16,.8), rgba(10,10,14,.62));
+    backdrop-filter: blur(8px); box-shadow: 0 12px 28px rgba(0,0,0,.32), inset 0 1px rgba(255,214,150,.07);
   }
+  .hud-tl::before { content: ''; position: absolute; left: 14px; right: 14px; top: -1px; height: 1px; background: linear-gradient(90deg, transparent, rgba(240,173,74,.7), transparent); pointer-events: none; }
   .who { display: flex; align-items: baseline; gap: 8px; }
   .who b { font-family: var(--display); font-size: 26px; line-height: 1; font-weight: 700; }
   .who span { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
-  .hbar { position: relative; height: 16px; background: rgba(0,0,0,.6); border: 1px solid rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; }
-  .hbar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(180deg, #e0634f, #9b2f22); transition: width .12s; }
+  .hbar { position: relative; height: 16px; background: rgba(0,0,0,.6); border: 1px solid rgba(255,255,255,.08); border-radius: 5px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.6); }
+  .hbar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(180deg, #ef7560, #b2382a 55%, #8a2a1e); transition: width .12s; }
+  .hbar i::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 40%; background: linear-gradient(180deg, rgba(255,255,255,.22), transparent); }
   .hbar i.lag { background: rgba(255,210,160,.35); transition: width .6s .2s; }
   .hbar span { position: relative; display: block; text-align: center; font-size: 11px; line-height: 14px; color: #fff; text-shadow: 0 1px 2px #000; font-variant-numeric: tabular-nums; }
   .hbar.xp { height: 6px; }
@@ -102,7 +111,7 @@
   .chips { display: flex; gap: 6px; flex-wrap: wrap; }
   .chip { font-size: 10px; letter-spacing: .06em; padding: 1px 7px; border-radius: 9px; border: 1px solid currentColor; background: rgba(0,0,0,.4); }
   .hud-tc { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 10px; background: rgba(6,7,10,.42); backdrop-filter: blur(7px); }
-  .depth { white-space: nowrap; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); background: rgba(0,0,0,.5); padding: 3px 10px; border-radius: 10px; }
+  .depth { white-space: nowrap; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #d8cdb4; background: rgba(0,0,0,.5); padding: 3px 12px; border-radius: 10px; border: 1px solid rgba(232,163,61,.18); }
   .boss { width: min(360px, 60vw); display: flex; flex-direction: column; gap: 3px; }
   .boss span { font-family: var(--display); font-size: 20px; color: #d895f0; text-shadow: 0 0 12px rgba(200,120,240,.6); }
   .boss .hbar { height: 10px; }
@@ -118,7 +127,7 @@
   .prompt { position: absolute; left: 50%; bottom: 112px; transform: translateX(-50%); pointer-events: auto; background: rgba(20,16,10,.85); border: 1px solid var(--torch); color: var(--torch); border-radius: 6px; padding: 6px 14px; font-size: 13px; letter-spacing: .06em; cursor: pointer; box-shadow: 0 0 18px rgba(232,163,61,.3); }
   .skills { position: absolute; right: 14px; bottom: 14px; display: flex; gap: 8px; pointer-events: auto; }
   .slot {
-    position: relative; width: 66px; height: 66px; border-radius: 10px; background: linear-gradient(180deg, rgba(24,26,32,.93), rgba(10,11,15,.92));
+    position: relative; width: 66px; height: 66px; border-radius: 12px; background: radial-gradient(120% 90% at 50% 0%, rgba(44,40,36,.95), rgba(12,12,16,.94) 70%);
     border: 1px solid rgba(255,255,255,.14); cursor: pointer; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 0;
     box-shadow: 0 8px 18px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.045);
   }
@@ -298,6 +307,21 @@
   .ulog h4 { margin: 4px 0 6px; font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--torch, #e8a33d); }
   .ulog ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
   .ulog li { font-size: 14px; line-height: 1.45; color: var(--text, #e8e0d0); }
+  .lvlup { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
+  .lvlup > small { font: 700 11px/1 var(--mono); letter-spacing: .3em; text-transform: uppercase; color: var(--torch); animation: lvglow 1.6s ease-in-out infinite; }
+  .lvlup h2 { color: var(--torch); text-shadow: 0 0 24px rgba(240,173,74,.55); }
+  .lvlup h2 b { font-size: 1.25em; }
+  .lvmulti { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: -6px 0 0 !important; }
+  .lvstats { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+  .lvrow { display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.06); animation: rise .4s cubic-bezier(.2,.8,.2,1) both; }
+  .lvrow:nth-child(2) { animation-delay: .06s; } .lvrow:nth-child(3) { animation-delay: .12s; } .lvrow:nth-child(4) { animation-delay: .18s; } .lvrow:nth-child(5) { animation-delay: .24s; }
+  .lvrow span { color: var(--text); font-size: 15px; }
+  .lvrow b { font-family: var(--mono); font-weight: 500; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .lvrow b em { font-style: normal; color: var(--text); }
+  .lvrow i { font-style: normal; font-family: var(--mono); font-size: 13px; text-align: right; color: var(--dim); }
+  .lvrow.up { border-color: rgba(232,163,61,.3); background: rgba(232,163,61,.07); }
+  .lvrow.up b em, .lvrow.up i { color: #8fe07a; font-weight: 700; }
+  @keyframes lvglow { 50% { text-shadow: 0 0 12px rgba(240,173,74,.9); } }
   .credits { display: flex; flex-direction: column; gap: 18px; text-align: center; padding: 4px 0 8px; }
   .credits h4 { margin: 0 0 4px; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
   .credits p { margin: 0; font-size: 16px; text-wrap: balance; }
@@ -444,6 +468,30 @@
     body.mplay .hud-tc { top: calc(var(--hudb, 104px) + 6px); max-width: 94vw; }
     body.mplay .prompt { top: auto; bottom: calc(270px + env(safe-area-inset-bottom)); }
   }
+  /* phones: a slimmer HUD and a thumb arc of buttons around a big attack button */
+  body.mplay .hud-tl { width: min(210px, 52vw); border-radius: 12px; }
+  body.mplay .hbar.xp { height: 5px; }
+  body.mplay .who b { font-size: 17px; }
+  body.mplay .mini-stats { font-size: 9.5px; gap: 1px 7px; }
+  body.mplay .depth { font-size: 9px; letter-spacing: .1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 88vw; padding: 3px 10px; }
+  body.mplay .hud-tc { padding: 0; background: none; backdrop-filter: none; }
+  body.mplay .skills { display: block; width: 190px; height: 248px; pointer-events: none; }
+  body.mplay .slot { position: absolute; width: 54px; height: 54px; border-radius: 50%; pointer-events: auto; box-shadow: 0 6px 16px rgba(0,0,0,.45), inset 0 1px rgba(255,255,255,.07); }
+  body.mplay .slot .n { display: none; }
+  body.mplay .slot canvas { width: 28px; height: 28px; }
+  body.mplay .slot .cnt { right: 50%; transform: translateX(50%); top: auto; bottom: 3px; font-size: 10px; font-weight: 700; }
+  body.mplay .slot .cn { font-size: 16px; }
+  body.mplay .slot[data-act="attack"] { width: 104px; height: 104px; right: 0; bottom: 0; background: radial-gradient(circle at 50% 35%, rgba(70,40,30,.95), rgba(16,12,12,.95) 72%); border-width: 2px; }
+  body.mplay .slot[data-act="attack"] canvas { width: 54px; height: 54px; }
+  body.mplay .slot[data-act="attack"] .n { display: block; font-size: 10px; }
+  body.mplay .slot[data-act="dodge"] { right: 132px; bottom: 22px; }
+  body.mplay .slot[data-act="ab0"] { right: 117px; bottom: 80px; }
+  body.mplay .slot[data-act="ab1"] { right: 76px; bottom: 121px; }
+  body.mplay .slot[data-act="ab2"] { right: 22px; bottom: 136px; }
+  body.mplay .slot[data-act="potion"], body.mplay .slot[data-act="res"], body.mplay .slot[data-act="bag"] { width: 44px; height: 44px; border-radius: 12px; bottom: 200px; }
+  body.mplay .slot[data-act="potion"] canvas, body.mplay .slot[data-act="res"] canvas, body.mplay .slot[data-act="bag"] canvas { width: 24px; height: 24px; }
+  body.mplay .slot[data-act="potion"] { right: 100px; } body.mplay .slot[data-act="res"] { right: 50px; } body.mplay .slot[data-act="bag"] { right: 0; }
+  @media (max-height: 500px) { body.mplay .skills { transform: scale(.74); transform-origin: 100% 100%; } }
   @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
   @keyframes pop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
@@ -473,6 +521,13 @@
     .mini-stats { flex-wrap: wrap; gap: 4px 10px; }
   }
   @media (max-width: 640px) {
+    .title-menu { order: -1; }
+    .mbtn { padding: 10px 14px; }
+    .mbtn small { line-height: 1.3; }
+    .title-side { gap: 12px; }
+    .title-side .lede { font-size: 15px; }
+    .mbtn b { font-size: 22px; }
+    .arc-name { font-size: 24px; }
     .classes { grid-template-columns: minmax(0, 1fr); }
     .brand { font-size: 36px; }
     .stage { height: 72vh; }
@@ -485,6 +540,8 @@
   }
   @media (prefers-reduced-motion: reduce) { .cls, .hbar i { transition: none; } }
 </style>
+</head>
+<body>
 
 <div class="shell">
   <header class="top">
@@ -633,7 +690,7 @@
   let touchMode = matchMedia('(pointer: coarse)').matches;
   const SET_KEY = 'lanternfall-settings';
   const navLang = (() => { const n = String((navigator.languages && navigator.languages[0]) || navigator.language || 'en').slice(0, 2).toLowerCase(); return n === 'es' || n === 'ko' ? n : 'en'; })();
-  const SET_DEF = { lang: navLang, diff: 'normal', zoom: 1, shake: true, particles: 'full', numbers: true, minimap: true, flash: true };
+  const SET_DEF = { lang: navLang, diff: 'normal', music: .7, sfx: .8, zoom: 1, shake: true, particles: 'full', numbers: true, minimap: true, flash: true };
   let SET = { ...SET_DEF };
   try { Object.assign(SET, JSON.parse(localStorage.getItem(SET_KEY) || '{}')); } catch {}
   const saveSettings = () => { try { localStorage.setItem(SET_KEY, JSON.stringify(SET)); } catch {} };
@@ -641,6 +698,118 @@
   if (!DIFF[SET.diff]) SET.diff = 'normal';
 
   const L10N = `
+Undying Oath ¦ Juramento Inmortal ¦ 불멸의 맹세
+Undying Oath! You refuse to fall. ¦ ¡Juramento Inmortal! Te niegas a caer. ¦ 불멸의 맹세! 쓰러지기를 거부한다.
+The Undying Oath fades. You catch your breath. ¦ El Juramento Inmortal se desvanece. Recuperas el aliento. ¦ 불멸의 맹세가 사라진다. 숨을 고른다.
+Darker dungeons ¦ Mazmorras más oscuras ¦ 더 어두워진 던전
+Every dungeon’s music is now dark and ominous, with low drones and uneasy notes. The Goblin Hollows get slow, heavy war drums. ¦ La música de cada mazmorra es ahora oscura y amenazante, con zumbidos graves y notas inquietantes. Las Hondonadas Goblin tienen tambores de guerra lentos y pesados. ¦ 이제 모든 던전 음악이 낮은 저음과 불안한 음으로 어둡고 불길하게 바뀌었습니다. 고블린 동굴에는 느리고 묵직한 전쟁 북소리가 울립니다.
+Battle Trance wraps you in a burning aura while it lasts. ¦ El Trance de Batalla te envuelve en un aura ardiente mientras dura. ¦ 전투 무아지경이 지속되는 동안 불타는 기운이 몸을 감쌉니다.
+New sounds for Rallying Prayer and Judgment. Last Stand is now called Undying Oath. ¦ Nuevos sonidos para Plegaria de ánimo y Juicio. Última resistencia ahora se llama Juramento Inmortal. ¦ 고무의 기도와 심판에 새 소리가 생겼습니다. 최후의 저항은 이제 불멸의 맹세라고 부릅니다.
+Richer ability sounds ¦ Sonidos de habilidades más ricos ¦ 더 풍부한 기술 소리
+Every ability now has its own richer, fantasy-style sound: roaring and crackling fire, cracking ice, buzzing lightning, ringing steel, glowing magic chords and mystic horns. ¦ Cada habilidad tiene ahora un sonido propio, más rico y de estilo fantástico: fuego que ruge y crepita, hielo que se agrieta, rayos que zumban, acero que resuena, acordes mágicos y cuernos místicos. ¦ 이제 모든 기술이 더 풍부한 판타지풍의 고유한 소리를 냅니다. 타오르며 탁탁 튀는 불, 갈라지는 얼음, 지지직거리는 번개, 울리는 강철, 빛나는 마법 화음과 신비로운 뿔피리.
+Sounds echo slightly, as if in a real room, and abilities are louder than everyday sounds. ¦ Los sonidos resuenan un poco, como en una sala real, y las habilidades suenan más fuerte que los sonidos cotidianos. ¦ 소리가 실제 공간처럼 살짝 울리고, 기술 소리는 평소 소리보다 더 크게 들립니다.
+A sound for everything ¦ Un sonido para todo ¦ 모든 것에 소리를
+Each class attacks with its own sound: the knight’s blade slashes, the mage’s bolts whoomph, the archer’s bow draws and snaps, and the assassin stabs quick and light. ¦ Cada clase ataca con su propio sonido: la espada del caballero corta, los proyectiles del mago retumban, el arco del arquero se tensa y chasquea, y el asesino apuñala rápido y ligero. ¦ 직업마다 공격 소리가 다릅니다. 기사의 칼은 베는 소리, 마법사의 탄은 '휘융' 소리, 궁수의 활은 당겼다 놓는 소리, 암살자는 빠르고 가벼운 찌르기 소리가 납니다.
+Every ability, spell and boss move has a sound that matches its name. ¦ Cada habilidad, hechizo y ataque de jefe tiene un sonido acorde a su nombre. ¦ 모든 기술, 주문, 보스 기술에 이름에 어울리는 소리가 생겼습니다.
+New sounds for menus, gear, crafting, shopping, talking, night bells, enemy shots, deaths, stuns and low health. ¦ Nuevos sonidos para menús, equipo, artesanía, compras, conversaciones, campanas nocturnas, disparos enemigos, muertes, aturdimientos y salud baja. ¦ 메뉴, 장비, 제작, 상점, 대화, 밤의 종소리, 적의 공격, 죽음, 기절, 낮은 체력에도 새 소리가 생겼습니다.
+Press E to go outside ¦ Pulsa E para salir ¦ E: 밖으로 나가기
+Tap to go outside ¦ Toca para salir ¦ 눌러서 밖으로 나가기
+Press E to pet the cat ¦ Pulsa E para acariciar al gato ¦ E: 고양이 쓰다듬기
+Tap to pet the cat ¦ Toca para acariciar al gato ¦ 눌러서 고양이 쓰다듬기
+Press E to rest ¦ Pulsa E para descansar ¦ E: 쉬기
+Tap to rest ¦ Toca para descansar ¦ 눌러서 쉬기
+Press E to look outside ¦ Pulsa E para mirar afuera ¦ E: 밖을 내다보기
+Tap to look outside ¦ Toca para mirar afuera ¦ 눌러서 밖을 내다보기
+Press E to warm your hands ¦ Pulsa E para calentarte las manos ¦ E: 손 녹이기
+Tap to warm your hands ¦ Toca para calentarte las manos ¦ 눌러서 손 녹이기
+Press E to read a book ¦ Pulsa E para leer un libro ¦ E: 책 읽기
+Tap to read a book ¦ Toca para leer un libro ¦ 눌러서 책 읽기
+Press E to read the note ¦ Pulsa E para leer la nota ¦ E: 쪽지 읽기
+Tap to read the note ¦ Toca para leer la nota ¦ 눌러서 쪽지 읽기
+Press E to open the chest ¦ Pulsa E para abrir el baúl ¦ E: 상자 열기
+Tap to open the chest ¦ Toca para abrir el baúl ¦ 눌러서 상자 열기
+Press E to look in the cupboard ¦ Pulsa E para mirar en la alacena ¦ E: 찬장 살펴보기
+Tap to look in the cupboard ¦ Toca para mirar en la alacena ¦ 눌러서 찬장 살펴보기
+Press E to open the wardrobe ¦ Pulsa E para abrir el armario ¦ E: 옷장 열기
+Tap to open the wardrobe ¦ Toca para abrir el armario ¦ 눌러서 옷장 열기
+Press E to knock ¦ Pulsa E para llamar a la puerta ¦ E: 문 두드리기
+Tap to knock ¦ Toca para llamar a la puerta ¦ 눌러서 문 두드리기
+You knock. Nobody answers. ¦ Llamas a la puerta. Nadie contesta. ¦ 문을 두드렸지만 아무도 대답하지 않습니다.
+Not now. Monsters are in the streets! ¦ Ahora no. ¡Hay monstruos en las calles! ¦ 지금은 안 돼요. 거리에 괴물이 있어요!
+The cat purrs and bumps its head against your hand. ¦ El gato ronronea y te da un cabezazo en la mano. ¦ 고양이가 가르랑거리며 손에 머리를 비빕니다.
+That’s my bed! Find your own. ¦ ¡Esa es mi cama! Búscate otra. ¦ 그건 내 침대예요! 다른 데서 자요.
+You nap for a moment and wake up rested. ¦ Echas una cabezada y despiertas descansado. ¦ 잠깐 낮잠을 자고 개운하게 일어났습니다.
+Sunlight on the rooftops. Somewhere a cart rattles past. ¦ Sol sobre los tejados. En algún lugar pasa traqueteando un carro. ¦ 지붕 위에 햇살이 비칩니다. 어딘가에서 수레가 덜컹거리며 지나갑니다.
+Dark streets. The watch fires burn along the wall. ¦ Calles oscuras. Las hogueras de la guardia arden a lo largo de la muralla. ¦ 어두운 거리. 성벽을 따라 경비대의 횃불이 타오릅니다.
+You warm your hands by the fire. Your tired legs feel better. ¦ Te calientas las manos junto al fuego. Tus piernas cansadas se recuperan. ¦ 불가에서 손을 녹입니다. 지친 다리가 한결 나아졌습니다.
+You learn something from the book. ¦ Aprendes algo del libro. ¦ 책에서 무언가를 배웠습니다.
+A note ¦ Una nota ¦ 쪽지
+Hands off my things! ¦ ¡No toques mis cosas! ¦ 내 물건에 손대지 마요!
+Just old blankets and a moth. ¦ Solo mantas viejas y una polilla. ¦ 낡은 담요와 나방 한 마리뿐입니다.
+You find a few coins under the old blankets. ¦ Encuentras unas monedas bajo las mantas viejas. ¦ 낡은 담요 밑에서 동전 몇 닢을 찾았습니다.
+The cupboard is bare. Maybe tomorrow. ¦ La alacena está vacía. Quizá mañana. ¦ 찬장이 텅 비었습니다. 내일 다시 와 보세요.
+You eat a little something from the cupboard and feel better. ¦ Comes algo de la alacena y te sientes mejor. ¦ 찬장에서 먹을 것을 조금 꺼내 먹고 기운을 차렸습니다.
+Coats that smell of woodsmoke and lavender. ¦ Abrigos que huelen a humo de leña y lavanda. ¦ 장작 연기와 라벤더 냄새가 나는 외투들.
+A moth flutters out. Nothing else. ¦ Sale volando una polilla. Nada más. ¦ 나방 한 마리가 날아 나옵니다. 그 밖엔 없습니다.
+Neatly folded shirts, and one very ugly hat. ¦ Camisas bien dobladas y un sombrero muy feo. ¦ 단정하게 개어 둔 셔츠들과 아주 못생긴 모자 하나.
+Make yourself at home, but mind the mud on your boots. ¦ Siéntete como en casa, pero cuidado con el barro de tus botas. ¦ 편히 있어요. 대신 장화에 묻은 진흙은 조심하고요.
+Shut the door, quick! The night gets in otherwise. ¦ ¡Cierra la puerta, rápido! Si no, se cuela la noche. ¦ 얼른 문 닫아요! 안 그러면 밤이 들어와요.
+You’re welcome to warm up by the fire. ¦ Puedes calentarte junto al fuego. ¦ 불가에서 몸 녹이고 가요.
+Can’t sleep with all the noise out there. ¦ No puedo dormir con todo ese ruido ahí fuera. ¦ 밖이 시끄러워서 잠을 못 자겠어요.
+A History of Aldermere ¦ Historia de Aldermere ¦ 알더미어의 역사
+The Great Lantern was lit by the first king, Aldric the Elder, who carried its flame up from the deep places. ¦ El Gran Farol lo encendió el primer rey, Aldric el Viejo, que subió su llama desde las profundidades. ¦ 위대한 등불은 첫 번째 왕, 대(大) 알드릭이 깊은 곳에서 불꽃을 가져와 밝혔습니다.
+Before he was the Lich, they say he was the Lantern’s keeper, and he loved its light too much to share it. ¦ Dicen que antes de ser el Liche fue el guardián del Farol, y amaba tanto su luz que no quiso compartirla. ¦ 리치가 되기 전, 그는 등불지기였다고 합니다. 그 빛을 너무 사랑해서 나누고 싶지 않았다고 하지요.
+On Rats ¦ Sobre las ratas ¦ 쥐에 관하여
+Rats follow the warmth. Where the cellars are warm, look for a crown. ¦ Las ratas siguen el calor. Donde los sótanos están templados, busca una corona. ¦ 쥐는 온기를 따라갑니다. 지하실이 따뜻한 곳에서 왕관을 찾으세요.
+Goblin Songs ¦ Canciones goblin ¦ 고블린의 노래
+Goblins beat their drums to sound bigger than they are. It usually works. ¦ Los goblins tocan sus tambores para parecer más grandes de lo que son. Suele funcionar. ¦ 고블린은 실제보다 커 보이려고 북을 칩니다. 대개는 효과가 있지요.
+Herbal Remedies ¦ Remedios de hierbas ¦ 약초 처방
+Redcap for wounds, windroot for weary legs, glowcap for the mind. Never eat moonpetal raw. ¦ Gorrorrojo para las heridas, raíz de viento para las piernas cansadas, hongo luminoso para la mente. Nunca comas pétalo de luna crudo. ¦ 상처엔 붉은갓, 지친 다리엔 바람뿌리, 정신엔 빛버섯. 달꽃잎은 절대 날로 먹지 마세요.
+Burial Rites of the Kings ¦ Ritos funerarios de los reyes ¦ 왕들의 장례 의식
+The old kings were buried with their swords, so they could guard the crypt forever. ¦ Los antiguos reyes fueron enterrados con sus espadas para que guardaran la cripta para siempre. ¦ 옛 왕들은 영원히 지하 묘지를 지키도록 칼과 함께 묻혔습니다.
+Trolls and Their Habits ¦ Los trols y sus costumbres ¦ 트롤과 그 습성
+A troll will mend from almost any wound. Fire slows the mending. ¦ Un trol se recupera de casi cualquier herida. El fuego frena la curación. ¦ 트롤은 거의 모든 상처에서 회복합니다. 불은 회복을 늦춥니다.
+A Children’s Tale ¦ Un cuento infantil ¦ 어린이 동화
+Once there was a little light that was afraid of the dark, until it learned the dark was afraid of it. ¦ Había una vez una lucecita que tenía miedo de la oscuridad, hasta que descubrió que la oscuridad le tenía miedo a ella. ¦ 옛날에 어둠을 무서워하던 작은 빛이 있었어요. 어둠이 오히려 자기를 무서워한다는 걸 알기 전까지는요.
+Flour: 2 sacks. Eggs: a dozen. Remember to lock the oven room. The rats are getting clever. ¦ Harina: 2 sacos. Huevos: una docena. Acuérdate de cerrar el cuarto del horno. Las ratas se están volviendo listas. ¦ 밀가루 2자루, 달걀 12개. 화덕 방 꼭 잠그기. 쥐들이 점점 영리해진다.
+To Wren. Happy 80th! Stop climbing the roof to look at the stars. Love, Mara. ¦ Para Wren. ¡Feliz 80 cumpleaños! Deja de subirte al tejado a mirar las estrellas. Con cariño, Mara. ¦ 렌에게. 80번째 생일 축하해요! 별 보겠다고 지붕에 그만 올라가요. 사랑을 담아, 마라.
+Order for the watch: 12 spearheads, 4 helmets. Greta says my rivets are crooked. They are not. ¦ Pedido de la guardia: 12 puntas de lanza, 4 yelmos. Greta dice que mis remaches están torcidos. No lo están. ¦ 경비대 주문: 창날 12개, 투구 4개. 그레타는 내 리벳이 삐뚤다고 한다. 절대 아니다.
+Things to buy: apples, ribbon, a new basket. Things to stop doing: worrying. ¦ Cosas que comprar: manzanas, cinta, una cesta nueva. Cosas que dejar de hacer: preocuparme. ¦ 살 것: 사과, 리본, 새 바구니. 그만할 것: 걱정.
+Trees marked for cutting: the old oak by the east wall. NOT the one the children climb. ¦ Árboles marcados para talar: el viejo roble junto a la muralla este. NO el que trepan los niños. ¦ 벨 나무: 동쪽 성벽 옆 늙은 참나무. 아이들이 올라가는 나무는 절대 아님.
+Dear sister, the city is dim but we are well. Write back soon. Your Ysolde. ¦ Querida hermana: la ciudad está a oscuras, pero estamos bien. Escríbeme pronto. Tu Ysolde. ¦ 사랑하는 언니에게, 도시는 어둡지만 우리는 잘 지내요. 곧 답장 줘요. 이졸데가.
+IOU: 3 silver to Corin, for the dice game. (He cheated.) ¦ Pagaré: 3 platas a Corin, por la partida de dados. (Hizo trampa.) ¦ 차용증: 주사위 놀이로 코린에게 은화 3닢. (걔가 속였음.)
+Moonpetal must be picked at night. Glowcap only in the deep caves. Do not tell Bram where. ¦ El pétalo de luna se recoge de noche. El hongo luminoso, solo en las cuevas profundas. No le digas a Bram dónde. ¦ 달꽃잎은 밤에 따야 한다. 빛버섯은 깊은 동굴에만 있다. 브램에게는 장소를 말하지 말 것.
+Practice the lute: one hour. Practice the dice: two hours. Do not tell Bram. ¦ Practicar el laúd: una hora. Practicar los dados: dos horas. No decírselo a Bram. ¦ 류트 연습 한 시간. 주사위 연습 두 시간. 브램에게는 비밀.
+Fish caught: 4. Fish that got away: 1, very big. I will catch it one day. ¦ Peces pescados: 4. Peces que se escaparon: 1, enorme. Algún día lo pescaré. ¦ 잡은 물고기 4마리. 놓친 물고기 1마리, 아주 큼. 언젠가 꼭 잡는다.
+Homes and sounds of every place ¦ Casas y sonidos de cada lugar ¦ 집과 장소마다의 소리
+Walk up to a villager’s front door to step inside their home. ¦ Acércate a la puerta de un aldeano para entrar en su casa. ¦ 마을 사람의 현관문으로 다가가면 집 안에 들어갈 수 있습니다.
+Nap in beds, warm up by the fire, read books, open chests and cupboards, and pet the cat. ¦ Echa la siesta en las camas, caliéntate junto al fuego, lee libros, abre baúles y alacenas, y acaricia al gato. ¦ 침대에서 낮잠을 자고, 불가에서 몸을 녹이고, 책을 읽고, 상자와 찬장을 열고, 고양이를 쓰다듬으세요.
+At night the owners are home, and they have opinions about their beds. ¦ De noche los dueños están en casa, y tienen opiniones sobre sus camas. ¦ 밤에는 집주인이 집에 있고, 자기 침대에 대해 할 말이 많습니다.
+Every dungeon has its own music, and each place has its own background sounds and footsteps. ¦ Cada mazmorra tiene su propia música, y cada lugar tiene sus propios sonidos de fondo y pasos. ¦ 던전마다 고유한 음악이 있고, 장소마다 배경 소리와 발소리가 다릅니다.
+Town has day and night music, a tense tune during monster attacks, and a cozy tune at home. ¦ El pueblo tiene música de día y de noche, una melodía tensa durante los ataques de monstruos y otra acogedora en casa. ¦ 마을에는 낮과 밤의 음악, 괴물 습격 때의 긴장감 있는 음악, 집 안의 아늑한 음악이 있습니다.
+Music ¦ Música ¦ 음악
+Sound effects ¦ Efectos de sonido ¦ 효과음
+Low ¦ Bajo ¦ 낮음
+Medium ¦ Medio ¦ 보통
+High ¦ Alto ¦ 높음
+Music for town, the dungeons and boss fights. ¦ Música para el pueblo, las mazmorras y los combates contra jefes. ¦ 마을, 던전, 보스전의 음악.
+Swings, hits, spells, coins and the rest. ¦ Golpes, impactos, hechizos, monedas y todo lo demás. ¦ 휘두르기, 타격, 주문, 동전 소리 등.
+Level up ¦ Subes de nivel ¦ 레벨 업
+Magic ¦ Magia ¦ 마력
+Skill points ¦ Puntos de habilidad ¦ 기술 점수
+Some of your health comes back. Spend skill points in your skill tree. ¦ Recuperas algo de salud. Gasta tus puntos de habilidad en el árbol de habilidades. ¦ 체력이 조금 회복됩니다. 스킬 트리에서 기술 점수를 사용하세요.
+Onward ¦ Adelante ¦ 계속하기
+Open skill tree ¦ Abrir árbol de habilidades ¦ 스킬 트리 열기
+Music and sound ¦ Música y sonido ¦ 음악과 소리
+Music for town, the dungeons and boss fights, all made right in your browser. ¦ Música para el pueblo, las mazmorras y los jefes, creada en tu propio navegador. ¦ 마을, 던전, 보스전 음악을 브라우저에서 바로 만들어 냅니다.
+Sound effects for swings, hits, spells, coins, potions, dodges and boss roars. ¦ Efectos de sonido para golpes, impactos, hechizos, monedas, pociones, esquivas y rugidos de jefes. ¦ 휘두르기, 타격, 주문, 동전, 물약, 회피, 보스 포효의 효과음.
+Turn music and sound up, down or off in Settings. ¦ Sube, baja o apaga la música y el sonido en Ajustes. ¦ 설정에서 음악과 소리를 조절하거나 끌 수 있습니다.
+A level-up screen pauses the game and shows which stats grew. ¦ Una pantalla de subida de nivel pausa el juego y muestra qué estadísticas mejoraron. ¦ 레벨 업 화면이 게임을 멈추고 오른 능력치를 보여 줍니다.
+A fresh look ¦ Un aspecto renovado ¦ 새로운 모습
+Phones get a bigger view of the dungeon and a thumb arc of buttons around the attack button. ¦ En el móvil ves más de cerca la mazmorra, con un arco de botones alrededor del botón de ataque. ¦ 휴대폰에서 던전이 더 크게 보이고, 공격 버튼 주위에 엄지로 누르기 쉬운 버튼이 둥글게 배치됩니다.
+The main menu sits right under the picture on phones. ¦ En el móvil, el menú principal está justo debajo de la imagen. ¦ 휴대폰에서 메인 메뉴가 그림 바로 아래에 나옵니다.
+A warmer, cleaner look for the HUD, health bars and buttons. ¦ Un aspecto más cálido y limpio para la interfaz, las barras de vida y los botones. ¦ 화면 정보, 체력 바, 버튼이 더 따뜻하고 깔끔해졌습니다.
+Each level now takes more experience than the last. Hover the XP bar to see how far you are. ¦ Cada nivel requiere ahora más experiencia que el anterior. Pasa el cursor por la barra de experiencia para ver tu progreso. ¦ 이제 레벨이 오를수록 필요한 경험치가 늘어납니다. 경험치 바에 마우스를 올리면 진행도를 볼 수 있습니다.
 Update log ¦ Registro de cambios ¦ 업데이트 기록
 What’s new in Lanternfall ¦ Novedades de Lanternfall ¦ Lanternfall의 새로운 소식
 NEW ¦ NUEVO ¦ NEW
@@ -2012,6 +2181,9 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     [/^(\d+) left$/, 'quedan $1', '$1마리 남음'],
     [/^wave (\d+) in (\d+)s$/, 'oleada $1 en $2 s', '$2초 후 습격 $1'],
     [/^Press E: (.+)$/, 'Pulsa E: $1', 'E: $1'],
+    [/^Press E to enter (.+)’s home$/, 'Pulsa E para entrar en la casa de $1', 'E: $1의 집에 들어가기'],
+    [/^Tap to enter (.+)’s home$/, 'Toca para entrar en la casa de $1', '눌러서 $1의 집에 들어가기'],
+    [/^(.+)’s home · (.+)$/, 'Casa de $1 · $2', '$1의 집 · $2'],
     [/^Press E to talk to (.+)$/, 'Pulsa E para hablar con $1', 'E: $1와(과) 대화'],
     [/^(.+) falls\. The stairs at the top of the hall are open, and a waystone hums to life\. You can go home from here and come back to this floor later\.$/, '$1 cae. Las escaleras al fondo de la sala están abiertas y una piedra de paso cobra vida. Puedes volver a casa desde aquí y regresar a este piso más tarde.', '$1을(를) 쓰러뜨렸다. 홀 끝의 계단이 열리고, 길잡이 돌이 웅웅 깨어난다. 여기서 집으로 돌아갔다가 나중에 이 층으로 돌아올 수 있다.'],
     [/^One more guardian stands between you and (.+)\.$/, 'Queda un guardián más entre tú y $1.', '$1에게 가는 길에 수호자가 하나 더 남아 있다.'],
@@ -2329,7 +2501,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const hash = (x, y, s) => { const v = Math.sin(x * 127.1 + y * 311.7 + s * 74.7) * 43758.5453; return v - Math.floor(v); };
   const angDiff = (a, b) => { let d = a - b; while (d > Math.PI) d -= Math.PI * 2; while (d < -Math.PI) d += Math.PI * 2; return d; };
-  const need = l => 20 + (l - 1) * 25;
+  /* each level costs more than the last: the step between levels keeps growing */
+  const need = l => Math.round(20 + (l - 1) * 25 + 3 * (l - 1) ** 2);
 
   /* ---------------- the kingdom, its dungeons, and the story ---------------- */
   const DUNGEONS = [
@@ -2428,7 +2601,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   let touchAttack = false;
 
   /* ---------------- world ---------------- */
-  const solidT = (tx, ty) => { if (tx < 0 || ty < 0 || tx >= MW || ty >= MH) return true; const t = G.tiles[idx(tx, ty)]; return t !== 1 && t !== 2 && t !== 3 && t !== 4; };
+  const solidT = (tx, ty) => { if (tx < 0 || ty < 0 || tx >= MW || ty >= MH) return true; const t = G.tiles[idx(tx, ty)]; return t !== 1 && t !== 2 && t !== 3 && t !== 4 && t !== 10; };
   const solidAt = (x, y) => solidT(Math.floor(x / TS), Math.floor(y / TS));
   function blocked(x, y, r) {
     const x0 = Math.floor((x - r) / TS), x1 = Math.floor((x + r) / TS), y0 = Math.floor((y - r) / TS), y1 = Math.floor((y + r) / TS);
@@ -3103,7 +3276,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         if (ready.length) {
           const id = pick(ready), [name, cd, fn] = BOSS_ABIL[id];
           m.abT[id] = cd * em; m.castLock = 1.1;
-          callout(m, name, m.enraged ? '#ff6a5a' : d.col); fn(m, d, P);
+          callout(m, name, m.enraged ? '#ff6a5a' : d.col); sfxBoss(id); fn(m, d, P);
         }
       }
     }
@@ -3120,8 +3293,493 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     G.bossAwake = true;
     for (const q of G.mons) if (MON[q.t].squadOf === key) q.awake = true;
     banner = { name: bossTitle(key), sub: BOSS_EPITHET[key] || DUNGEONS[G.dun].name, col: D.col, t: 0 };
-    dread = 1; addShake(14); ring(m.x, m.y, 320, 1, D.col, 'shock');
+    dread = 1; addShake(14); ring(m.x, m.y, 320, 1, D.col, 'shock'); sfx('roar');
     say([say1(bossTitle(key), BOSS_LINES[key], D.col)]);
+  }
+
+
+  /* ---------------- sound: every effect and every note is synthesized with Web Audio, no audio files ---------------- */
+  const AU = { ctx: null, last: {}, song: null, step: 0, next: 0 };
+  function auInit() {
+    if (AU.ctx) { if (AU.ctx.state === 'suspended' && !document.hidden) AU.ctx.resume().catch(() => {}); return; }
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    try {
+      const c = AU.ctx = new AC();
+      const comp = c.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 4; comp.connect(c.destination);
+      AU.master = c.createGain(); AU.master.connect(comp);
+      AU.sfx = c.createGain(); AU.sfx.connect(AU.master);
+      AU.mus = c.createGain(); AU.mus.gain.value = 0; AU.mus.connect(AU.master);
+      /* the music runs through a soft echo so the dungeon sounds like stone */
+      AU.musIn = c.createGain(); AU.musIn.connect(AU.mus);
+      const dl = c.createDelay(1), fb = c.createGain(), lp = c.createBiquadFilter();
+      dl.delayTime.value = .34; fb.gain.value = .34; lp.type = 'lowpass'; lp.frequency.value = 2000;
+      AU.musIn.connect(dl); dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(AU.mus);
+      const b = c.createBuffer(1, c.sampleRate, c.sampleRate), ch = b.getChannelData(0); for (let i = 0; i < ch.length; i++) ch[i] = Math.random() * 2 - 1; AU.noise = b;
+      /* a short room reverb so effects sound like they happen somewhere */
+      const len = Math.floor(c.sampleRate * 2.2), ir = c.createBuffer(2, len, c.sampleRate);
+      for (let chn = 0; chn < 2; chn++) { const dd = ir.getChannelData(chn); for (let i = 0; i < len; i++) dd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.4); }
+      AU.verb = c.createConvolver(); AU.verb.buffer = ir; const vg = c.createGain(); vg.gain.value = .55; AU.verb.connect(vg); vg.connect(AU.sfx);
+      auVol(); setInterval(musTick, 80); setInterval(musAmb, 80);
+    } catch { AU.ctx = null; }
+  }
+  function auVol() {
+    if (!AU.ctx) return;
+    const t = AU.ctx.currentTime;
+    AU.sfx.gain.setTargetAtTime(+SET.sfx * .9, t, .05);
+    AU.mus.gain.setTargetAtTime(+SET.music * .5 * (paused ? .4 : 1), t, .4);
+  }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, auInit, { capture: true, passive: true }));
+  addEventListener('click', e => { if (e.target.closest && e.target.closest('button:not(.slot)')) sfx('click'); }, true);
+  document.addEventListener('visibilitychange', () => { if (AU.ctx) (document.hidden ? AU.ctx.suspend() : AU.ctx.resume()).catch(() => {}); });
+  function tone(f, dur, o = {}) {
+    const c = AU.ctx, t = c.currentTime + Math.max(0, o.at || 0), g = c.createGain(), os = c.createOscillator();
+    os.type = o.type || 'square'; os.frequency.setValueAtTime(f, t);
+    if (o.slide) os.frequency.exponentialRampToValueAtTime(Math.max(20, o.slide), t + dur);
+    if (o.detune) os.detune.value = o.detune;
+    if (o.steps) o.steps.forEach((sf, i) => os.frequency.setValueAtTime(sf, t + i * dur / o.steps.length));
+    if (o.vib) { const l = c.createOscillator(), lg = c.createGain(); l.frequency.value = o.vib[0]; lg.gain.value = o.vib[1]; l.connect(lg); lg.connect(os.frequency); l.start(t); l.stop(t + dur + .05); }
+    const v = o.vol ?? .2, a = o.attack ?? .005;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + a); g.gain.exponentialRampToValueAtTime(.0001, t + Math.max(dur, a + .01));
+    let n = os; if (o.lp) { const fl = c.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = o.lp; os.connect(fl); n = fl; }
+    n.connect(g); auOut(g, o); os.start(t); os.stop(t + dur + .05);
+  }
+  function hiss(dur, o = {}) {
+    const c = AU.ctx, t = c.currentTime + Math.max(0, o.at || 0), sN = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain();
+    sN.buffer = AU.noise; sN.loop = true;
+    fl.type = o.type || 'lowpass'; fl.frequency.setValueAtTime(o.f || 1200, t); if (o.f2) fl.frequency.exponentialRampToValueAtTime(o.f2, t + dur); fl.Q.value = o.q || 1;
+    const v = o.vol ?? .2; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + (o.attack ?? .004)); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    sN.connect(fl); fl.connect(g); auOut(g, o); sN.start(t, Math.random() * .5); sN.stop(t + dur + .05);
+  }
+  const SFX = {
+    swing: () => hiss(.3, { type: 'bandpass', f: 380, f2: 2000, q: .7, vol: .17, attack: .09 }),
+    slicehit: () => hiss(.12, { type: 'bandpass', f: 1600, f2: 900, q: .9, vol: .09, attack: .015 }),
+    stab: () => { SB.stab(0, 1); SB.stab(.07, .75); },
+    bow: () => SB.twang(0, 1),
+    zap: () => SB.whoom(0, 1),
+    hit: () => { hiss(.07, { f: 1800, vol: .18 }); tone(150, .08, { slide: 70, vol: .09, lp: 900 }); },
+    crit: () => { hiss(.1, { type: 'bandpass', f: 2400, vol: .2 }); tone(660, .12, { slide: 330, vol: .07 }); tone(990, .12, { type: 'triangle', vol: .07, at: .02 }); },
+    kill: () => { hiss(.2, { f: 900, f2: 200, vol: .18 }); tone(300, .16, { type: 'triangle', slide: 90, vol: .1 }); },
+    bossdie: () => { hiss(1.5, { f: 1200, f2: 60, vol: .4 }); tone(110, 1.5, { type: 'sawtooth', slide: 30, vol: .2, lp: 600 }); [523, 659, 784].forEach((f, i) => tone(f, 1.2, { type: 'triangle', vol: .07, at: .8 + i * .15 })); },
+    hurt: () => { tone(210, .16, { type: 'sawtooth', slide: 90, vol: .13, lp: 1400 }); hiss(.1, { f: 700, vol: .14 }); },
+    block: () => { tone(1250, .2, { type: 'triangle', vol: .12 }); tone(1870, .14, { type: 'sine', vol: .07 }); hiss(.04, { type: 'highpass', f: 3000, vol: .1 }); },
+    coin: () => { tone(1320, .07, { vol: .05 }); tone(1980, .16, { vol: .05, at: .06 }); },
+    loot: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, .22, { type: 'triangle', vol: .09, at: i * .06 })),
+    pickup: () => tone(700, .1, { type: 'triangle', slide: 1100, vol: .09 }),
+    drink: () => { for (let i = 0; i < 3; i++) tone(320 + i * 60, .09, { type: 'sine', slide: 540 + i * 60, vol: .12, at: i * .09 }); },
+    whoosh: () => hiss(.24, { type: 'bandpass', f: 380, f2: 1600, q: .8, vol: .15, attack: .05 }),
+    spell: () => { tone(440, .32, { type: 'sine', slide: 880, vol: .1 }); hiss(.28, { type: 'bandpass', f: 1500, f2: 4200, q: 2, vol: .06 }); },
+    skill: () => { hiss(.2, { type: 'bandpass', f: 600, f2: 2000, vol: .14 }); tone(160, .2, { slide: 320, vol: .06, lp: 1200 }); },
+    boom: () => { hiss(.5, { f: 800, f2: 80, vol: .26 }); tone(90, .4, { type: 'sine', slide: 40, vol: .22 }); },
+    zapline: () => { hiss(.18, { type: 'highpass', f: 2000, vol: .1 }); tone(1200, .12, { type: 'sawtooth', slide: 300, vol: .05, lp: 2500 }); },
+    roar: () => { hiss(1.1, { type: 'bandpass', f: 320, f2: 110, q: 1.5, vol: .36, attack: .1 }); tone(82, 1.1, { type: 'sawtooth', slide: 55, vol: .15, lp: 500, attack: .1 }); },
+    bosscast: () => { tone(220, .5, { type: 'sawtooth', slide: 110, vol: .07, lp: 900 }); tone(233, .5, { type: 'sawtooth', slide: 117, vol: .05, lp: 900 }); },
+    enemyshot: () => tone(520, .09, { type: 'triangle', slide: 300, vol: .035 }),
+    levelup: () => { [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, .5, { type: 'triangle', vol: .11, at: i * .09 })); [262, 392, 523].forEach(f => tone(f, 1.1, { type: 'sine', vol: .07, at: .4, attack: .05 })); },
+    death: () => [392, 349, 311, 262].forEach((f, i) => tone(f, .6, { type: 'triangle', vol: .12, at: i * .3 })),
+    stairs: () => [392, 330, 262, 196].forEach((f, i) => { tone(f, .14, { type: 'triangle', vol: .08, at: i * .1 }); hiss(.05, { f: 600, vol: .08, at: i * .1 }); }),
+    click: () => tone(1100, .035, { vol: .025 }),
+    es_arrow: () => SB.twang(0, .35), es_rock: () => SB.swish(0, .5, 200, 800, .2), es_lob: () => { SB.swish(0, .5, 200, 700, .3); SB.whistle(.05, .5, 900, 500, .6); },
+    es_magic: () => { SB.hum(0, .4, 330, .25); SB.rise(0, .4, 400, 900, .15); }, es_fire: () => SB.fire(0, .4, .25), es_ice: () => SB.ice(0, .5), es_spit: () => SB.bloop(0, .6),
+    mswing: () => SB.swish(0, .5, 300, 1300, .16),
+    die_bones: () => { SB.bones(0, 1); SB.thud(.1, .4, 200); }, die_splat: () => SB.splat(0, 1), die_squeak: () => { SB.squeak(0, 1.4); SB.thud(.05, .3, 300); }, die_wood: () => { SB.crunch(0, .6); SB.thud(0, .6, 220); },
+    stunned: () => { SB.ring(0, .6, 2600, .15); SB.ring(.1, .6, 3100, .15); SB.ring(.2, .5, 2600, .15); }, frozen: () => SB.ice(0, .8),
+    wallhit: () => SB.thud(0, .25, 260, .06),
+    warn: () => SB.buzz(0, 1),
+    bagopen: () => { hiss(.14, { type: 'bandpass', f: 1600, q: 1, vol: .06 }); SB.clink(.05, .5); }, bagclose: () => hiss(.12, { type: 'bandpass', f: 1100, q: 1, vol: .05 }),
+    equip: () => { SB.clang(0, .45, 1300); SB.thud(.02, .3, 220); },
+    unlock: () => { SB.chime(0, 1.2); SB.rise(0, .6, 500, 1500, .3); },
+    spend: () => { SB.clink(0, .9); SB.clink(.06, .8); SB.clink(.12, .7); },
+    smith: () => { SB.clang(0, .9, 1100); SB.clang(.22, .8, 1000); SB.hiss(.4, .6); },
+    brewing: () => { SB.bloop(0, 1); SB.bloop(.25, .8); },
+    craft: () => { SB.thud(0, .6, 300, .08); SB.thud(.15, .6, 280, .08); SB.swish(.3, .4, 1500, 3000, .1); },
+    blip: () => SB.blip(0, 1, 560 + Math.random() * 120),
+    talkopen: () => SB.blip(0, 1.4, 700),
+    bell: () => { SB.bell(0, 1); SB.bell(.9, .8); SB.bell(1.8, .7); },
+    fanfare: () => [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, .3, { type: 'triangle', vol: .08, at: i * .11 })),
+    portal: () => { SB.rise(0, .8, 300, 1400, .6); SB.chime(.4, .8); SB.hum(0, .5, 220, .8); },
+    gate: () => { tone(80, .9, { type: 'sawtooth', slide: 110, vol: .06, lp: 500, attack: .2 }); SB.rumble(0, .7, .8); SB.thud(.8, .9, 90); },
+    heartbeat: () => SB.heart(0, .8),
+    tired: () => hiss(.5, { type: 'bandpass', f: 700, f2: 400, q: .8, vol: .08, attack: .1 }),
+    reveal: () => { SB.swish(0, .6, 1500, 3000, .3); SB.chime(.2, .7); },
+    shard: () => { SB.holy(0, 1.3); SB.chime(.4, 1.2); SB.bell(.2, .5); },
+    step: () => {
+      const a = stepKind();
+      if (a === 'wood') { tone(150, .07, { type: 'sine', slide: 90, vol: .07 }); hiss(.05, { f: 900, vol: .04 }); }
+      else if (a === 'grass') hiss(.08, { type: 'bandpass', f: 1300, q: .7, vol: .03 });
+      else if (a === 'wet') { hiss(.09, { type: 'bandpass', f: 2300, q: 1.5, vol: .035 }); tone(420, .05, { type: 'sine', slide: 260, vol: .018 }); }
+      else if (a === 'dirt') hiss(.06, { f: 650, vol: .045 });
+      else { hiss(.04, { type: 'bandpass', f: 1900, q: 2, vol: .045 }); tone(210, .04, { type: 'triangle', vol: .018 }); }
+    },
+    door: () => { tone(110, .45, { type: 'sawtooth', slide: 170, vol: .05, lp: 700, attack: .05 }); hiss(.3, { f: 500, vol: .05, at: .1 }); tone(85, .14, { type: 'sine', vol: .14, at: .4 }); },
+    knock: () => { for (let i = 0; i < 3; i++) { tone(160, .07, { type: 'sine', slide: 110, vol: .16, at: i * .18 }); hiss(.04, { f: 800, vol: .08, at: i * .18 }); } },
+    page: () => { hiss(.08, { type: 'highpass', f: 3000, vol: .06 }); hiss(.09, { type: 'highpass', f: 2500, vol: .05, at: .13 }); },
+    meow: () => { tone(520, .35, { type: 'triangle', slide: 780, vol: .07, attack: .05 }); tone(780, .32, { type: 'triangle', slide: 470, vol: .06, at: .3 }); },
+    creak: () => tone(170, .42, { type: 'sawtooth', slide: 260, vol: .04, lp: 600, attack: .08 }),
+    eat: () => { for (let i = 0; i < 3; i++) hiss(.06, { type: 'bandpass', f: 1200 + i * 300, q: 2, vol: .08, at: i * .13 }); },
+    bed: () => hiss(.7, { f: 600, f2: 250, vol: .07, attack: .2 }),
+    crackle: () => { for (let i = 0; i < 8; i++) hiss(.03, { type: 'highpass', f: 2000 + Math.random() * 2500, vol: .06, at: Math.random() * .7 }); hiss(.9, { f: 300, vol: .05, attack: .2 }); },
+  };
+  /* what the hero is walking on */
+  function stepKind() {
+    if (!G) return 'stone';
+    if (curRoom()) return 'wood';
+    if (G.zone === 'town') { const t = G.tiles[idx(Math.floor(G.p.x / TS), Math.floor(G.p.y / TS))]; return t === 3 || t === 4 ? 'grass' : 'stone'; }
+    return ['wet', 'dirt', 'stone', 'wet', 'stone'][G.dun] || 'stone';
+  }
+  /* background sounds for each place: birds and crickets in town, the fire at home, drips, drums, wind and rumbles below */
+  function ambTick() {
+    if (!+SET.sfx || !G || $('game').hidden || paused || G.over) return;
+    const r = Math.random, A = { dest: AU.sfx };
+    const drip = () => { const f = rf(900, 1500); tone(f, .09, { type: 'sine', slide: f * .5, vol: .03 }); tone(f * .9, .08, { type: 'sine', slide: f * .45, vol: .012, at: .28 }); };
+    if (curRoom()) { if (r() < .35) hiss(.025, { type: 'highpass', f: 2200 + r() * 2500, vol: .012 + r() * .02 }); if (r() < .01) hiss(.5, { f: 250, vol: .03 }); return; }
+    if (G.zone === 'town') {
+      if (dayInfo().dark < .5) { if (r() < .03) { const f = rf(2600, 3800); for (let i = 0; i < 2 + Math.floor(r() * 3); i++) tone(f + rf(-200, 300), .07, { type: 'sine', slide: f * rf(1.1, 1.35), vol: .02, at: i * .1 }); } if (r() < .006) hiss(2.2, { type: 'bandpass', f: 500, f2: 900, q: .6, vol: .025, attack: .9 }); }
+      else { if (r() < .3) { tone(4300, .025, { type: 'triangle', vol: .006 }); tone(4300, .025, { type: 'triangle', vol: .006, at: .05 }); } if (r() < .004) { tone(380, .3, { type: 'sine', slide: 330, vol: .04 }); tone(360, .5, { type: 'sine', slide: 300, vol: .04, at: .45 }); } }
+      return;
+    }
+    const d = G.dun;
+    if (d === 0) { if (r() < .035) drip(); if (r() < .006) { tone(2600, .05, { type: 'triangle', slide: 3300, vol: .015 }); tone(2800, .05, { type: 'triangle', slide: 3500, vol: .012, at: .09 }); } }
+    else if (d === 1) { if (r() < .012) { tone(75, .45, { type: 'sine', slide: 50, vol: .07 }); tone(75, .45, { type: 'sine', slide: 50, vol: .05, at: .32 }); } if (r() < .015) drip(); }
+    else if (d === 2) { if (r() < .01) hiss(3, { type: 'bandpass', f: 380, f2: 900, q: 2, vol: .045, attack: 1.2 }); if (r() < .004) { tone(2200, .3, { type: 'triangle', vol: .015 }); tone(3100, .25, { type: 'triangle', vol: .01, at: .04 }); } }
+    else if (d === 3) { if (r() < .008) hiss(2.2, { f: 120, vol: .1, attack: .6 }); if (r() < .03) drip(); if (r() < .015) tone(300, .12, { type: 'sine', slide: 700, vol: .02 }); }
+    else { if (r() < .012) hiss(2.5, { type: 'bandpass', f: 600, f2: 1400, q: 1, vol: .035, attack: 1 }); if (r() < .0025) hiss(2.8, { f: 160, f2: 60, vol: .14, attack: .05 }); if (r() < .005) hiss(1.2, { type: 'bandpass', f: 1200, q: 7, vol: .02, attack: .4 }); }
+  }
+
+  /* building blocks for effects: each takes a delay (s) and a loudness, and some take a pitch or length */
+  const SB = {
+    swish: (at = 0, v = 1, lo = 700, hi = 3000, d = .14) => hiss(d, { type: 'bandpass', f: lo, f2: hi, q: 1.3, vol: .15 * v, at }),
+    ring: (at = 0, v = 1, f = 1800, d = .35) => { tone(f, d, { type: 'sine', vol: .05 * v, at }); tone(f * 2.71, d * .6, { type: 'sine', vol: .018 * v, at }); },
+    thud: (at = 0, v = 1, f = 130, d = .16) => { tone(f, d, { type: 'sine', slide: f * .45, vol: .22 * v, at }); hiss(d * .6, { f: 500, vol: .08 * v, at }); },
+    boom: (at = 0, v = 1) => { hiss(.6, { f: 700, f2: 70, vol: .28 * v, at }); tone(85, .5, { type: 'sine', slide: 38, vol: .24 * v, at }); },
+    crunch: (at = 0, v = 1) => { hiss(.45, { f: 900, f2: 120, vol: .2 * v, at }); for (let i = 0; i < 4; i++) hiss(.04, { type: 'bandpass', f: 600 + i * 300, q: 3, vol: .1 * v, at: at + i * .06 }); },
+    fire: (at = 0, v = 1, d = .5) => { hiss(d, { f: 300, f2: 1500, vol: .16 * v, attack: .06, at }); for (let i = 0; i < 5; i++) hiss(.03, { type: 'highpass', f: 2500 + Math.random() * 2000, vol: .05 * v, at: at + Math.random() * d }); },
+    whoom: (at = 0, v = 1) => { hiss(.3, { f: 240, f2: 1300, vol: .16 * v, attack: .07, at }); tone(120, .3, { type: 'sine', slide: 360, vol: .1 * v, attack: .06, at }); hiss(.12, { type: 'bandpass', f: 500, q: 1, vol: .08 * v, at: at + .2 }); },
+    ice: (at = 0, v = 1) => { for (let i = 0; i < 5; i++) tone(2200 + Math.random() * 2200, .18, { type: 'sine', vol: .03 * v, at: at + i * .03 }); hiss(.25, { type: 'highpass', f: 5000, vol: .06 * v, at }); },
+    shatter: (at = 0, v = 1) => { hiss(.3, { type: 'highpass', f: 3000, vol: .14 * v, at }); for (let i = 0; i < 6; i++) tone(2500 + Math.random() * 3000, .12, { type: 'triangle', vol: .03 * v, at: at + Math.random() * .1 }); },
+    zap: (at = 0, v = 1) => { for (let i = 0; i < 4; i++) { tone(900 + Math.random() * 1200, .06, { type: 'sawtooth', slide: 200, vol: .05 * v, lp: 4000, at: at + i * .045 }); hiss(.04, { type: 'highpass', f: 3000, vol: .07 * v, at: at + i * .045 }); } },
+    thunder: (at = 0, v = 1) => { hiss(.08, { type: 'highpass', f: 2000, vol: .2 * v, at }); hiss(1.8, { f: 400, f2: 60, vol: .26 * v, at: at + .03, attack: .02 }); },
+    holy: (at = 0, v = 1) => [523, 659, 784, 1047].forEach((f, i) => tone(f, .9, { type: 'sine', vol: .04 * v, attack: .08, at: at + i * .04 })),
+    chime: (at = 0, v = 1) => [1047, 1319, 1568].forEach((f, i) => tone(f, .5, { type: 'triangle', vol: .04 * v, at: at + i * .07 })),
+    bloop: (at = 0, v = 1) => { for (let i = 0; i < 3; i++) tone(260 + Math.random() * 200, .09, { type: 'sine', slide: 600 + Math.random() * 300, vol: .07 * v, at: at + i * .08 }); },
+    shadow: (at = 0, v = 1) => { hiss(.4, { type: 'bandpass', f: 1800, f2: 300, q: 1, vol: .12 * v, attack: .3, at }); tone(110, .45, { type: 'sine', slide: 55, vol: .1 * v, attack: .25, at }); },
+    poof: (at = 0, v = 1) => hiss(.6, { f: 1400, f2: 200, vol: .18 * v, at }),
+    /* an arrow leaving the bow: a rush of air with a thin whistle that trails away */
+    twang: (at = 0, v = 1) => { hiss(.42, { type: 'bandpass', f: 1500, f2: 3800, q: 2.2, vol: .13 * v, attack: .03, at }); hiss(.32, { type: 'bandpass', f: 600, f2: 1400, q: .8, vol: .06 * v, attack: .02, at }); tone(2300, .38, { type: 'sine', slide: 1500, vol: .016 * v, attack: .04, at }); },
+    draw: (at = 0, v = 1, d = .1) => { tone(70, d, { type: 'sawtooth', slide: 140, vol: .06 * v, lp: 420, attack: d * .8, at }); hiss(d, { type: 'bandpass', f: 900, f2: 1600, q: 3, vol: .025 * v, attack: d * .8, at }); },
+    whistle: (at = 0, v = 1, f0 = 2000, f1 = 700, d = .5) => tone(f0, d, { type: 'sine', slide: f1, vol: .03 * v, at }),
+    stab: (at = 0, v = 1) => { hiss(.035, { type: 'highpass', f: 3500, vol: .13 * v, at }); hiss(.05, { type: 'bandpass', f: 1400, q: 2, vol: .06 * v, at: at + .01 }); tone(320, .045, { type: 'sine', slide: 150, vol: .06 * v, at: at + .015 }); },
+    clink: (at = 0, v = 1) => tone(2400 + Math.random() * 1200, .12, { type: 'triangle', vol: .04 * v, at }),
+    roar: (at = 0, v = 1) => { hiss(.8, { type: 'bandpass', f: 380, f2: 160, q: 1.4, vol: .3 * v, attack: .08, at }); tone(110, .8, { type: 'sawtooth', slide: 70, vol: .1 * v, lp: 600, attack: .08, at }); },
+    shout: (at = 0, v = 1) => { tone(190, .45, { type: 'sawtooth', slide: 250, vol: .08 * v, lp: 1300, attack: .04, at }); hiss(.4, { type: 'bandpass', f: 800, q: 2, vol: .08 * v, attack: .04, at }); },
+    heart: (at = 0, v = 1) => { tone(60, .12, { type: 'sine', slide: 40, vol: .25 * v, at }); tone(55, .12, { type: 'sine', slide: 38, vol: .18 * v, at: at + .18 }); },
+    hum: (at = 0, v = 1, f = 220, d = .6) => { tone(f, d, { type: 'sine', vol: .06 * v, attack: .1, at }); tone(f * 1.5, d, { type: 'sine', vol: .04 * v, attack: .1, at, detune: 8 }); },
+    rise: (at = 0, v = 1, f0 = 300, f1 = 1800, d = .3) => tone(f0, d, { type: 'sine', slide: f1, vol: .06 * v, at }),
+    screech: (at = 0, v = 1) => { tone(1700, .35, { type: 'sawtooth', slide: 2500, vol: .03 * v, lp: 3500, at }); tone(2400, .25, { type: 'triangle', slide: 1500, vol: .03 * v, at: at + .2 }); },
+    squeak: (at = 0, v = 1) => tone(2600 + Math.random() * 600, .06, { type: 'triangle', slide: 3400, vol: .03 * v, at }),
+    horn: (at = 0, v = 1) => { tone(220, .8, { type: 'sawtooth', vol: .06 * v, lp: 900, attack: .1, at }); tone(330, .8, { type: 'sawtooth', vol: .04 * v, lp: 900, attack: .15, at: at + .05 }); },
+    bell: (at = 0, v = 1) => { tone(520, 2.4, { type: 'sine', vol: .1 * v, at }); tone(1300, 1.4, { type: 'sine', vol: .03 * v, at }); tone(780, 1.8, { type: 'sine', vol: .04 * v, at }); },
+    tick: (at = 0, v = 1, f = 1800) => tone(f, .03, { type: 'square', vol: .03 * v, lp: 3000, at }),
+    bones: (at = 0, v = 1) => { for (let i = 0; i < 6; i++) hiss(.03, { type: 'bandpass', f: 1500 + Math.random() * 1500, q: 4, vol: .1 * v, at: at + i * .05 + Math.random() * .03 }); },
+    splat: (at = 0, v = 1) => { hiss(.2, { f: 700, f2: 150, vol: .18 * v, at }); tone(200, .15, { type: 'sine', slide: 80, vol: .1 * v, at }); },
+    chain: (at = 0, v = 1) => { for (let i = 0; i < 5; i++) tone(1800 + Math.random() * 1600, .1, { type: 'triangle', vol: .035 * v, at: at + i * .06 }); },
+    glass: (at = 0, v = 1) => { hiss(.15, { type: 'highpass', f: 3500, vol: .15 * v, at }); for (let i = 0; i < 5; i++) tone(3000 + Math.random() * 2500, .1, { type: 'sine', vol: .03 * v, at: at + Math.random() * .08 }); },
+    rumble: (at = 0, v = 1, d = 1.2) => hiss(d, { f: 140, vol: .16 * v, attack: .2, at }),
+    clang: (at = 0, v = 1, f = 900) => { tone(f, .5, { type: 'triangle', vol: .09 * v, at }); tone(f * 2.4, .3, { type: 'sine', vol: .04 * v, at }); hiss(.05, { type: 'highpass', f: 2500, vol: .1 * v, at }); },
+    suck: (at = 0, v = 1) => { hiss(.5, { type: 'bandpass', f: 2000, f2: 300, q: 2, vol: .1 * v, attack: .4, at }); tone(700, .5, { type: 'sine', slide: 180, vol: .05 * v, attack: .3, at }); },
+    whir: (at = 0, v = 1, d = .5) => { for (let i = 0; i < d / .05; i++) tone(2600 + (i % 2) * 500, .04, { type: 'triangle', vol: .022 * v, at: at + i * .05 }); },
+    blip: (at = 0, v = 1, f = 620) => tone(f, .035, { type: 'triangle', vol: .02 * v, at }),
+    hiss: (at = 0, v = 1) => hiss(.25, { type: 'highpass', f: 3000, f2: 6000, vol: .06 * v, at }),
+    buzz: (at = 0, v = 1) => tone(130, .12, { type: 'square', vol: .03 * v, lp: 900, at }),
+  };
+  const sq = (...steps) => () => steps.forEach(([n, at, v, ...x]) => SB[n](at || 0, v ?? 1, ...x));
+
+  function auOut(g, o) { g.connect(o.dest || AU.bus || AU.sfx); if (o.wet && AU.verb) { const w = AU.ctx.createGain(); w.gain.value = o.wet; g.connect(w); w.connect(AU.verb); } }
+  /* noise with its own filter and volume curves: f and g are lists of [time, value] */
+  function nz(o) {
+    const c = AU.ctx, t = c.currentTime + Math.max(0, o.at || 0), sN = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain();
+    sN.buffer = AU.noise; sN.loop = true; fl.type = o.type || 'bandpass'; fl.Q.value = o.q ?? 1;
+    fl.frequency.setValueAtTime(o.f[0][1], t); for (const [tt, ff] of o.f.slice(1)) fl.frequency.exponentialRampToValueAtTime(ff, t + tt);
+    g.gain.setValueAtTime(.0001, t); for (const [tt, vv] of o.g) g.gain.exponentialRampToValueAtTime(Math.max(.0001, vv), t + tt);
+    sN.connect(fl); fl.connect(g); auOut(g, o); sN.start(t, Math.random() * .5); sN.stop(t + o.d + .05);
+  }
+  const RND = (a, b) => a + Math.random() * (b - a);
+  /* realistic building blocks for ability sounds */
+  const R = {
+    swoosh: (at = 0, v = 1, f0 = 300, fp = 1600, d = .3, q = 1.2, wet = .15) => nz({ at, d, q, wet, f: [[0, f0], [d * .5, fp], [d, f0 * .8]], g: [[d * .45, .22 * v], [d, .0001]] }),
+    air: (at = 0, v = 1, d = .6, f0 = 1500, f1 = 3500) => nz({ at, d, q: 2, wet: .2, f: [[0, f0], [d, f1]], g: [[d * .25, .1 * v], [d, .0001]] }),
+    thump: (at = 0, v = 1, f = 90, d = .3, wet = .2) => { tone(f, d, { type: 'sine', slide: f * .4, vol: .3 * v, at, wet }); nz({ at, d: d * .7, type: 'lowpass', q: .7, wet, f: [[0, 900], [d * .7, 120]], g: [[.006, .25 * v], [d * .7, .0001]] }); },
+    metal: (at = 0, v = 1, f = 500, d = 1.2, wet = .3) => { [[1, 1], [2.76, .55], [5.4, .3], [8.93, .17], [13.3, .1]].forEach(([r, a]) => tone(f * r, d / (1 + r * .25), { type: 'sine', vol: .09 * v * a, at, wet })); nz({ at, d: .05, type: 'highpass', f: [[0, 3000]], g: [[.002, .2 * v], [.05, .0001]], wet }); },
+    crack: (at = 0, v = 1, wet = .35) => { nz({ at, d: .03, type: 'highpass', f: [[0, 2500]], g: [[.002, .5 * v], [.03, .0001]], wet }); nz({ at, d: .12, q: .8, f: [[0, 1800], [.12, 600]], g: [[.004, .22 * v], [.12, .0001]], wet }); },
+    rumble: (at = 0, v = 1, d = 1.5, wet = .4) => nz({ at, d, type: 'lowpass', q: .8, wet, f: [[0, 220], [d, 70]], g: [[d * .15, .3 * v], [d * .5, .18 * v], [d, .0001]] }),
+    crackle: (at = 0, v = 1, d = .6, n = 14) => { for (let i = 0; i < n; i++) nz({ at: at + Math.random() * d, d: .02, type: 'highpass', q: .7, f: [[0, RND(2000, 6000)]], g: [[.002, RND(.05, .14) * v], [.02, .0001]] }); },
+    ignite: (at = 0, v = 1) => { nz({ at, d: .5, type: 'lowpass', q: .7, wet: .2, f: [[0, 200], [.08, 2400], [.5, 500]], g: [[.03, .32 * v], [.5, .0001]] }); tone(60, .35, { type: 'sine', slide: 40, vol: .2 * v, at }); },
+    fire: (at = 0, v = 1, d = 1) => { nz({ at, d, type: 'lowpass', q: .6, wet: .25, f: [[0, 500], [d * .3, 1100], [d * .7, 700], [d, 400]], g: [[d * .15, .26 * v], [d * .6, .18 * v], [d, .0001]] }); R.crackle(at, v, d, Math.round(d * 26)); },
+    boom: (at = 0, v = 1, wet = .45) => { R.crack(at, v * .8, wet); tone(70, 1.1, { type: 'sine', slide: 28, vol: .42 * v, at, wet }); nz({ at, d: 1.4, type: 'lowpass', q: .6, wet, f: [[0, 1800], [1.4, 60]], g: [[.01, .45 * v], [.5, .2 * v], [1.4, .0001]] }); R.debris(at + .15, v * .7, .8); },
+    debris: (at = 0, v = 1, d = .7) => { for (let i = 0; i < 9; i++) nz({ at: at + Math.random() * d, d: .06, type: 'lowpass', q: 1, f: [[0, RND(500, 1400)]], g: [[.004, RND(.06, .15) * v], [.06, .0001]] }); },
+    crystal: (at = 0, v = 1, n = 8, d = .3, lo = 3000, hi = 7000) => { for (let i = 0; i < n; i++) { const f = RND(lo, hi); tone(f, RND(.15, .45), { type: 'sine', vol: .04 * v, at: at + Math.random() * d, wet: .5 }); } },
+    shatter: (at = 0, v = 1) => { R.crack(at, v); R.crystal(at, v * 1.4, 16, .25); nz({ at, d: .4, type: 'highpass', q: .7, wet: .4, f: [[0, 4000]], g: [[.005, .22 * v], [.4, .0001]] }); },
+    freeze: (at = 0, v = 1, d = .5) => { R.crystal(at, v, 10, d, 2500, 6000); nz({ at, d, q: 8, wet: .3, f: [[0, 2500], [d, 6000]], g: [[d * .5, .08 * v], [d, .0001]] }); },
+    elec: (at = 0, v = 1, d = .4) => { const st = []; for (let i = 0; i < d / .018; i++) st.push(RND(70, 480)); tone(200, d, { type: 'sawtooth', steps: st, vol: .1 * v, lp: 3200, at, wet: .3 }); for (let i = 0; i < 6; i++) nz({ at: at + Math.random() * d, d: .05, type: 'highpass', f: [[0, 3500]], g: [[.003, .18 * v], [.05, .0001]] }); },
+    thunder: (at = 0, v = 1) => { R.crack(at, v * 1.4, .5); nz({ at: at + .05, d: 2.6, type: 'lowpass', q: .7, wet: .6, f: [[0, 900], [.4, 300], [2.6, 60]], g: [[.05, .45 * v], [.6, .2 * v], [1.1, .3 * v], [2.6, .0001]] }); },
+    bubble: (at = 0, v = 1, n = 6, d = .5) => { for (let i = 0; i < n; i++) { const f = RND(180, 600); tone(f, RND(.05, .12), { type: 'sine', slide: f * RND(2, 3), vol: .1 * v, at: at + Math.random() * d, wet: .15 }); } },
+    sizzle: (at = 0, v = 1, d = .6) => { for (let i = 0; i < 5; i++) nz({ at: at + i * d / 5, d: d / 4, type: 'highpass', q: .5, f: [[0, RND(4000, 7000)]], g: [[.02, RND(.05, .12) * v], [d / 4, .0001]] }); },
+    gas: (at = 0, v = 1, d = 1.2) => nz({ at, d, type: 'highpass', q: .5, wet: .3, f: [[0, 2600], [d, 1600]], g: [[.03, .22 * v], [d * .4, .1 * v], [d, .0001]] }),
+    splash: (at = 0, v = 1) => { nz({ at, d: .35, type: 'lowpass', q: .6, wet: .2, f: [[0, 2500], [.35, 400]], g: [[.006, .32 * v], [.35, .0001]] }); R.bubble(at + .05, v * .8, 6, .3); },
+    glass: (at = 0, v = 1) => { R.crack(at, v * .8); for (let i = 0; i < 14; i++) tone(RND(2500, 7500), RND(.08, .3), { type: 'sine', vol: .045 * v, at: at + Math.random() * .35, wet: .3 }); },
+    bell: (at = 0, v = 1, f = 660, d = 2.2) => [[1, 1], [2, .5], [2.4, .4], [3, .25], [4.5, .2], [5.4, .12]].forEach(([r, a]) => tone(f * r, d / (1 + r * .2), { type: 'sine', vol: .07 * v * a, at, wet: .5 })),
+    /* a glowing magical chord: soft detuned tones that swell in, with a sparkle on top */
+    pad: (at = 0, v = 1, notes = [262, 330, 392], d = 1.6) => { notes.forEach((f, i) => { tone(f, d, { type: 'triangle', vol: .06 * v, attack: d * .35, at: at + i * .04, wet: .6, vib: [4.5, f * .006] }); tone(f * 2, d * .8, { type: 'sine', vol: .025 * v, attack: d * .4, at: at + i * .04, detune: 9, wet: .6 }); }); R.shimmer(at + d * .2, v * .5, d * .6, 2500, 5500); },
+    /* energy gathering: a buzzing tone that rises and throbs */
+    surge: (at = 0, v = 1, f0 = 90, f1 = 360, d = .8) => { tone(f0, d, { type: 'sawtooth', slide: f1, vol: .07 * v, lp: 1400, attack: d * .7, at, wet: .4, vib: [9, f0 * .05] }); tone(f0 * 2, d, { type: 'sine', slide: f1 * 2, vol: .04 * v, attack: d * .7, at, wet: .4 }); },
+    /* a deep magical throb in place of a heartbeat */
+    pulse: (at = 0, v = 1, f = 70) => { tone(f, .35, { type: 'sine', slide: f * .6, vol: .3 * v, attack: .02, at, wet: .3 }); tone(f * 3, .3, { type: 'triangle', slide: f * 2, vol: .04 * v, at, wet: .5 }); },
+    /* a mystic horn blast: layered brassy tones, no voice */
+    mhorn: (at = 0, v = 1, f = 147, d = 1) => { [1, 1.5, 2].forEach((r, i) => tone(f * r, d, { type: 'sawtooth', vol: (.07 - i * .015) * v, lp: 1100 + i * 300, attack: .12, at: at + i * .03, wet: .5, vib: [5, 2] })); R.shimmer(at + .2, v * .4, d * .6, 1500, 3500); },
+    /* a spectral cry: a gliding, wavering tone for magical birds */
+    spirit: (at = 0, v = 1, f = 1600, d = .7) => { tone(f, d, { type: 'sine', slide: f * .6, vol: .07 * v, vib: [11, f * .04], attack: .04, at, wet: .5 }); tone(f * 1.5, d * .8, { type: 'triangle', slide: f * .9, vol: .03 * v, vib: [11, f * .05], at, wet: .5 }); },
+    heart: (at = 0, v = 1) => { R.thump(at, v * .7, 58, .18, .1); R.thump(at + .2, v * .5, 52, .18, .1); },
+    breath: (at = 0, v = 1, d = .7, up = true) => nz({ at, d, q: 1.5, f: up ? [[0, 500], [d, 1300]] : [[0, 1300], [d, 500]], g: [[d * .6, .08 * v], [d, .0001]] }),
+    creak: (at = 0, v = 1, d = .3) => { const st = []; for (let i = 0; i < d / .022; i++) st.push(RND(55, 95)); tone(70, d, { type: 'sawtooth', steps: st, vol: .1 * v, lp: 1100, attack: d * .6, at }); },
+    wings: (at = 0, v = 1, n = 4, gap = .12) => { for (let i = 0; i < n; i++) nz({ at: at + i * gap, d: .1, type: 'lowpass', q: .7, f: [[0, 700], [.1, 250]], g: [[.03, .16 * v], [.1, .0001]] }); },
+    screech: (at = 0, v = 1, f = 2600, d = .6) => { tone(f, d, { type: 'sawtooth', slide: f * .7, vol: .07 * v, lp: 4200, vib: [32, 140], attack: .02, at, wet: .4 }); tone(f * 1.5, d * .7, { type: 'triangle', slide: f, vol: .03 * v, vib: [32, 200], at, wet: .4 }); },
+    hum: (at = 0, v = 1, f = 220, d = 1, trem = 0) => { tone(f, d, { type: 'sine', vol: .08 * v, attack: d * .2, at, wet: .4, vib: trem ? [trem, f * .02] : 0 }); tone(f * 2.01, d, { type: 'sine', vol: .04 * v, attack: d * .25, at, wet: .4 }); tone(f * 1.5, d, { type: 'triangle', vol: .025 * v, attack: d * .3, at, detune: 7, wet: .4 }); },
+    tick: (at = 0, v = 1, f = 2200) => { nz({ at, d: .025, q: 4, f: [[0, f]], g: [[.002, .25 * v], [.025, .0001]] }); tone(f, .04, { type: 'sine', vol: .04 * v, at }); },
+    whistle: (at = 0, v = 1, f0 = 2400, f1 = 900, d = .6) => { tone(f0, d, { type: 'sine', slide: f1, vol: .05 * v, at, wet: .3 }); nz({ at, d, q: 12, f: [[0, f0], [d, f1]], g: [[d * .3, .06 * v], [d, .0001]] }); },
+    boing: (at = 0, v = 1) => tone(180, .5, { type: 'sine', vol: .15 * v, vib: [14, 40], at }),
+    tinkle: (at = 0, v = 1, n = 6, d = .4) => { for (let i = 0; i < n; i++) R.metal(at + Math.random() * d, v * .25, RND(1800, 3200), .25, .2); },
+    thunk: (at = 0, v = 1) => { nz({ at, d: .08, type: 'lowpass', q: 1, f: [[0, 1400], [.08, 300]], g: [[.003, .3 * v], [.08, .0001]] }); tone(190, .08, { type: 'sine', slide: 110, vol: .14 * v, at }); },
+    knife: (at = 0, v = 1, f = 2600) => nz({ at, d: .12, q: 2.5, wet: .1, f: [[0, f * .6], [.06, f * 1.4], [.12, f]], g: [[.04, .2 * v], [.12, .0001]] }),
+    release: (at = 0, v = 1) => SB.twang(at, v),
+    step: (at = 0, v = 1) => { R.thump(at, v * .4, 120, .1, .05); R.tinkle(at, v * .4, 2, .05); },
+    shimmer: (at = 0, v = 1, d = 1, lo = 1500, hi = 4000) => { for (let i = 0; i < d * 14; i++) tone(RND(lo, hi), .3, { type: 'sine', vol: .025 * v, attack: .05, at: at + i / 14, wet: .7 }); },
+    reverse: (at = 0, v = 1, d = .6, f0 = 400, f1 = 2400) => nz({ at, d, q: 1, wet: .3, f: [[0, f0], [d, f1]], g: [[d * .92, .25 * v], [d, .0001]] }),
+    whisper: (at = 0, v = 1, d = 1.2) => { for (let i = 0; i < 4; i++) nz({ at: at + i * d / 4, d: d / 3, q: 9, wet: .5, f: [[0, RND(900, 2400)], [d / 3, RND(900, 2400)]], g: [[d / 8, .06 * v], [d / 3, .0001]] }); },
+  };
+  const ABV = 1.5;
+  /* every ability, built from those parts; v=ABV keeps ability sounds louder than everyday ones */
+  const AB_SND = {
+    /* knight */
+    charge: () => { nz({ d: .32, q: .9, wet: .15, f: [[0, 220], [.3, 1100]], g: [[.28, .24 * ABV], [.32, .0001]] }); nz({ at: .27, d: .35, type: 'lowpass', q: .6, wet: .3, f: [[0, 700], [.35, 120]], g: [[.008, .3 * ABV], [.35, .0001]] }); tone(95, .35, { type: 'sine', slide: 45, vol: .3 * ABV, at: .27, wet: .3 }); tone(180, .2, { type: 'triangle', slide: 120, vol: .06 * ABV, lp: 600, at: .27 }); },
+    whirl: () => { for (let i = 0; i < 5; i++) R.swoosh(i * .13, ABV * .75, 350 + i * 60, 1700 + i * 200, .2, 1.4, .2); R.swoosh(0, ABV * .3, 150, 400, .8, .6, .1); },
+    execute: () => { R.surge(0, ABV * .8, 70, 280, .3); R.swoosh(.25, ABV, 180, 1400, .3, .9); R.thump(.5, ABV * 1.3, 70, .5, .4); R.debris(.52, ABV * .6, .3); tone(110, 1, { type: 'triangle', slide: 55, vol: .12 * ABV, at: .5, wet: .6 }); },
+    earthsplit: () => { R.thump(0, ABV * 1.2, 60, .5, .4); for (let i = 0; i < 6; i++) { nz({ at: .05 + i * .07, d: .2, type: 'lowpass', q: 1, wet: .3, f: [[0, 1400], [.2, 300]], g: [[.01, .3 * ABV], [.2, .0001]] }); } R.rumble(.05, ABV * .9, 1.4); R.debris(.2, ABV * .8, .8); },
+    trance: () => { R.pulse(0, ABV); R.pulse(.4, ABV * 1.1); R.pulse(.72, ABV * 1.2); R.surge(.1, ABV, 80, 240, 1.2); R.shimmer(.8, ABV * .5, .6, 1500, 3500); },
+    wall: () => { nz({ d: .3, q: 6, wet: .2, f: [[0, 1800], [.3, 3400]], g: [[.15, .12 * ABV], [.3, .0001]] }); R.metal(.28, ABV * 1.1, 240, 1.4); R.thump(.28, ABV, 90, .3); },
+    warcry: () => { R.mhorn(0, ABV * 1.1, 147, 1.1); R.thump(.05, ABV * .8, 60, .5, .5); R.rumble(.1, ABV * .5, 1); nz({ d: .7, q: .8, wet: .4, f: [[0, 300], [.7, 1800]], g: [[.1, .15 * ABV], [.7, .0001]] }); },
+    bash: () => { R.swoosh(0, ABV * .6, 200, 800, .18); R.metal(.15, ABV * 1.2, 380, .9); R.thump(.15, ABV * 1.2, 100, .3); R.shimmer(.18, ABV * .3, .25, 2500, 5000); },
+    fortress: () => { R.metal(0, ABV, 160, 1.6); R.metal(.25, ABV * .9, 190, 1.4); R.thump(0, ABV, 60, .5, .5); R.thump(.25, ABV, 60, .5, .5); R.rumble(.1, ABV * .7, 1.6); },
+    aegis: () => { R.pad(0, ABV, [262, 330, 392, 523], 2); R.bell(.2, ABV * .6, 784, 2.4); R.metal(.1, ABV * .3, 1046, 2); },
+    rally: () => { [392, 494, 587, 784, 988].forEach((f, i) => { tone(f, 1.1, { type: 'triangle', vol: .07 * ABV, at: i * .08, wet: .6 }); tone(f * 2, .5, { type: 'sine', vol: .015 * ABV, at: i * .08, wet: .6 }); }); tone(196, 1.6, { type: 'sine', vol: .1 * ABV, attack: .5, at: .2, wet: .5 }); R.shimmer(.35, ABV * .5, .8, 2500, 5000); },
+    smite: () => { R.shimmer(0, ABV * .5, .3, 3000, 6000); R.crack(.28, ABV * 1.4, .5); R.bell(.3, ABV * .8, 523, 2); R.thump(.3, ABV, 70, .4, .4); },
+    consecrate: () => { R.pad(0, ABV * .8, [196, 247, 294], 2.2); R.hum(0, ABV, 98, 2.2, 3); },
+    judgment: () => { tone(500, .75, { type: 'sine', slide: 2600, vol: .07 * ABV, attack: .6, wet: .4 }); nz({ d: .75, q: 3, wet: .3, f: [[0, 800], [.75, 5000]], g: [[.7, .12 * ABV], [.75, .0001]] }); R.crack(.75, ABV * 1.3, .5); R.metal(.75, ABV * .7, 880, 2.2); R.boom(.75, ABV * .8); R.shimmer(.8, ABV * .6, 1, 3000, 7000); },
+    laststand: () => { R.pulse(0, ABV * 1.3, 60); R.pulse(.5, ABV * 1.3, 60); R.surge(.15, ABV * .9, 55, 165, 1.1); R.metal(.2, ABV * .5, 260, 1.4); R.tinkle(.1, ABV * .5, 5, .5); },
+    /* archer */
+    pierce: () => { R.creak(0, ABV, .3); R.release(.3, ABV * 1.3); R.air(.32, ABV * 1.2, .8, 900, 2600); R.thunk(.75, ABV * .6); },
+    snipe: () => { R.creak(0, ABV, .45); R.hum(.05, ABV * .5, 440, .45, 6); R.crack(.47, ABV * .8, .3); R.whistle(.48, ABV * 1.2, 3400, 2600, .7); R.air(.48, ABV, .7, 2000, 4500); },
+    multishot: () => { R.creak(0, ABV * .8, .2); for (const [d, f] of [[0, 1], [.02, 1.15], [.04, .85]]) { R.release(.2 + d, ABV * .8); R.whistle(.2 + d, ABV * .5, 2400 * f, 1600 * f, .5); } },
+    ricochet: () => { R.creak(0, ABV * .7, .18); R.release(.18, ABV); R.whistle(.4, ABV * .8, 3200, 1400, .3); R.metal(.4, ABV * .3, 2400, .3); R.whistle(.6, ABV * .7, 3000, 1300, .3); R.metal(.6, ABV * .25, 2700, .3); R.thunk(.85, ABV * .5); },
+    rain: () => { R.creak(0, ABV * .8, .25); R.release(.25, ABV); for (let i = 0; i < 8; i++) R.whistle(.6 + i * .06, ABV * .45, RND(2400, 3400), RND(700, 1100), .55); for (let i = 0; i < 8; i++) R.thunk(1.15 + i * .05 + Math.random() * .03, ABV * .4); },
+    volley: () => { R.creak(0, ABV * .7, .15); for (let i = 0; i < 5; i++) { R.release(.15 + i * .07, ABV * .7); R.whistle(.16 + i * .07, ABV * .35, RND(2200, 3000), 1400, .45); } },
+    disengage: () => { R.swoosh(0, ABV * .8, 200, 900, .35, .7); R.release(.12, ABV); R.thump(.38, ABV * .5, 130, .15, .1); R.step(.45, ABV * .5); },
+    trap: () => { for (let i = 0; i < 5; i++) R.tick(i * .06, ABV * .6, 1600); R.boing(.32, ABV * .6); R.metal(.34, ABV * .6, 1200, .4); },
+    hawk: () => { R.spirit(0, ABV, 2200, .7); R.wings(.35, ABV, 5, .1); R.swoosh(.8, ABV * .7, 400, 2000, .3); R.shimmer(.85, ABV * .4, .3, 2500, 5000); },
+    tempest: () => { nz({ d: 2, q: 1.4, wet: .4, f: [[0, 300], [.6, 1200], [1.2, 500], [2, 900]], g: [[.5, .25 * ABV], [1.4, .15 * ABV], [2, .0001]] }); for (let i = 0; i < 6; i++) R.whistle(.2 + i * .2, ABV * .4, RND(1800, 3200), RND(900, 1600), .6); R.release(.1, ABV * .8); },
+    firearrow: () => { R.release(0, ABV); nz({ at: .02, d: .7, q: 1.1, wet: .3, f: [[0, 350], [.25, 1300], [.7, 600]], g: [[.12, .2 * ABV], [.7, .0001]] }); nz({ at: .05, d: .6, type: 'lowpass', q: .5, wet: .2, f: [[0, 900], [.6, 500]], g: [[.1, .08 * ABV], [.6, .0001]] }); for (let i = 0; i < 5; i++) tone(RND(1800, 3200), .06, { type: 'triangle', vol: .02 * ABV, at: .15 + i * .09 + Math.random() * .04, wet: .4 }); },
+    venomshot: () => { R.creak(0, ABV * .6, .15); R.release(.15, ABV); R.sizzle(.2, ABV * .7, .4); R.bubble(.25, ABV * .6, 4, .3); },
+    frostarrow: () => { R.creak(0, ABV * .6, .15); R.release(.15, ABV); R.freeze(.18, ABV * .9, .4); },
+    cluster: () => { R.creak(0, ABV * .7, .2); R.release(.2, ABV); R.sizzle(.25, ABV * .5, .4); R.boom(.75, ABV * .5); R.boom(.9, ABV * .45); R.boom(1.05, ABV * .4); },
+    phoenix: () => { R.creak(0, ABV, .3); R.release(.3, ABV * 1.2); R.fire(.3, ABV * 1.1, 1.2); R.spirit(.4, ABV * .9, 1400, .9); R.wings(.4, ABV, 4, .14); },
+    /* assassin */
+    flurry: () => { for (let i = 0; i < 4; i++) { R.knife(i * .08, ABV * .8, 2400 + i * 300); R.thunk(i * .08 + .04, ABV * .3); } },
+    lunge: () => { R.swoosh(0, ABV * .9, 250, 1800, .2, 1); R.knife(.16, ABV, 3000); R.thunk(.2, ABV * .6); },
+    bladedance: () => { for (let i = 0; i < 6; i++) { R.knife(i * .09, ABV * .7, i % 2 ? 3200 : 2200); if (i % 2) R.thunk(i * .09 + .04, ABV * .25); } R.swoosh(0, ABV * .3, 200, 600, .6, .7); },
+    shuriken: () => { for (let i = 0; i < 3; i++) { tone(3000 + i * 200, .4, { type: 'triangle', vol: .04 * ABV, vib: [40, 300], at: i * .08, wet: .2 }); R.air(i * .08, ABV * .4, .35, 3000, 4500); R.thunk(.35 + i * .08, ABV * .5); R.metal(.35 + i * .08, ABV * .15, 2200, .2); } },
+    lotus: () => { for (let i = 0; i < 10; i++) R.knife(i * (.11 - i * .006), ABV * .6, RND(2000, 3600)); tone(2800, 1, { type: 'triangle', vol: .03 * ABV, vib: [36, 400], at: .1, wet: .3 }); R.swoosh(.7, ABV, 300, 2400, .4, 1); },
+    vanish: () => { nz({ d: .5, type: 'lowpass', q: .6, wet: .4, f: [[0, 1600], [.5, 300]], g: [[.01, .3 * ABV], [.5, .0001]] }); R.reverse(.05, ABV * .6, .4, 1800, 300); },
+    shadowstep: () => { R.reverse(0, ABV * .8, .35, 300, 2000); R.swoosh(.35, ABV * .8, 2000, 500, .25, 1); R.step(.55, ABV * .4); },
+    smoke: () => { R.glass(0, ABV * .5); nz({ at: .02, d: 1.6, type: 'highpass', q: .5, wet: .4, f: [[0, 3000], [1.6, 1200]], g: [[.04, .3 * ABV], [.5, .14 * ABV], [1.6, .0001]] }); },
+    mark: () => { R.bell(0, ABV * .5, 220, 2.5); R.whisper(.1, ABV, 1.4); R.hum(0, ABV * .7, 55, 1.8); },
+    eclipse: () => { R.reverse(0, ABV, 1, 200, 1200); tone(45, 2, { type: 'sine', vol: .3 * ABV, attack: .8, at: .2, wet: .5 }); R.whisper(.4, ABV * .7, 1.5); nz({ at: .9, d: 1.4, q: 1, wet: .5, f: [[0, 400], [1.4, 150]], g: [[.2, .2 * ABV], [1.4, .0001]] }); },
+    fan: () => { for (let i = 0; i < 3; i++) R.knife(i * .04, ABV * .6, 3600 + i * 400); R.splash(.3, ABV * .4); },
+    toxic: () => { R.bubble(0, ABV, 8, .5); R.sizzle(.1, ABV * .8, .6); R.knife(.5, ABV * .5, 4000); },
+    caltrops: () => { R.swoosh(0, ABV * .4, 400, 1000, .2); for (let i = 0; i < 9; i++) R.metal(.15 + Math.random() * .3, ABV * .18, RND(2600, 4200), .25, .15); },
+    plaguebomb: () => { R.swoosh(0, ABV * .6, 300, 1100, .3); R.glass(.3, ABV); R.gas(.33, ABV * .8, 1.3); R.bubble(.4, ABV * .7, 8, .8); },
+    virulence: () => { R.splash(0, ABV * 1.2); R.gas(.05, ABV * .7, .9); R.bubble(.1, ABV * .8, 10, .5); },
+    /* mage */
+    fireball: () => { R.ignite(0, ABV); R.fire(.05, ABV * .9, .7); R.swoosh(.1, ABV * .7, 200, 900, .5, .6, .2); },
+    nova: () => { R.freeze(0, ABV, .35); R.shatter(.35, ABV * 1.2); nz({ at: .35, d: .8, type: 'highpass', q: .5, wet: .5, f: [[0, 5000], [.8, 2500]], g: [[.01, .18 * ABV], [.8, .0001]] }); },
+    lightning: () => { R.elec(0, ABV * 1.2, .45); R.crack(.05, ABV, .4); R.elec(.25, ABV, .3); R.crack(.3, ABV * .8, .4); R.rumble(.3, ABV * .4, .8); },
+    blink: () => { nz({ d: .18, q: 3, wet: .3, f: [[0, 400], [.18, 4500]], g: [[.12, .2 * ABV], [.18, .0001]] }); tone(300, .2, { type: 'sine', slide: 2400, vol: .06 * ABV, at: 0, wet: .4 }); R.thump(.2, ABV * .3, 300, .08); R.shimmer(.2, ABV * .4, .3, 3000, 6000); },
+    mend: () => { R.shimmer(0, ABV * .7, .8, 1500, 3500); R.pad(0, ABV * .6, [392, 494, 587], 1.4); },
+    icelance: () => { R.freeze(0, ABV * .8, .35); R.whistle(.35, ABV, 3800, 2600, .4); R.air(.35, ABV * .8, .4, 3000, 5000); R.crack(.75, ABV * .7); R.crystal(.75, ABV, 8, .15); },
+    miasma: () => { R.bubble(0, ABV * 1.2, 12, 1.2); R.gas(.1, ABV * .7, 1.4); tone(65, 1.4, { type: 'sine', vol: .12 * ABV, attack: .4, wet: .3 }); },
+    barrier: () => { R.hum(0, ABV * 1.2, 196, 1.2, 6); R.metal(.05, ABV * .4, 1400, 1.6); R.shimmer(.1, ABV * .4, .6, 2000, 4000); },
+    orbs: () => { for (let i = 0; i < 3; i++) { R.hum(i * .15, ABV * .6, 330 * (1 + i * .25), .7, 8); R.bell(i * .15, ABV * .3, 990 * (1 + i * .25), .8); } },
+    meteor: () => { nz({ d: 1.1, type: 'lowpass', q: .7, wet: .3, f: [[0, 300], [1.1, 1400]], g: [[1, .3 * ABV], [1.1, .0001]] }); R.whistle(0, ABV, 1800, 300, 1.1); R.boom(1.05, ABV * 1.4, .6); R.fire(1.15, ABV * .6, .8); },
+    drain: () => { R.reverse(0, ABV, .8, 2400, 300); R.pulse(.3, ABV * .5, 80); tone(440, 1.1, { type: 'sine', slide: 110, vol: .08 * ABV, attack: .3, at: .2, wet: .6, vib: [6, 10] }); },
+    firewall: () => { R.ignite(0, ABV * 1.2); nz({ d: .5, type: 'lowpass', q: .6, wet: .3, f: [[0, 300], [.5, 2000]], g: [[.4, .3 * ABV], [.5, .2 * ABV]] }); R.fire(.1, ABV * 1.1, 1.8); },
+    thunder: () => { R.elec(0, ABV * .6, .2); R.thunder(.15, ABV * 1.4); },
+    starfall: () => { for (let i = 0; i < 7; i++) { const t0 = i * .13; R.whistle(t0, ABV * .45, RND(3600, 5000), RND(1200, 1800), .45); R.crystal(t0 + .45, ABV * .4, 3, .05, 3000, 6000); R.thump(t0 + .45, ABV * .25, 140, .12); } },
+    timestop: () => { [0, .25, .55, .95, 1.45].forEach((t0, i) => R.tick(t0, ABV * .9, i % 2 ? 1600 : 2200)); tone(900, 1.6, { type: 'sine', slide: 50, vol: .08 * ABV, at: .1, wet: .6 }); R.reverse(0, ABV * .6, 1.2, 1500, 200); R.shimmer(1.4, ABV * .4, .8, 4000, 7000); },
+  };
+  /* boss and guardian moves */
+  const BOSS_SND = {
+    swarm: sq(['squeak', 0], ['squeak', .06], ['squeak', .12], ['squeak', .2], ['squeak', .27], ['rumble', 0, .5, .6]),
+    plague: sq(['bloop', 0, 1], ['hiss', .1], ['bloop', .3, .8]),
+    warcharge: sq(['roar', 0, .8], ['swish', .3, 1, 200, 900, .4]),
+    rally: sq(['horn', 0, 1.3], ['horn', .35, .8]),
+    whirl: sq(['swish', 0, 1, 400, 2000, .2], ['swish', .2, 1, 400, 2000, .2], ['swish', .4, 1, 400, 2000, .2]),
+    bonestorm: sq(['bones', 0, 1.2], ['swish', 0, .8, 600, 2400, .3], ['bones', .2, 1]),
+    raise: sq(['rise', 0, .8, 120, 360, .8], ['hum', 0, .7, 98, 1], ['bones', .4, .8]),
+    graveslam: sq(['swish', 0, .8, 300, 1200, .5], ['boom', .7, 1.1]),
+    chains: sq(['chain', 0, 1.3], ['chain', .25, 1]),
+    quake: sq(['rumble', 0, 1.2, 1.2], ['boom', .7, 1]),
+    rampage: sq(['roar', 0, 1], ['thud', .3, 1, 90], ['thud', .55, 1, 90]),
+    boulders: sq(['crunch', 0, .7], ['whistle', .2, 1, 900, 300, .8]),
+    trollblood: sq(['bloop', 0, 1], ['heart', .2, 1.2], ['hum', .2, .6, 120, .8]),
+    brood: sq(['roar', 0, 1.1], ['roar', .4, .7]),
+    deathnova: sq(['rise', 0, 1, 200, 900, .25], ['zap', .2, 1.2], ['boom', .2, .5]),
+    shadowstep: sq(['shadow', 0, 1.2]),
+    beam: sq(['rise', 0, 1, 200, 1400, .7], ['hum', .6, 1, 440, 2.2]),
+    grip: sq(['ice', 0, 1.1], ['hum', 0, .6, 160, .9]),
+    ward: sq(['chime', 0, 1], ['hum', 0, .8, 120, 1.2], ['ring', .3, .7, 900, 1]),
+    hunger: sq(['suck', 0, 1.4], ['hum', .2, .8, 80, 2.4]),
+    soulspiral: sq(['hum', 0, .9, 300, 2.4], ['whir', 0, .6, 2.4]),
+    frostfall: sq(['ice', 0, 1], ['whistle', .1, 1, 2600, 1200, .7]),
+    burrow: sq(['crunch', 0, 1], ['rumble', .2, .8, 1.2]),
+    frenzy: sq(['squeak', 0, 1.6], ['squeak', .08, 1.6], ['squeak', .16, 1.4], ['heart', .1]),
+    skullleap: sq(['thud', 0, .8, 120], ['swish', .1, 1, 200, 1000, .6]),
+    firebombs: sq(['hiss', 0], ['swish', .1, .7, 300, 1000, .3], ['swish', .3, .7, 300, 1000, .3]),
+    bonespikes: sq(['crunch', 0, .8], ['bones', .3, 1]),
+    bonecage: sq(['bones', 0, 1.2], ['crunch', .5, .8]),
+    crushleap: sq(['roar', 0, .8], ['swish', .1, 1, 150, 700, .7]),
+    roar: sq(['roar', 0, 1.6], ['roar', .1, 1]),
+    ironleap: sq(['clang', 0, .8, 500], ['swish', .1, 1, 200, 900, .6]),
+    bulwark: sq(['clang', 0, 1.2, 420], ['hum', .1, .8, 150, 1]),
+    shockline: sq(['zap', 0, 1], ['zap', .2, .8]),
+    hexspiral: sq(['hum', 0, .8, 370, 2.4], ['whir', 0, .5, 2.4]),
+    hexmarks: sq(['ring', 0, .8, 1300, .8], ['hum', 0, .6, 185, 1]),
+    firebreath: sq(['roar', 0, .7], ['fire', .5, 1.4, 2]),
+    meteor: sq(['whistle', 0, 1.2, 1400, 250, 1]),
+    cinderspiral: sq(['fire', 0, 1, 2], ['whir', 0, .4, 2]),
+    stoneline: sq(['crunch', 0, 1], ['rumble', .2, .7, .7]),
+    petrify: sq(['hum', 0, 1, 90, .9], ['crunch', .7, .6]),
+    shieldwall: sq(['clang', 0, 1, 700], ['clang', .08, .9, 760], ['clang', .16, .8, 820]),
+    warhorn: sq(['horn', 0, 1.4]),
+  };
+  const sndOn = () => AU.ctx && +SET.sfx && AU.ctx.state === 'running';
+  /* measured so every ability lands at about the same loudness */
+  const AB_GAIN = {charge:1.4,whirl:5.56,execute:1.07,earthsplit:1.35,trance:1.42,wall:0.95,warcry:1.77,bash:0.85,fortress:0.85,aegis:3.57,rally:3.47,smite:0.71,consecrate:3.73,judgment:0.58,laststand:1.07,pierce:3.5,snipe:1.02,multishot:5.38,ricochet:4.31,rain:6,volley:6,disengage:2.75,trap:2.34,hawk:4.27,tempest:6,firearrow:5.7,venomshot:3.62,frostarrow:5.81,cluster:1.45,phoenix:3.33,flurry:6,lunge:3.7,bladedance:6,shuriken:1.26,lotus:5.2,vanish:3.76,shadowstep:6,smoke:0.9,mark:5.75,eclipse:2.02,fan:6,toxic:2.58,caltrops:6,plaguebomb:1.17,virulence:0.84,fireball:2.43,nova:0.7,lightning:0.87,blink:6,mend:4.5,icelance:1.05,miasma:1.41,barrier:3.5,orbs:5.38,meteor:0.74,drain:3.12,firewall:2.63,thunder:0.62,starfall:5.32,timestop:5.26};
+  const SFX_GAIN = { swing: 3.4, stab: .75, bow: 2.8, zap: 1.6, slicehit: 3 };
+  function onBus(gain, f) { const b = AU.ctx.createGain(); b.gain.value = gain; b.connect(AU.sfx); AU.bus = b; try { f(); } catch {} AU.bus = null; }
+  function sfxAb(id, res) { const f = AB_SND[id]; if (!f) return sfx(res === 'mp' ? 'spell' : 'skill'); if (sndOn()) onBus(AB_GAIN[id] || 1, f); }
+  function sfxBoss(id) { const f = BOSS_SND[id]; if (!f) return sfx('bosscast'); if (sndOn()) try { f(); } catch {} }
+  function sfx(id, gap = .045) {
+    if (!AU.ctx || !+SET.sfx || AU.ctx.state !== 'running') return;
+    const t = AU.ctx.currentTime; if (t - (AU.last[id] ?? -9) < gap) return; AU.last[id] = t;
+    if (SFX_GAIN[id]) onBus(SFX_GAIN[id], SFX[id]); else try { SFX[id](); } catch {}
+  }
+  /* music: a small sequencer that writes each song as it plays — calm in town, a cold drone in the dungeons, drums for bosses */
+  const midi = n => 440 * Math.pow(2, (n - 69) / 12);
+  const SCALES = { major: [0, 2, 4, 5, 7, 9, 11], minor: [0, 2, 3, 5, 7, 8, 10], dorian: [0, 2, 3, 5, 7, 9, 10], phryg: [0, 1, 3, 5, 7, 8, 10], locrian: [0, 1, 3, 5, 6, 8, 10] };
+  /* each dungeon has its own sound: plucky warrens, drum-heavy hollows, a choir in the crypt, rumbling deeps, a harpsichord in the tower */
+  /* every dungeon is dark: low drones, minor and phrygian keys, and half-step rubs that never quite settle */
+  const DUN_MUS = [
+    { fl: 'warren', root: 57, scale: 'phryg', bpm: 72, prog: [0, 1, 0, 6] },
+    { fl: 'hollow', root: 52, scale: 'phryg', bpm: 76, prog: [0, 0, 1, 6] },
+    { fl: 'crypt', root: 55, scale: 'minor', bpm: 50, prog: [0, 5, 1, 4] },
+    { fl: 'deeps', root: 50, scale: 'phryg', bpm: 54, prog: [0, 1, 0, 6] },
+    { fl: 'tower', root: 53, scale: 'locrian', bpm: 66, prog: [0, 4, 1, 6] },
+  ];
+  function songFor(key) {
+    const [kind, di] = key.split(':'), M = DUN_MUS[+di || 0] || DUN_MUS[0];
+    if (kind === 'title') return { kind: 'calm', bpm: 70, root: 62, scale: SCALES.major, prog: [0, 5, 3, 4] };
+    if (kind === 'town') return { kind: 'calm', bpm: 88, root: 60, scale: SCALES.major, prog: [0, 3, 5, 4] };
+    if (kind === 'night') return { kind: 'night', bpm: 60, root: 57, scale: SCALES.minor, prog: [0, 5, 3, 4] };
+    if (kind === 'home') return { kind: 'home', bpm: 72, root: 65, scale: SCALES.major, prog: [0, 3, 4, 0] };
+    if (kind === 'siege') return { kind: 'boss', fl: 'siege', bpm: 122, root: 38, scale: SCALES.minor, prog: [0, 0, 5, 4] };
+    if (kind === 'boss') return { kind: 'boss', fl: M.fl, bpm: 116 + (+di || 0) * 6, root: M.root - 12, scale: SCALES[M.scale], prog: [0, 0, 5, 6] };
+    return { kind: 'dark', fl: M.fl, bpm: M.bpm, root: M.root - 12, scale: SCALES[M.scale], prog: M.prog };
+  }
+  function musWant() {
+    if (!$('title').hidden || !G || $('game').hidden) return 'title';
+    if (G.over) return null;
+    if (G.bossAwake && G.mons.some(m => MON[m.t].boss || MON[m.t].squadOf)) return 'boss:' + G.dun;
+    if (G.zone !== 'town') return 'dungeon:' + G.dun;
+    if (curRoom()) return 'home';
+    if (G.nightState && G.nightState.active) return 'siege';
+    return dayInfo().dark > .5 ? 'night' : 'town';
+  }
+  function musTick() {
+    const c = AU.ctx; if (!c || c.state !== 'running') return;
+    const want = +SET.music ? musWant() : null;
+    if (want !== AU.song) {
+      AU.song = want; AU.step = 0; AU.next = c.currentTime + .15; AU.S = want && songFor(want);
+      AU.mus.gain.cancelScheduledValues(c.currentTime); AU.mus.gain.setValueAtTime(0, c.currentTime); auVol();
+    }
+    if (!AU.S) return;
+    const st = 60 / AU.S.bpm / 4;
+    while (AU.next < c.currentTime + .3) { try { musStep(AU.S, AU.step, AU.next - c.currentTime, st); } catch {} AU.next += st; AU.step++; }
+  }
+  function musAmb() { if (AU.ctx && AU.ctx.state === 'running') try { ambTick(); } catch {}
+  }
+  function musStep(S, i, at, st) {
+    const b = i % 16, bar = Math.floor(i / 16), ch = S.prog[bar % S.prog.length], D = AU.musIn;
+    const deg = (d, o = 0) => midi(S.root + 12 * (Math.floor(d / 7) + o) + S.scale[((d % 7) + 7) % 7]);
+    if (S.kind === 'calm') {
+      if (b === 0) { tone(deg(ch, -1), st * 15, { type: 'sine', vol: .1, at, attack: .03, dest: D }); for (const k of [0, 2, 4]) tone(deg(ch + k, 1), st * 16, { type: 'sawtooth', vol: .012, at, attack: .5, lp: 900, detune: k * 3, dest: D }); }
+      if (b % 2 === 0) { const arp = [0, 2, 4, 7, 4, 2, 0, 4][(b / 2) % 8]; tone(deg(ch + arp, 1), st * 6, { type: 'triangle', vol: .045, at, dest: D }); }
+      if ((b === 4 || b === 10) && Math.random() < .45) tone(deg(ch + [2, 4, 6][Math.floor(Math.random() * 3)], 2), st * 7, { type: 'sine', vol: .035, at, attack: .02, dest: D });
+    } else if (S.kind === 'night') {
+      if (b === 0 && bar % 2 === 0) tone(deg(ch, 0), st * 30, { type: 'sine', vol: .07, at, attack: 1, dest: D });
+      if ((b === 0 || b === 6 || b === 10) && Math.random() < .55) tone(deg(ch + [0, 2, 4, 7][Math.floor(Math.random() * 4)], 1), st * 8, { type: 'triangle', vol: .035, at, attack: .02, dest: D });
+    } else if (S.kind === 'home') {
+      if (b === 0) tone(deg(ch, -1), st * 15, { type: 'sine', vol: .07, at, attack: .05, dest: D });
+      if (b % 4 === 0) tone(deg(ch + [0, 4, 2, 4][b / 4], 0), st * 3.5, { type: 'triangle', vol: .03, at, dest: D });
+      if (b % 2 === 0 && Math.random() < .5) { const n = deg(ch + [4, 7, 9, 11, 7][Math.floor(Math.random() * 5)], 2); tone(n, .9, { type: 'sine', vol: .028, at, dest: D }); tone(n * 2, .5, { type: 'sine', vol: .008, at, dest: D }); }
+    } else if (S.kind === 'dark') {
+      const f = S.fl, rr = Math.random;
+      /* a low drone under every dungeon, swelling in and out */
+      if (b === 0 && bar % 2 === 0) { tone(deg(ch, 0), st * 32, { type: 'sine', vol: .1, at, attack: 1.2, dest: D }); tone(deg(ch, 0) * 1.5, st * 32, { type: 'triangle', vol: .018, at, attack: 1.6, lp: 400, dest: D }); }
+      if (f === 'warren') {
+        if (b % 4 === 0) tone(deg(ch + [0, 0, 1, 0][(b / 4) % 4], 1), st * 1.4, { type: 'triangle', vol: .045, at, lp: 800, dest: D });
+        if (b % 4 === 2 && rr() < .45) tone(deg(ch + 1, 1), st * .8, { type: 'triangle', vol: .028, at, lp: 700, dest: D });
+        if (rr() < .03) tone(deg(ch + Math.floor(rr() * 7), 3) * 1.03, st * 2.5, { type: 'sine', vol: .011, at, dest: D });
+      } else if (f === 'hollow') {
+        /* slow, heavy goblin war drums, a growling bass and a distant horn */
+        if ([0, 3, 8, 10].includes(b)) tone(b === 0 || b === 8 ? 72 : 104, .45, { type: 'sine', slide: b === 0 || b === 8 ? 40 : 62, vol: b === 0 ? .2 : .12, at, dest: AU.mus });
+        if (b === 0 || b === 8) hiss(.2, { f: 380, vol: .05, at, dest: AU.mus });
+        if (b === 0) tone(deg(ch, 0), st * 16, { type: 'sawtooth', vol: .035, at, lp: 260, attack: .3, vib: [5, 1.5], dest: D });
+        if (b === 0 && bar % 4 === 2) { tone(deg(ch, 1), st * 12, { type: 'sawtooth', vol: .03, at, lp: 650, attack: .8, dest: D }); tone(deg(ch + 4, 1), st * 12, { type: 'sawtooth', vol: .02, at, lp: 650, attack: .9, dest: D }); }
+        if (b === 12 && rr() < .3) tone(deg(ch + 1, 2), st * 3, { type: 'triangle', vol: .02, at, lp: 1100, dest: D });
+      } else if (f === 'crypt') {
+        if (b === 0) for (const k of [0, 2, 4]) tone(deg(ch + k, 0), st * 16, { type: 'sawtooth', vol: .013, at, attack: 1.6, lp: 480, detune: k * 5 - 5, dest: D });
+        if (b === 0 && bar % 2 === 0) { const f0 = deg(ch, 1); tone(f0, 4, { type: 'sine', vol: .05, at, dest: D }); tone(f0 * 2.76, 2.2, { type: 'sine', vol: .012, at, dest: D }); }
+        if (b === 8 && bar % 4 === 1) tone(deg(ch + 1, 3), st * 8, { type: 'sine', vol: .012, at, attack: .6, vib: [5, 6], dest: D });
+      } else if (f === 'deeps') {
+        if (b === 0 || b === 10) tone(deg(ch, 0), .9, { type: 'sine', vol: .17, at, attack: .02, dest: AU.mus });
+        if (b === 0 && bar % 2 === 0) hiss(3, { f: 130, vol: .07, at, attack: 1, dest: D });
+        if (b % 8 === 4 && rr() < .4) tone(deg(ch + [0, 1, 3][Math.floor(rr() * 3)], 1), st * 8, { type: 'triangle', vol: .04, at, lp: 600, attack: .2, dest: D });
+      } else {
+        tone(deg(ch + [0, 2, 4, 6, 7, 6, 4, 2][b % 8], 1), st * 1.1, { type: 'square', vol: .012, at, lp: 1700, dest: D });
+        if (b === 0) for (const k of [0, 2, 4]) tone(deg(ch + k, 0), st * 16, { type: 'triangle', vol: .03, at, attack: .5, dest: D });
+        if (b === 8 && bar % 4 === 2) tone(deg(ch + 4, 3), st * 8, { type: 'sine', slide: deg(ch + 3, 3), vol: .012, at, attack: .4, dest: D });
+      }
+    } else {
+      if (b % 4 === 0) tone(130, .2, { type: 'sine', slide: 42, vol: .3, at, dest: AU.mus });
+      if (b % 8 === 4) hiss(.15, { type: 'bandpass', f: 1800, vol: .12, at, dest: AU.mus });
+      if (b % 2 === 1) hiss(.03, { type: 'highpass', f: 7000, vol: .025, at, dest: AU.mus });
+      if (b % 2 === 0) tone(deg(ch, b % 4 ? 1 : 0), st * 1.8, { type: 'sawtooth', vol: .07, at, lp: 520, dest: AU.mus });
+      if (b === 0) for (const k of [0, 2, 4]) tone(deg(ch + k, 2), st * 6, { type: 'sawtooth', vol: .022, at, lp: 1500, dest: D });
+      const lead = { tower: 'square', crypt: 'sawtooth', hollow: 'triangle', deeps: 'sawtooth', warren: 'square', siege: 'square' }[S.fl] || 'square';
+      if ([0, 3, 6, 8, 11, 14].includes(b)) tone(deg(ch + [4, 3, 2, 4, 5, 3][[0, 3, 6, 8, 11, 14].indexOf(b)], 2), st * 1.6, { type: lead, vol: lead === 'triangle' ? .04 : .022, at, lp: 1800, dest: D });
+      if (S.fl === 'hollow' && (b === 6 || b === 14)) tone(150, .2, { type: 'sine', slide: 90, vol: .14, at, dest: AU.mus });
+      if (S.fl === 'tower' && b % 2 === 1) tone(deg(ch + [7, 4, 9, 4][(b >> 1) % 4], 2), st * .9, { type: 'square', vol: .012, at, lp: 2600, dest: D });
+      if (S.fl === 'crypt' && b === 0) for (const k of [0, 2, 4]) tone(deg(ch + k, 1), st * 16, { type: 'sawtooth', vol: .014, at, attack: .6, lp: 700, dest: D });
+      if (S.fl === 'deeps' && b === 10) tone(90, .3, { type: 'sine', slide: 38, vol: .22, at, dest: AU.mus });
+      if (S.fl === 'siege' && b >= 12 && bar % 4 === 3) hiss(.08, { type: 'bandpass', f: 1600, vol: .08, at, dest: AU.mus });
+    }
   }
 
   /* ---------------- combat ---------------- */
@@ -3152,10 +3810,10 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     }
     if (m.t === 'lich' && G.mons.some(q => q.t === 'phylactery')) { dmg = Math.max(1, Math.round(dmg * .1)); tag = 'WARDED'; }
     else if (m.guardT > 0) { dmg = Math.max(1, Math.round(dmg * .3)); tag = 'GUARDED'; }
-    m.hp -= dmg; if (!o.dot) { m.flash = 0.12; m.hitT = .2; m.hitDir = o.ang !== undefined ? (Math.cos(o.ang) >= 0 ? 1 : -1) : (m.x >= P.x ? 1 : -1); } m.awake = true;
+    m.hp -= dmg; if (!o.dot) { sfx(G.cls === 'knight' ? 'slicehit' : tag === 'CRIT' ? 'crit' : 'hit', .05); m.flash = 0.12; m.hitT = .2; m.hitDir = o.ang !== undefined ? (Math.cos(o.ang) >= 0 ? 1 : -1) : (m.x >= P.x ? 1 : -1); } m.awake = true;
     if (o.ang !== undefined && !MON[m.t].boss) { const k = o.knock || 160; m.kx += Math.cos(o.ang) * k; m.ky += Math.sin(o.ang) * k; }
-    if (o.stun) m.stun = Math.max(m.stun, o.stun);
-    if (o.freeze) m.frozen = Math.max(m.frozen, o.freeze);
+    if (o.stun) { if (!(m.stun > 0)) sfx('stunned', .15); m.stun = Math.max(m.stun, o.stun); }
+    if (o.freeze) { if (!(m.frozen > 0)) sfx('frozen', .15); m.frozen = Math.max(m.frozen, o.freeze); }
     if (o.poison) { m.poison = 3; m.pdmg = o.poison; burst(m.x, m.y, '#7fd13f', 8, 60, 5, 0, 10, 0.6); }
     if (F) {
       if (F.poison) { m.poison = 3; m.pdmg = Math.max(m.pdmg || 0, base * F.poison); }
@@ -3194,6 +3852,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   function killMon(m) {
     const d = MON[m.t], P = G.p, F = P.fx || {};
     G.mons = G.mons.filter(x => x !== m); G.kills++;
+    sfx(d.boss ? 'bossdie' : d.undead ? 'die_bones' : /slime|spore|spitter|plaguerat|phylactery/.test(m.t) ? 'die_splat' : m.t === 'bat' || d.flutter ? 'die_squeak' : d.dummy ? 'die_wood' : 'kill', .06);
     dying.push({ m: { ...m, hp: m.max, awake: true, flash: 0, frozen: 0, stun: 0, poison: 0, burn: 0, bleed: 0, chill: 0, stopT: 0, wind: 0, slamWind: 0, chargeWind: 0, lunge: 0, born: 0, hitT: 0, castT: 0, moveAmt: 0, beam: null, drain: null, spin: 0 }, t: 0, dur: d.boss ? 1.4 : .7, dir: m.x >= P.x ? 1 : -1 });
     burst(m.x, m.y, d.col, 22, 200, 4); burst(m.x, m.y, '#000', 8, 80, 5);
     if (d.dummy) { G.kills--; burst(m.x, m.y, '#e8d090', 16, 140, 3, -30); return; }
@@ -3236,6 +3895,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   function gainXP(n) {
     const P = G.p, c = CLASSES[G.cls];
+    const before = { lvl: P.lvl, max: P.max, atk: Math.round(P.atk), def: P.def, mp: P.maxMp || 0, pts: skillPts() };
     P.xp += n;
     while (P.xp >= need(P.lvl)) {
       P.xp -= need(P.lvl); P.lvl++;
@@ -3247,13 +3907,29 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       burst(P.x, P.y, '#e8a33d', 30, 200, 3);
       msg(`Level ${P.lvl}. You feel stronger, and you have a skill point to spend (T).`, '#e8a33d');
     }
+    if (P.lvl > before.lvl) showLevelUp(before);
+  }
+  /* the level-up card: pauses the game and lists what grew */
+  let lvlAt = 0;
+  function showLevelUp(b) {
+    const P = G.p;
+    sfx('levelup', 0);
+    if (G.over || !$('modal').hidden) return;
+    const row = (name, a, z) => `<div class="lvrow${z !== a ? ' up' : ''}"><span>${name}</span><b data-notr>${a} → <em>${z}</em></b><i data-notr>${z !== a ? '+' + (z - a) : '–'}</i></div>`;
+    paused = true; keys.clear(); mouse.down = false; touchAttack = false; lvlAt = performance.now(); auVol();
+    $('pauseBtn').textContent = 'Resume';
+    $('veilCard').innerHTML = `<div class="lvlup"><small>Level up</small><h2><span>Level</span> <b data-notr>${P.lvl}</b></h2>${P.lvl - b.lvl > 1 ? `<p class="lvmulti" data-notr>${b.lvl} → ${P.lvl}</p>` : ''}
+      <div class="lvstats">${row('Max health', b.max, P.max)}${row('Damage', b.atk, Math.round(P.atk))}${row('Defense', b.def, P.def)}${G.cls === 'mage' ? row('Magic', b.mp, P.maxMp || 0) : ''}${row('Skill points', b.pts, skillPts())}</div>
+      <p>Some of your health comes back. Spend skill points in your skill tree.</p>
+      <div class="btns"><button class="primary" id="lvlOk">Onward</button><button class="ghost" id="lvlTree">Open skill tree</button></div></div>`;
+    $('veil').hidden = false;
   }
   function hurtPlayer(dmg, src, mo) {
     const P = G.p;
     if (P.iframe > 0 || P.dash || P.roll || G.over || G.bossEnd) return;
     dmg *= DIFF[SET.diff].dmg;
     if (P.block > 0 && P.eq.offhand && P.eq.offhand.dur > 0 && Math.random() < P.block) {
-      P.iframe = .2; float(P.x, P.y - 20, 'BLOCK', '#cfe2ff'); ring(P.x, P.y - 4, 30, .2, '#dfe8f0');
+      P.iframe = .2; sfx('block'); float(P.x, P.y - 20, 'BLOCK', '#cfe2ff'); ring(P.x, P.y - 4, 30, .2, '#dfe8f0');
       burst(P.x - (Math.cos(P.aim) < 0 ? -1 : 1) * 10, P.y, '#e8f0ff', 10, 150, 2); wear('offhand', 1);
       if (P.thorns && mo && mo.hp > 0) hurtMon(mo, dmg * P.thorns, { dot: true, col: '#e0c080' });
       return;
@@ -3271,7 +3947,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (SKx.lowGuard && P.hp < P.max * .3) d = Math.max(1, Math.round(d * .7));
     if (SKx.manaShield && P.mp > 0) { const ms = Math.min(P.mp, d * .25); P.mp -= ms; d = Math.max(0, Math.round(d - ms)); }
     if (P.lastStand > 0 && P.hp - d < 1) d = Math.max(0, Math.floor(P.hp - 1));
-    P.hp -= d; P.iframe = 0.3; P.hitT = 0.25; P.hitDir = mo ? (P.x >= mo.x ? 1 : -1) : (Math.random() < .5 ? -1 : 1);
+    P.hp -= d; sfx('hurt', .12); P.iframe = 0.3; P.hitT = 0.25; P.hitDir = mo ? (P.x >= mo.x ? 1 : -1) : (Math.random() < .5 ? -1 : 1);
     float(P.x, P.y - 20, '-' + d, '#ff6a5a');
     burst(P.x, P.y, '#c0392b', 8, 140, 3);
     addShake(d > 15 ? 10 : 6);
@@ -3331,7 +4007,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     else if (!P.tiredWarn) { P.tiredWarn = true; msg('Out of stamina. Your attacks slow down until you catch your breath.', '#9b937f'); }
     P.autoT = a.rate * (1 - (P.rateB || 0)) / hasteMult() * (tired ? 1.8 : 1);
     P.swing = 0.2; P.swingDir = -P.swingDir || 1;
-    wear('weapon', .15);
+    wear('weapon', .15); sfx({ slash: 'swing', stab: 'stab', arrow: 'bow', missile: 'zap' }[a.kind] || 'swing', .06);
     const tipX = P.x + Math.cos(ang) * 22, tipY = P.y + Math.sin(ang) * 22 - 4, W = artOf(P.eq.weapon) || {};
     if (a.kind === 'slash') {
       const reach = (a.range + (F.reach || 0)) * (1 + (F.reachPct || 0)), arc = F.arc ? 2.6 : 2.1;
@@ -3545,7 +4221,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       });
     }),
     trance: AB('Battle Trance', 40, 40, '#ff7a4a', 'Capstone. For 10 seconds you hit 30% harder and move and swing 20% faster, and you heal 15% of your health.', () => {
-      const P = G.p; P.buffs.str = Math.max(P.buffs.str || 0, 10); P.buffs.swift = Math.max(P.buffs.swift || 0, 10); heal(.15);
+      const P = G.p; P.buffs.str = Math.max(P.buffs.str || 0, 10); P.buffs.swift = Math.max(P.buffs.swift || 0, 10); heal(.15); P.trance = 10;
       ring(P.x, P.y, 90, .5, '#ff7a4a', 'gold'); burst(P.x, P.y, '#ffb070', 30, 200, 3, -40); levelFlash = Math.max(levelFlash, .25); msg('Battle Trance! You fight like ten knights.', '#ff7a4a');
     }),
     /* ----- knight: Bulwark ----- */
@@ -3582,8 +4258,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     judgment: AB('Judgment', 40, 16, '#fff0b0', 'A great hammer of light falls where you aim and crushes everything under it.', () => {
       const p = cursorPt(380); zones.push({ kind: 'fall', x: p.x, y: p.y, r: 120, t: .8, dur: .8, dmg: G.p.atk * 4.5 });
     }),
-    laststand: AB('Last Stand', 40, 50, '#ff9a6a', 'Capstone. For 8 seconds nothing can bring you below 1 health. When it ends, you heal 30% of your health.', () => {
-      const P = G.p; P.lastStand = 8; ring(P.x, P.y, 90, .5, '#ff9a6a', 'shock'); burst(P.x, P.y, '#ffc8a0', 26, 180, 3); msg('Last Stand! You refuse to fall.', '#ff9a6a');
+    laststand: AB('Undying Oath', 40, 50, '#ff9a6a', 'Capstone. For 8 seconds nothing can bring you below 1 health. When it ends, you heal 30% of your health.', () => {
+      const P = G.p; P.lastStand = 8; ring(P.x, P.y, 90, .5, '#ff9a6a', 'shock'); burst(P.x, P.y, '#ffc8a0', 26, 180, 3); msg('Undying Oath! You refuse to fall.', '#ff9a6a');
     }),
     /* ----- archer: Marksman ----- */
     pierce: AB('Piercing Shot', 20, 4, '#e3c46a', 'A heavy arrow that punches through every enemy in a line.', () => ABIL.pierce()),
@@ -3743,6 +4419,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (A.res === 'mp' ? P.mp < cost : P.st < cost) return warn(A.res === 'mp' ? 'Not enough magic.' : 'Too tired. Catch your breath first.');
     if (A.run() === false) return;
     if (A.res === 'mp') P.mp -= cost; else spendSt(cost);
+    sfxAb(id, A.res);
     P.scd[id] = A.cd / (buffOn('quick') ? 1.4 : 1) * (1 - ((P.sk || {}).cdr || 0));
     tutEvent('ability');
   }
@@ -3753,7 +4430,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (P.st < 20) return warn('Too tired to dodge.');
     spendSt(20);
     P.roll = { t: .28, dur: .28, ang: P.moving ? P.moveAng : P.aim, dir: Math.cos(P.moving ? P.moveAng : P.aim) < 0 ? -1 : 1 };
-    P.iframe = Math.max(P.iframe, .32); P.rollCd = .45;
+    P.iframe = Math.max(P.iframe, .32); P.rollCd = .45; sfx('whoosh');
     burst(P.x, P.y + 10, '#8a7a62', 10, 90, 4, 0, 8, .5);
     tutEvent('roll');
   }
@@ -4141,15 +4818,16 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (it.dur <= 0) { msg(`Your ${it.name} broke! It does nothing until a smith repairs it.`, '#ff6a5a'); recalc(); updateHUD(0, true); }
   }
   function revealMap() {
+    sfx('reveal');
     for (let i = 0; i < MW * MH; i++) if (G.tiles[i] !== 0) {
       const x = i % MW, y = (i / MW) | 0;
       for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) G.seen[idx(clamp(x + dx, 0, MW - 1), clamp(y + dy, 0, MH - 1))] = 1;
     }
   }
   let warnAt = 0;
-  function warn(text) { const now = performance.now(); if (now - warnAt > 1400) { warnAt = now; msg(text, '#9b937f'); } }
+  function warn(text) { const now = performance.now(); if (now - warnAt > 1400) { warnAt = now; msg(text, '#9b937f'); sfx('warn', .3); } }
   function consume(it) {
-    const P = G.p, C = CONS[it.sub];
+    const P = G.p, C = CONS[it.sub]; sfx('drink');
     if (it.sub === 'map') { if (G.zone !== 'dungeon') { warn('There is nothing to map here.'); return false; } revealMap(); msg('The scroll unfolds the whole floor in your mind.', '#74a2e6'); }
     else if (C.type === 'hp') {
       if (P.hp >= P.max && !C.mana) { warn('You are already at full health.'); return false; }
@@ -4624,7 +5302,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       const n = skNode(id), r = skillRank(id), c = skillCan(b, i, id), free = isFree(id), slot = P.spells.indexOf(id);
       const learn = () => {
         if (!skillCan(b, i, id).ok) return;
-        P.skills[id] = r + 1; recalc();
+        P.skills[id] = r + 1; recalc(); sfx('unlock');
         ring(P.x, P.y, 50, .4, br.col); burst(P.x, P.y, br.col, 18, 110, 3, -40);
         if (n.ab) {
           const e = P.spells.indexOf(null); if (e >= 0) P.spells[e] = id; buildSkills();
@@ -4775,7 +5453,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   function craftRows(table, tab, station) {
     return Object.entries(table).filter(([, r]) => !tab || r[3] === tab || station === 'smelt').map(([out, [inp, gold, n]]) => {
       const ok = hasAll(inp) && G.gold >= gold;
-      const make = k => { let m = 0; for (let i = 0; i < k; i++) { if (!hasAll(inp) || G.gold < gold) break; take(inp); G.gold -= gold; give(out, n); m += n; } if (m) msg(`Made ${MATS[out][0]}${m > 1 ? ' ×' + m : ''}.`, MATS[out][2]); };
+      const make = k => { let m = 0; for (let i = 0; i < k; i++) { if (!hasAll(inp) || G.gold < gold) break; take(inp); G.gold -= gold; give(out, n); m += n; } if (m) { sfx(invMode === 'brew' ? 'brewing' : invMode === 'weaponsmith' || invMode === 'armorsmith' ? 'smith' : 'craft'); } if (m) msg(`Made ${MATS[out][0]}${m > 1 ? ' ×' + m : ''}.`, MATS[out][2]); };
       return { key: 'r-' + out, icon: matIcon(out), name: MATS[out][0] + (n > 1 ? ` ×${n}` : ''), col: MATS[out][2], sub: Object.keys(inp).length ? needText(inp) : 'From Alder’s own stock', right: gold + 'g', ok,
         detail: () => dhead(matIcon(out), MATS[out][0], MATS[out][2], `You have ${have(out)}`) + `<p class="hint">${matUse(out)}</p>` + needHtml(inp, gold) +
           `<div class="dbtns">${btn('make', `Make${n > 1 ? ' ' + n : ''}`, ok)}${btn('make5', 'Make 5 times', ok, true)}</div>`,
@@ -4797,14 +5475,14 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const P = G.p, S = STATIONS[mode];
     if (mode === 'shop' && tab === 'pots') return SHOP_POTS.map(sub => {
       const C = CONS[sub], it = makeCons(sub), ok = G.gold >= C.price && bagFits(it);
-      const buy = n => { for (let i = 0; i < n; i++) { if (G.gold < C.price || !bagFits(it)) break; G.gold -= C.price; addToBag(makeCons(sub)); } msg(`Bought ${C.name}.`, '#e3c46a'); };
+      const buy = n => { for (let i = 0; i < n; i++) { if (G.gold < C.price || !bagFits(it)) break; G.gold -= C.price; addToBag(makeCons(sub)); } sfx('spend'); msg(`Bought ${C.name}.`, '#e3c46a'); };
       return { key: 'p-' + sub, icon: itemIcon(it), name: C.name, col: RAR[it.rar].c, sub: C.desc, right: C.price + 'g', ok,
         detail: () => itemDetail(it, `<p class="hint">You carry ${P.bag.filter(b => b.sub === sub).reduce((s, b) => s + b.qty, 0)}.</p><div class="dbtns">${btn('buy', `Buy for ${C.price}g`, ok)}${btn('buy5', 'Buy 5', G.gold >= C.price * 5 && bagFits(it), true)}${G.gold < C.price ? why(`You need ${C.price - G.gold} more gold.`) : !bagFits(it) ? why('Your bag is full.') : ''}</div>`),
         acts: { buy: () => buy(1), buy5: () => buy(5) }, dbl: () => buy(1) };
     });
     if (mode === 'shop' && tab === 'mats') return SHOP_MATS.map(id => {
       const pr = matBuy(id), ok = G.gold >= pr;
-      const buy = n => { for (let i = 0; i < n; i++) { if (G.gold < pr) break; G.gold -= pr; give(id); } msg(`Bought ${MATS[id][0]}.`, '#e3c46a'); };
+      const buy = n => { for (let i = 0; i < n; i++) { if (G.gold < pr) break; G.gold -= pr; give(id); } sfx('spend'); msg(`Bought ${MATS[id][0]}.`, '#e3c46a'); };
       return { key: 'm-' + id, icon: matIcon(id), name: MATS[id][0], col: MATS[id][2], sub: `You have ${have(id)}`, right: pr + 'g', ok,
         detail: () => dhead(matIcon(id), MATS[id][0], MATS[id][2], `Material · you have ${have(id)}`) + `<p class="hint">${matUse(id)}</p><div class="dbtns">${btn('buy', `Buy for ${pr}g`, ok)}${btn('buy5', `Buy 5 for ${pr * 5}g`, G.gold >= pr * 5, true)}</div>`,
         acts: { buy: () => buy(1), buy5: () => buy(5) }, dbl: () => buy(1) };
@@ -4814,7 +5492,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         const pr = sellPrice(it);
         return { key: 'sb-' + it.id, icon: itemIcon(it), name: itemTitle(it) + (it.qty > 1 ? ` ×${it.qty}` : ''), col: RAR[it.rar].c, sub: kindLabel(it), right: pr + 'g', ok: true,
           detail: () => itemDetail(it, `<div class="dbtns">${btn('sell', `Sell${it.qty > 1 ? ' one' : ''} for ${pr}g`)}</div><p class="hint">To sell gear you’re wearing, unequip it in your inventory (I) first.</p>`),
-          acts: { sell: () => { G.gold += pr; if (it.kind === 'cons' && it.qty > 1) it.qty--; else P.bag = P.bag.filter(b => b !== it); msg(`Sold ${it.name} for ${pr} gold.`, '#e3c46a'); } } };
+          acts: { sell: () => { G.gold += pr; sfx('coin'); if (it.kind === 'cons' && it.qty > 1) it.qty--; else P.bag = P.bag.filter(b => b !== it); msg(`Sold ${it.name} for ${pr} gold.`, '#e3c46a'); } } };
       });
       for (const id of Object.keys(MATS)) if (have(id) > 0) {
         const pr = matSell(id);
@@ -4828,7 +5506,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       const ok = G.gold >= it.price && bagFits(it);
       const buy = () => {
         if (G.gold < it.price || !bagFits(it)) return;
-        G.gold -= it.price;
+        G.gold -= it.price; sfx('spend');
         if (it.kind === 'cons') { addToBag(makeCons(it.sub)); if (--it.qty <= 0) G.merchant.stock = G.merchant.stock.filter(s => s !== it); }
         else { addToBag(it); G.merchant.stock = G.merchant.stock.filter(s => s !== it); }
         msg(`Bought ${it.name}.`, '#e3c46a');
@@ -4839,7 +5517,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     });
     if ((mode === 'weaponsmith' || mode === 'armorsmith') && tab === 'up') return ownedGear(S.kinds).map(({ it, where }) => {
       const max = (it.up || 0) >= 5, c = upCost(it), ok = !max && hasAll(c.mats) && G.gold >= c.gold;
-      const up = () => { if (!ok) return; take(c.mats); G.gold -= c.gold; it.up = (it.up || 0) + 1; recalc(); ring(G.p.x, G.p.y, 40, .3, '#ffd27a'); msg(`${itemTitle(it)}: the work is done.`, RAR[it.rar].c); };
+      const up = () => { if (!ok) return; take(c.mats); G.gold -= c.gold; it.up = (it.up || 0) + 1; recalc(); sfx('smith'); ring(G.p.x, G.p.y, 40, .3, '#ffd27a'); msg(`${itemTitle(it)}: the work is done.`, RAR[it.rar].c); };
       const prev = Object.keys(it.stats).filter(k => MAIN.has(k)).map(k => `<span class="up">${STAT_SHORT[k]} ${statVal({ ...it, dur: 1 }, k)} → ${statVal({ ...it, dur: 1, up: (it.up || 0) + 1 }, k)}</span>`).join('');
       return { key: 'u-' + it.id, icon: itemIcon(it), name: itemTitle(it), col: RAR[it.rar].c, sub: `${where === 'worn' ? 'Equipped' : 'In your bag'} · ${max ? 'fully upgraded' : `upgrade to +${(it.up || 0) + 1}`}`, right: max ? 'max' : c.gold + 'g', ok,
         detail: () => itemDetail(it, max ? '<p class="hint">This can’t be improved any further.</p>' : `<div class="cmp"><small>Upgrade to +${(it.up || 0) + 1} of 5:</small>${prev}</div>${needHtml(c.mats, c.gold)}<div class="dbtns">${btn('up', 'Upgrade', ok)}</div>`),
@@ -4847,7 +5525,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     });
     if ((mode === 'weaponsmith' || mode === 'armorsmith') && tab === 'fix') {
       const hurt = ownedGear(S.kinds).filter(({ it }) => it.dur < it.maxDur);
-      const fix = it => { const c = repairCost(it); if (G.gold < c) return false; G.gold -= c; it.dur = it.maxDur; return true; };
+      const fix = it => { const c = repairCost(it); if (G.gold < c) return false; G.gold -= c; it.dur = it.maxDur; sfx('smith', .3); return true; };
       const rows = hurt.map(({ it, where }) => {
         const c = repairCost(it), ok = G.gold >= c;
         const go = () => { if (fix(it)) { recalc(); msg(`${itemTitle(it)} is good as new.`, '#7db870'); } };
@@ -4975,7 +5653,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (act === 'equip') {
       if (!canUse(it)) return;
       const slot = it.kind, old = P.eq[slot], i = invSel.i;
-      P.eq[slot] = it; P.bag.splice(i, 1); if (old) P.bag.splice(i, 0, old);
+      P.eq[slot] = it; P.bag.splice(i, 1); if (old) P.bag.splice(i, 0, old); sfx('equip');
       recalc(); msg(`Equipped ${itemTitle(it)}.`, RAR[it.rar].c); invSel = { where: 'eq', i: slot };
       burst(P.x, P.y, RAR[it.rar].c, 12, 90, 2.5, -40);
     } else if (act === 'unequip') {
@@ -4992,7 +5670,9 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   function toggleInv(open, mode = 'bag', tab) {
     if (!G || G.over || paused) return;
+    const was = invOpen;
     invOpen = open === undefined ? !invOpen : open;
+    if (invOpen !== was) sfx(invOpen ? (mode === 'weaponsmith' || mode === 'armorsmith' ? 'smith' : mode === 'brew' ? 'brewing' : 'bagopen') : 'bagclose', .1);
     invMode = mode; invSel = null; discardArm = null;
     if (mode === 'bag') bagTab = tab || 'bag'; else tradeTab = tab || STATIONS[mode].tabs[0][0];
     keys.clear(); mouse.down = false; touchAttack = false;
@@ -5002,6 +5682,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
 
   function onStairs() { const P = G.p; return G.stairs && Math.floor(P.x / TS) === G.stairs.x && Math.floor(P.y / TS) === G.stairs.y; }
   function descend() {
+    sfx('stairs');
     if (!G || G.over || paused || dlg || fadeCb || G.zone !== 'dungeon' || !onStairs()) return;
     const D = DUNGEONS[G.dun], next = G.depth + 1;
     transition(() => {
@@ -5056,11 +5737,11 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       ctx.globalAlpha = a;
       const y = ch * .28, size = Math.min(62, cw / 11);
       ctx.font = `600 11px "JetBrains Mono", "Noto Sans KR", monospace`; ctx.fillStyle = '#c9bfa6';
-      let undo = spaced('', 5); ctx.fillText(tr(banner.sub).toUpperCase(), cw / 2, y - size * .75); undo();
+      let undo = spaced('', cw < 520 ? 2 : 5); ctx.fillText(tr(banner.sub).toUpperCase(), cw / 2, y - size * .75, cw - 28); undo();
       ctx.font = `700 ${size}px "Grenze Gotisch", "Noto Serif KR", Georgia, serif`;
-      const bname = tr(banner.name); ctx.fillStyle = '#000'; ctx.fillText(bname, cw / 2 + 2, y + 3);
+      const bname = tr(banner.name); ctx.fillStyle = '#000'; ctx.fillText(bname, cw / 2 + 2, y + 3, cw - 28);
       ctx.shadowColor = banner.col; ctx.shadowBlur = 26; ctx.fillStyle = banner.col;
-      ctx.fillText(bname, cw / 2 + (1 - easeOut(q / .5)) * 60, y); ctx.shadowBlur = 0;
+      ctx.fillText(bname, cw / 2 + (1 - easeOut(q / .5)) * 60, y, cw - 28); ctx.shadowBlur = 0;
       const lw = Math.min(cw * .5, 360) * easeOut(q / .6);
       ctx.fillStyle = banner.col; ctx.fillRect(cw / 2 - lw / 2, y + size * .6, lw, 2);
       ctx.globalAlpha = 1;
@@ -5073,10 +5754,10 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         const gr = ctx.createRadialGradient(cw / 2, y, 0, cw / 2, y, Math.min(cw * .5, 380));
         gr.addColorStop(0, 'rgba(0,0,0,.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = gr; ctx.fillRect(0, y - 120, cw, 240);
         ctx.font = `700 ${size}px "Grenze Gotisch", "Noto Serif KR", Georgia, serif`; ctx.fillStyle = '#f0ad4a';
-        ctx.shadowColor = 'rgba(232,163,61,.5)'; ctx.shadowBlur = 18; ctx.fillText(tr(titleCard.title), cw / 2, y); ctx.shadowBlur = 0;
+        ctx.shadowColor = 'rgba(232,163,61,.5)'; ctx.shadowBlur = 18; ctx.fillText(tr(titleCard.title), cw / 2, y, cw - 28); ctx.shadowBlur = 0;
         if (titleCard.sub) {
           ctx.font = `600 11px "JetBrains Mono", "Noto Sans KR", monospace`; ctx.fillStyle = '#c9bfa6';
-          const undo = spaced('', 4); ctx.fillText(tr(titleCard.sub).toUpperCase(), cw / 2, y + size * .78); undo();
+          const undo = spaced('', cw < 520 ? 2 : 4); ctx.fillText(tr(titleCard.sub).toUpperCase(), cw / 2, y + size * .78, cw - 28); undo();
         }
         const lw = Math.min(cw * .4, 260) * easeOut(q / .8);
         ctx.fillStyle = 'rgba(232,163,61,.7)'; ctx.fillRect(cw / 2 - lw / 2, y + size * .5, lw, 1.5);
@@ -5096,7 +5777,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     lines = lines.map(l => ({ ...l, en: l.text, text: fillName(trLine(l.text)) }));
     dlg = { lines, i: 0, shown: 0, choices, onDone };
     keys.clear(); mouse.down = false; touchAttack = false;
-    $('dlg').hidden = false; renderDlg();
+    $('dlg').hidden = false; renderDlg(); sfx('talkopen');
   }
   function renderDlg() {
     const L = dlg.lines[dlg.i], done = dlg.shown >= L.text.length, last = dlg.i === dlg.lines.length - 1;
@@ -5113,12 +5794,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   function tickDlg(dt) {
     const L = dlg.lines[dlg.i];
-    if (dlg.shown < L.text.length) { dlg.shown = Math.min(L.text.length, dlg.shown + dt * (reduced ? 1e4 : 60)); renderDlg(); }
+    if (dlg.shown < L.text.length) { const a = Math.floor(dlg.shown / 3); dlg.shown = Math.min(L.text.length, dlg.shown + dt * (reduced ? 1e4 : 60)); if (Math.floor(dlg.shown / 3) !== a && L.who) sfx('blip', .05); renderDlg(); }
   }
   function dlgNext() {
     const L = dlg.lines[dlg.i];
     if (dlg.shown < L.text.length) { dlg.shown = L.text.length; return renderDlg(); }
-    if (dlg.i < dlg.lines.length - 1) { dlg.i++; dlg.shown = 0; return renderDlg(); }
+    if (dlg.i < dlg.lines.length - 1) { dlg.i++; dlg.shown = 0; sfx('click'); return renderDlg(); }
     if (dlg.choices) return;
     closeDlg();
   }
@@ -5230,7 +5911,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   /* ----- building the town ----- */
   let townFlows = {};
   function buildTown(spawn) {
-    MW = TOWN.w; MH = TOWN.h;
+    MW = TOWN.mapW; MH = TOWN.h;
     const t = new Array(MW * MH).fill(0);
     const set = (x, y, v) => { if (x >= 0 && y >= 0 && x < MW && y < MH) t[idx(x, y)] = v; };
     const fill = (x0, y0, w, h, v) => { for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) set(x, y, v); };
@@ -5248,7 +5929,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     // The forest south of the wall: little glades, five clearings, and winding dirt paths to each gate.
     const carve = (cx, cy, r, v) => {
       for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++)
-        if (x > 1 && y > 30 && x < MW - 2 && y < MH - 2 && Math.hypot(x + .5 - cx, y + .5 - cy) <= r) t[idx(x, y)] = v;
+        if (x > 1 && y > 30 && x < TOWN.w - 2 && y < MH - 2 && Math.hypot(x + .5 - cx, y + .5 - cy) <= r) t[idx(x, y)] = v;
     };
     const path = (x0, y0, x1, y1, seed) => {
       const len = Math.hypot(x1 - x0, y1 - y0), n = Math.ceil(len * 2), nx = -(y1 - y0) / len, ny = (x1 - x0) / len;
@@ -5257,11 +5938,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         carve(x0 + (x1 - x0) * q + nx * wob, y0 + (y1 - y0) * q + ny * wob, 1.3, 4);
       }
     };
-    for (let i = 0; i < 16; i++) carve(5 + hash(i, 1, 9) * (MW - 10), 34 + hash(i, 2, 9) * (MH - 38), .8 + hash(i, 3, 9) * .9, 3);
+    for (let i = 0; i < 16; i++) carve(5 + hash(i, 1, 9) * (TOWN.w - 10), 34 + hash(i, 2, 9) * (MH - 38), .8 + hash(i, 3, 9) * .9, 3);
     for (const [x, y] of TOWN.clearings) carve(x, y, 3.6, 3);
     path(32, 30.8, 32, 43, 1); path(32, 38, 12, 35.5, 2); path(32, 38, 52, 35.5, 3);
     path(32, 43, 11, 51, 4); path(32, 43, 53, 51, 5); path(32, 43, 32, 55, 6);
     set(31, 30, 4); set(32, 30, 4);
+    carveRooms(t, MW);
 
     G.zone = 'town'; G.dun = null; G.depth = 0; G.tiles = t; G.mw = MW; G.mh = MH; G.seen = new Array(MW * MH).fill(1);
     G.mons = []; G.items = []; G.torches = []; G.stairs = null; G.portal = null; G.bossAwake = false;
@@ -5271,7 +5953,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (!G.townHerbs || G.townHerbs.day !== day) {
       const list = [];
       for (let k = 0; k < 400 && list.length < 9; k++) {
-        const x = rnd(3, MW - 4), y = rnd(32, MH - 3);
+        const x = rnd(3, TOWN.w - 4), y = rnd(32, MH - 3);
         if (t[idx(x, y)] === 3 && !list.some(h => Math.abs(h.x / TS - x) < 3 && Math.abs(h.y / TS - y) < 3)) list.push({ t: 'mat', sub: pick(['redcap', 'redcap', 'windroot', 'windroot', 'bloodroot', 'glowcap']), n: 1, x: x * TS + TS / 2, y: y * TS + TS / 2, herb: 1 });
       }
       G.townHerbs = { day, list };
@@ -5288,6 +5970,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const N = G.nightState;
     if (N && N.active) { N.active = false; N.wave = Math.max(0, N.wave - 1); N.timer = 8; }
     const P = G.p;
+    G.inside = null;
     if (spawn === 'healer') { P.x = TOWN.healer.x; P.y = TOWN.healer.y + 1.3 * TS; }
     else if (typeof spawn === 'number' && G.gates[spawn]) { P.x = G.gates[spawn].x; P.y = G.gates[spawn].y + 1.7 * TS; }
     else { P.x = 32 * TS; P.y = 11.6 * TS; }
@@ -5295,7 +5978,9 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     zones = []; zaps = []; callouts = []; projs = []; parts = []; floats = []; slashes = []; rings = []; ghosts = []; decals = []; dying = [];
     townFlows = {}; flowTile = -1; renderMap(); updateFog(true);
   }
-  const renderMap = () => G.zone === 'town' ? renderTown() : renderFloor();
+  const renderMap = () => G.zone === 'town' ? (G.mw !== TOWN.mapW ? rebuildTownKeep() : renderTown()) : renderFloor();
+  /* older saves have a town without the homes: rebuild it and keep the hero where they stood */
+  function rebuildTownKeep() { const P = G.p, x = P.x, y = P.y; buildTown(); P.x = x; P.y = y; cam.x = x; cam.y = y; }
   function randomCitySpot() {
     for (let k = 0; k < 60; k++) {
       const x = rnd(5, 58), y = rnd(9, 29), v = G.tiles ? G.tiles[idx(x, y)] : 3;
@@ -5304,6 +5989,254 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     return { x: 32 * TS, y: 14 * TS };
   }
   function houseFlow(i) { return townFlows[i] || (townFlows[i] = bfs(HOUSES[i].dx, HOUSES[i].dy)); }
+
+
+  /* ---------------- villagers' homes: each owned house has a room, laid out past the east edge of the town map ---------------- */
+  const ROOM_W = 12, ROOM_H = 9;
+  TOWN.mapW = TOWN.w + 33;
+  const HOME_OF = {}; FOLK.forEach((f, i) => { HOME_OF[(i * 3) % HOUSES.length] = i; });
+  const ROOM_PAL = [
+    { wall: '#c8b48e', wain: '#6a4a30', floor: ['#7a5638', '#6a4a30'], blanket: '#8a3a32', rug: '#7a3a4a' },
+    { wall: '#b8c0a8', wain: '#4a5a3a', floor: ['#8a6440', '#77553a'], blanket: '#3a5a8a', rug: '#3a6a5a' },
+    { wall: '#d0bca0', wain: '#5a3a2a', floor: ['#6e4c32', '#5e402a'], blanket: '#6a4a8a', rug: '#8a6a2a' },
+    { wall: '#c0a890', wain: '#4a3a2a', floor: ['#866040', '#735236'], blanket: '#4a7a4a', rug: '#6a2a2a' },
+    { wall: '#b4aca0', wain: '#3a3a4a', floor: ['#7c5a3c', '#6a4c32'], blanket: '#8a6a3a', rug: '#2a4a6a' },
+  ];
+  const ROOMS = Object.keys(HOME_OF).map(Number).sort((a, b) => a - b).map((h, k) => ({ k, house: h, owner: HOME_OF[h], x: TOWN.w + 3 + (k % 2) * (ROOM_W + 3), y: 2 + Math.floor(k / 2) * (ROOM_H + 2), flip: k % 2 === 1, pal: ROOM_PAL[k % ROOM_PAL.length], cat: k % 3 === 0 }));
+  const roomOfHouse = h => ROOMS.find(R => R.house === h) || null;
+  const curRoom = () => G && G.zone === 'town' && G.inside != null ? roomOfHouse(G.inside) : null;
+  /* furniture, in tiles from the room's top-left corner; px/py is where you stand to use it */
+  const ROOM_FURN = [
+    { k: 'bed', tx: 1, ty: 2, w: 2, h: 2, px: 2, py: 4.4 },
+    { k: 'window', tx: 3, ty: 0, w: 1, h: 2, px: 3.6, py: 2.5, wall: true },
+    { k: 'fire', tx: 5, ty: 0, w: 2, h: 2, px: 6, py: 2.5, wall: true },
+    { k: 'shelf', tx: 8, ty: 0, w: 2, h: 2, px: 9, py: 2.5, wall: true },
+    { k: 'table', tx: 4, ty: 4, w: 3, h: 1, px: 5.5, py: 5.4 },
+    { k: 'chest', tx: 10, ty: 4, w: 1, h: 1, px: 9.4, py: 4.5 },
+    { k: 'cupboard', tx: 10, ty: 6, w: 1, h: 2, px: 9.4, py: 7 },
+    { k: 'wardrobe', tx: 1, ty: 6, w: 1, h: 2, px: 2.6, py: 7 },
+  ];
+  const furnOf = R => ROOM_FURN.map(f => ({ ...f, tx: R.flip ? ROOM_W - f.tx - f.w : f.tx, px: R.flip ? ROOM_W - f.px : f.px }));
+  const roomPt = (R, px, py) => ({ x: (R.x + px) * TS, y: (R.y + py) * TS });
+  const catPos = R => roomPt(R, R.flip ? ROOM_W - 7.6 : 7.6, 2.75);
+  const ownerSeat = R => roomPt(R, R.flip ? ROOM_W - 7.6 : 7.6, 4.85);
+  function carveRooms(t, W) {
+    for (let y = 0; y < MH; y++) for (let x = TOWN.w; x < W; x++) t[y * W + x] = 11;
+    for (const R of ROOMS) {
+      for (let y = 2; y <= 7; y++) for (let x = 1; x <= 10; x++) t[(R.y + y) * W + R.x + x] = 10;
+      for (const f of furnOf(R)) if (!f.wall) for (let y = f.ty; y < f.ty + f.h; y++) for (let x = f.tx; x < f.tx + f.w; x++) t[(R.y + y) * W + R.x + x] = 12;
+    }
+  }
+  const HOME_LINES = ['Make yourself at home, but mind the mud on your boots.', 'Shut the door, quick! The night gets in otherwise.', 'You’re welcome to warm up by the fire.', 'Can’t sleep with all the noise out there.'];
+  const BOOKS = [
+    ['A History of Aldermere', 'The Great Lantern was lit by the first king, Aldric the Elder, who carried its flame up from the deep places.'],
+    ['The Lantern Lich', 'Before he was the Lich, they say he was the Lantern’s keeper, and he loved its light too much to share it.'],
+    ['On Rats', 'Rats follow the warmth. Where the cellars are warm, look for a crown.'],
+    ['Goblin Songs', 'Goblins beat their drums to sound bigger than they are. It usually works.'],
+    ['Herbal Remedies', 'Redcap for wounds, windroot for weary legs, glowcap for the mind. Never eat moonpetal raw.'],
+    ['Burial Rites of the Kings', 'The old kings were buried with their swords, so they could guard the crypt forever.'],
+    ['Trolls and Their Habits', 'A troll will mend from almost any wound. Fire slows the mending.'],
+    ['A Children’s Tale', 'Once there was a little light that was afraid of the dark, until it learned the dark was afraid of it.'],
+  ];
+  const NOTES = {
+    'Pell the baker': 'Flour: 2 sacks. Eggs: a dozen. Remember to lock the oven room. The rats are getting clever.',
+    'Old Wren': 'To Wren. Happy 80th! Stop climbing the roof to look at the stars. Love, Mara.',
+    'Hollis the smith': 'Order for the watch: 12 spearheads, 4 helmets. Greta says my rivets are crooked. They are not.',
+    'Mara': 'Things to buy: apples, ribbon, a new basket. Things to stop doing: worrying.',
+    'Tam the woodcutter': 'Trees marked for cutting: the old oak by the east wall. NOT the one the children climb.',
+    'Ysolde': 'Dear sister, the city is dim but we are well. Write back soon. Your Ysolde.',
+    'Bram': 'IOU: 3 silver to Corin, for the dice game. (He cheated.)',
+    'Edda the herbwife': 'Moonpetal must be picked at night. Glowcap only in the deep caves. Do not tell Bram where.',
+    'Corin': 'Practice the lute: one hour. Practice the dice: two hours. Do not tell Bram.',
+    'Fen the fisher': 'Fish caught: 4. Fish that got away: 1, very big. I will catch it one day.',
+  };
+  const WARDROBE = ['Coats that smell of woodsmoke and lavender.', 'A moth flutters out. Nothing else.', 'Neatly folded shirts, and one very ugly hat.'];
+  const homeDay = () => Math.floor((G.clock || 0) / DAY);
+  const usedToday = key => (G.homeUse = G.homeUse || {})[key] === homeDay();
+  const useToday = key => { (G.homeUse = G.homeUse || {})[key] = homeDay(); };
+  const ownerHome = R => { const f = G.folk && G.folk[R.owner]; return f && f.state === 'home' ? f : null; };
+  function enterRoom(R) {
+    if (G.nightState && G.nightState.active) return warn('Not now. Monsters are in the streets!');
+    const P = G.p;
+    G.inside = R.house; sfx('door');
+    const d = roomPt(R, 6, 7.3); P.x = d.x; P.y = d.y; P.vx = P.vy = 0; cam.x = P.x; cam.y = P.y - 40;
+    updateFog(true);
+  }
+  function leaveRoom() {
+    const h = HOUSES[G.inside], P = G.p;
+    G.inside = null; sfx('door');
+    P.x = (h.dx + .5) * TS; P.y = (h.dy + .8) * TS; P.vx = P.vy = 0; cam.x = P.x; cam.y = P.y;
+    updateFog(true);
+  }
+  function roomTarget(R) {
+    const P = G.p, o = ownerHome(R);
+    const door = roomPt(R, 6, 7.6);
+    if (dist(P, door) < 52) return { text: 'Press E to go outside', act: leaveRoom };
+    if (o && dist(P, o) < 56) return { text: `Press E to talk to ${o.name}`, act: () => { sfx('click'); say([say1(o.name, pick(HOME_LINES), '#e0cfa8')]); } };
+    if (R.cat && dist(P, catPos(R)) < 50) return { text: 'Press E to pet the cat', act: () => petCat(R) };
+    let best = null, bd = 58;
+    for (const f of furnOf(R)) { const q = roomPt(R, f.px, f.py), d = dist(P, q); if (d < bd) { bd = d; best = f; } }
+    if (!best) return null;
+    const T = { bed: 'Press E to rest', window: 'Press E to look outside', fire: 'Press E to warm your hands', shelf: 'Press E to read a book', table: 'Press E to read the note', chest: 'Press E to open the chest', cupboard: 'Press E to look in the cupboard', wardrobe: 'Press E to open the wardrobe' };
+    return { text: T[best.k], act: () => useFurn(R, best.k) };
+  }
+  function petCat(R) {
+    const c = catPos(R); sfx('meow'); R.purr = 2.5;
+    float(c.x, c.y - 16, '♥', '#ff8aa8'); burst(c.x, c.y - 8, '#ff8aa8', 8, 50, 2, -40);
+    msg('The cat purrs and bumps its head against your hand.', '#ffb0c0');
+  }
+  function useFurn(R, k) {
+    const P = G.p, o = ownerHome(R), owner = FOLK[R.owner].name, key = R.house + ':' + k;
+    if (k === 'bed') {
+      if (o) return say([say1(owner, 'That’s my bed! Find your own.', '#e0cfa8')]);
+      sfx('bed'); P.hp = P.max; P.st = P.maxSt; if (P.maxMp) P.mp = P.maxMp;
+      burst(P.x, P.y, '#b8ffb0', 16, 80, 2.5, -50); return msg('You nap for a moment and wake up rested.', '#9fe38a');
+    }
+    if (k === 'window') { sfx('click'); return msg(dayInfo().phase === 'day' ? 'Sunlight on the rooftops. Somewhere a cart rattles past.' : 'Dark streets. The watch fires burn along the wall.', '#c9bfa6'); }
+    if (k === 'fire') { sfx('crackle'); P.st = P.maxSt; return msg('You warm your hands by the fire. Your tired legs feel better.', '#ffb070'); }
+    if (k === 'shelf') {
+      sfx('page'); const b = BOOKS[(R.k * 3 + homeDay()) % BOOKS.length];
+      return say([say1(b[0], b[1], '#d8c8a0')], null, () => {
+        G.booksRead = G.booksRead || {};
+        if (!G.booksRead[b[0]]) { G.booksRead[b[0]] = 1; gainXP(Math.round(need(P.lvl) * .05) + 5); msg('You learn something from the book.', '#e8a33d'); }
+      });
+    }
+    if (k === 'table') { sfx('page'); return say([say1('A note', NOTES[owner] || '…', '#d8c8a0')]); }
+    if (k === 'chest') {
+      if (o) return say([say1(owner, 'Hands off my things!', '#e0cfa8')]);
+      sfx('creak');
+      if (usedToday(key)) return msg('Just old blankets and a moth.', '#9b937f');
+      useToday(key); const gv = rnd(4, 9) * (1 + G.shards); G.gold += gv; sfx('coin');
+      float(P.x, P.y - 30, '+' + gv + 'g', '#e3c46a', true); return msg('You find a few coins under the old blankets.', '#e3c46a');
+    }
+    if (k === 'cupboard') {
+      sfx('creak');
+      if (usedToday(key)) return msg('The cupboard is bare. Maybe tomorrow.', '#9b937f');
+      useToday(key); sfx('eat'); const h = Math.round(P.max * .3); P.hp = Math.min(P.max, P.hp + h);
+      float(P.x, P.y - 26, '+' + h, '#7db870'); return msg('You eat a little something from the cupboard and feel better.', '#9fe38a');
+    }
+    if (k === 'wardrobe') { sfx('creak'); return msg(pick(WARDROBE), '#c9bfa6'); }
+  }
+  /* painted once into the town canvas */
+  function drawRooms(g) {
+    g.fillStyle = '#050507'; g.fillRect(TOWN.w * TS, 0, (TOWN.mapW - TOWN.w) * TS, MH * TS);
+    const box = (x, y, w, h, top, side, line = 'rgba(0,0,0,.55)') => { g.fillStyle = side; g.fillRect(x, y, w, h); g.fillStyle = top; g.fillRect(x, y, w, h * .62); g.strokeStyle = line; g.lineWidth = 2; g.strokeRect(x + 1, y + 1, w - 2, h - 2); };
+    for (const R of ROOMS) {
+      const ox = R.x * TS, oy = R.y * TS, W = ROOM_W * TS, H = ROOM_H * TS, C = R.pal;
+      /* floorboards */
+      for (let y = 2 * TS; y < 8 * TS; y += 16) for (let x = TS, i = 0; x < 11 * TS; i++) {
+        const len = 70 + hash(x, y, R.k) * 90, w = Math.min(len, 11 * TS - x);
+        g.fillStyle = (i + y / 16) % 2 ? C.floor[0] : C.floor[1]; g.fillRect(ox + x, oy + y, w, 16);
+        g.fillStyle = 'rgba(255,230,190,.07)'; g.fillRect(ox + x, oy + y, w, 2);
+        g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(ox + x + w - 1, oy + y, 1.5, 16); g.fillRect(ox + x, oy + y + 15, w, 1);
+        x += w;
+      }
+      /* rug */
+      g.fillStyle = C.rug; g.beginPath(); g.ellipse(ox + 6 * TS, oy + 5.3 * TS, 3.1 * TS, 1.55 * TS, 0, 0, 6.283); g.fill();
+      g.strokeStyle = 'rgba(255,230,180,.35)'; g.lineWidth = 3; g.beginPath(); g.ellipse(ox + 6 * TS, oy + 5.3 * TS, 2.7 * TS, 1.25 * TS, 0, 0, 6.283); g.stroke();
+      g.strokeStyle = 'rgba(0,0,0,.25)'; g.lineWidth = 2; g.beginPath(); g.ellipse(ox + 6 * TS, oy + 5.3 * TS, 1.6 * TS, .7 * TS, 0, 0, 6.283); g.stroke();
+      /* back wall: plaster over wood panelling */
+      g.fillStyle = C.wall; g.fillRect(ox + TS, oy, 10 * TS, 2 * TS);
+      for (let k = 0; k < 40; k++) { g.fillStyle = `rgba(0,0,0,${.03 + hash(k, R.k, 3) * .04})`; g.fillRect(ox + TS + hash(k, 1, R.k) * 10 * TS, oy + hash(k, 2, R.k) * 60, 6 + hash(k, 3, 1) * 14, 4); }
+      g.fillStyle = C.wain; g.fillRect(ox + TS, oy + 62, 10 * TS, 34);
+      g.fillStyle = 'rgba(0,0,0,.25)'; for (let x = TS; x < 11 * TS; x += 24) g.fillRect(ox + x, oy + 62, 2, 34);
+      g.fillStyle = '#3a2618'; g.fillRect(ox + TS, oy + 58, 10 * TS, 5); g.fillRect(ox + TS, oy, 10 * TS, 8);
+      const sh = g.createLinearGradient(0, oy + 2 * TS, 0, oy + 2 * TS + 26); sh.addColorStop(0, 'rgba(0,0,0,.45)'); sh.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = sh; g.fillRect(ox + TS, oy + 2 * TS, 10 * TS, 26);
+      /* side and front walls */
+      g.fillStyle = '#2a1e16'; g.fillRect(ox, oy, TS, H); g.fillRect(ox + 11 * TS, oy, TS, H); g.fillRect(ox, oy + 8 * TS, W, TS);
+      g.fillStyle = '#4a3626'; g.fillRect(ox + TS - 6, oy, 6, 8 * TS); g.fillRect(ox + 11 * TS, oy, 6, 8 * TS); g.fillRect(ox + TS, oy + 8 * TS, 10 * TS, 6);
+      /* the door gap and mat */
+      g.fillStyle = C.floor[0]; g.fillRect(ox + 5 * TS, oy + 8 * TS, 2 * TS, 18);
+      g.fillStyle = '#7a6a48'; g.beginPath(); g.roundRect(ox + 5.2 * TS, oy + 7.45 * TS, 1.6 * TS, .5 * TS, 4); g.fill();
+      g.strokeStyle = 'rgba(0,0,0,.3)'; g.lineWidth = 1.5; for (let k = 1; k < 6; k++) { g.beginPath(); g.moveTo(ox + 5.2 * TS + k * 13, oy + 7.5 * TS); g.lineTo(ox + 5.2 * TS + k * 13, oy + 7.9 * TS); g.stroke(); }
+      for (const f of furnOf(R)) {
+        const fx = ox + f.tx * TS, fy = oy + f.ty * TS, fw = f.w * TS, fh = f.h * TS;
+        if (f.k === 'bed') {
+          g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(fx + 6, fy + 10, fw - 4, fh - 4);
+          box(fx + 4, fy + 2, fw - 8, fh - 6, '#7a5232', '#5a3a22');
+          g.fillStyle = '#efe6d4'; g.beginPath(); g.roundRect(fx + 12, fy + 8, fw - 24, 22, 6); g.fill();
+          g.fillStyle = C.blanket; g.beginPath(); g.roundRect(fx + 8, fy + 34, fw - 16, fh - 46, 6); g.fill();
+          g.fillStyle = 'rgba(255,255,255,.12)'; g.fillRect(fx + 8, fy + 34, fw - 16, 6);
+          g.strokeStyle = 'rgba(0,0,0,.2)'; g.lineWidth = 2; for (let k = 1; k < 4; k++) { g.beginPath(); g.moveTo(fx + 8, fy + 34 + k * 12); g.lineTo(fx + fw - 8, fy + 34 + k * 12); g.stroke(); }
+        } else if (f.k === 'window') {
+          g.fillStyle = '#3a2618'; g.fillRect(fx + 6, fy + 10, fw - 12, 46);
+          const sky = g.createLinearGradient(0, fy + 14, 0, fy + 52); sky.addColorStop(0, '#9cc8e8'); sky.addColorStop(1, '#d8e8d0'); g.fillStyle = sky; g.fillRect(fx + 10, fy + 14, fw - 20, 38);
+          g.fillStyle = '#3a2618'; g.fillRect(fx + fw / 2 - 2, fy + 14, 4, 38); g.fillRect(fx + 10, fy + 31, fw - 20, 4);
+          g.fillStyle = '#5a3a24'; g.fillRect(fx + 2, fy + 54, fw - 4, 6);
+          g.fillStyle = '#8a3a3a'; g.fillRect(fx + 2, fy + 8, 8, 44); g.fillRect(fx + fw - 10, fy + 8, 8, 44);
+        } else if (f.k === 'fire') {
+          g.fillStyle = '#6a625a'; g.beginPath(); g.roundRect(fx + 4, fy + 4, fw - 8, fh - 6, 6); g.fill();
+          for (let k = 0; k < 18; k++) { g.fillStyle = `rgba(0,0,0,${.12 + hash(k, 5, R.k) * .12})`; g.fillRect(fx + 8 + hash(k, 1, 7) * (fw - 28), fy + 8 + hash(k, 2, 7) * (fh - 26), 16, 9); }
+          g.fillStyle = '#4a4440'; g.fillRect(fx, fy, fw, 12);
+          g.fillStyle = '#120c0a'; g.beginPath(); g.moveTo(fx + 20, fy + fh - 4); g.lineTo(fx + 20, fy + 44); g.quadraticCurveTo(fx + fw / 2, fy + 22, fx + fw - 20, fy + 44); g.lineTo(fx + fw - 20, fy + fh - 4); g.fill();
+          g.fillStyle = '#5a3a22'; g.fillRect(fx + 30, fy + fh - 16, fw - 60, 7); g.fillRect(fx + 36, fy + fh - 22, fw - 72, 7);
+        } else if (f.k === 'shelf') {
+          box(fx + 4, fy + 4, fw - 8, fh - 6, '#6a4a2e', '#4a3220');
+          const cols = ['#8a3a32', '#3a5a8a', '#4a7a4a', '#a88a3a', '#6a4a8a', '#2a5a5a', '#9a5a2a'];
+          for (let r = 0; r < 3; r++) {
+            const sy = fy + 10 + r * 26; g.fillStyle = '#2a1a10'; g.fillRect(fx + 10, sy, fw - 20, 22);
+            for (let x = fx + 12, i = 0; x < fx + fw - 16; i++) { const bw = 5 + hash(i, r, R.k) * 5, bh = 14 + hash(r, i, R.k) * 7; g.fillStyle = cols[(i + r * 3 + R.k) % cols.length]; g.fillRect(x, sy + 22 - bh, bw, bh); g.fillStyle = 'rgba(255,240,200,.25)'; g.fillRect(x + 1, sy + 26 - bh, bw - 2, 1.5); x += bw + 1; }
+            g.fillStyle = '#6a4a2e'; g.fillRect(fx + 8, sy + 21, fw - 16, 4);
+          }
+        } else if (f.k === 'table') {
+          g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(fx + 6, fy + 12, fw - 6, fh - 6);
+          box(fx + 2, fy + 4, fw - 4, fh - 10, '#9a6c44', '#6a4a2e');
+          for (const sx of [fx - 18, fx + fw + 2]) { g.fillStyle = '#6a4a2e'; g.beginPath(); g.arc(sx + 8, fy + fh / 2 + 4, 11, 0, 6.283); g.fill(); g.fillStyle = '#8a5e3a'; g.beginPath(); g.arc(sx + 8, fy + fh / 2 + 1, 10, 0, 6.283); g.fill(); }
+          g.fillStyle = '#efe6d4'; g.save(); g.translate(fx + fw / 2 - 18, fy + 12); g.rotate(-.12); g.fillRect(0, 0, 18, 13); g.fillStyle = 'rgba(40,30,20,.5)'; for (let k = 0; k < 3; k++) g.fillRect(3, 3 + k * 3.2, 12 - k * 2, 1); g.restore();
+          const prop = (FOLK_STYLE[FOLK[R.owner].name] || [])[2];
+          const ix = fx + fw / 2 + 14, iy = fy + 16;
+          if (prop === 'bread') { g.fillStyle = '#c8883a'; g.beginPath(); g.ellipse(ix, iy, 14, 8, 0, 0, 6.283); g.fill(); g.strokeStyle = '#8a5420'; g.lineWidth = 1.5; for (let k = -1; k <= 1; k++) { g.beginPath(); g.moveTo(ix + k * 6 - 3, iy - 5); g.lineTo(ix + k * 6 + 2, iy + 4); g.stroke(); } }
+          else if (prop === 'hammer') { g.fillStyle = '#6a4a2e'; g.fillRect(ix - 12, iy - 2, 22, 4); g.fillStyle = '#8a8a92'; g.fillRect(ix + 6, iy - 7, 9, 14); }
+          else if (prop === 'herbs') { for (let k = 0; k < 4; k++) { g.fillStyle = ['#5a8a3a', '#7aa04a', '#a0587a', '#4a7a3a'][k]; g.beginPath(); g.ellipse(ix - 8 + k * 5, iy, 3, 8, .3, 0, 6.283); g.fill(); } }
+          else if (prop === 'rod') { g.fillStyle = '#d8d0c0'; g.beginPath(); g.ellipse(ix, iy, 13, 8, 0, 0, 6.283); g.fill(); g.fillStyle = '#8aa0b0'; g.beginPath(); g.ellipse(ix, iy, 9, 4, 0, 0, 6.283); g.fill(); g.beginPath(); g.moveTo(ix + 8, iy); g.lineTo(ix + 13, iy - 4); g.lineTo(ix + 13, iy + 4); g.fill(); }
+          else if (prop === 'basket') { g.fillStyle = '#a8804a'; g.beginPath(); g.ellipse(ix, iy + 2, 12, 7, 0, 0, 6.283); g.fill(); for (const [dx, c] of [[-4, '#c83a2a'], [3, '#d84a2a'], [-1, '#7aa03a']]) { g.fillStyle = c; g.beginPath(); g.arc(ix + dx, iy - 2, 4, 0, 6.283); g.fill(); } }
+          else { g.fillStyle = '#8a6a4a'; g.beginPath(); g.roundRect(ix - 6, iy - 6, 11, 13, 2); g.fill(); g.fillStyle = '#efe6d4'; g.fillRect(ix + 9, iy - 10, 5, 12); }
+        } else if (f.k === 'chest') {
+          g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(fx + 8, fy + 14, fw - 10, fh - 12);
+          box(fx + 5, fy + 8, fw - 10, fh - 12, '#8a5a32', '#5a3a20');
+          g.fillStyle = '#4a4a52'; g.fillRect(fx + 5, fy + 20, fw - 10, 4); g.fillRect(fx + 12, fy + 8, 4, fh - 12); g.fillRect(fx + fw - 16, fy + 8, 4, fh - 12);
+          g.fillStyle = '#c9a24a'; g.fillRect(fx + fw / 2 - 3, fy + 19, 6, 7);
+        } else {
+          /* cupboard and wardrobe: tall wooden cabinets */
+          g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(fx + 8, fy + 8, fw - 8, fh - 4);
+          box(fx + 4, fy + 2, fw - 8, fh - 6, f.k === 'cupboard' ? '#8a6040' : '#6a4630', f.k === 'cupboard' ? '#5e4028' : '#4a3020');
+          g.strokeStyle = 'rgba(0,0,0,.45)'; g.lineWidth = 2; g.beginPath(); g.moveTo(fx + fw / 2, fy + 8); g.lineTo(fx + fw / 2, fy + fh - 10); g.stroke();
+          g.fillStyle = '#c9a24a'; g.fillRect(fx + fw / 2 - 5, fy + fh / 2 - 4, 3, 8); g.fillRect(fx + fw / 2 + 2, fy + fh / 2 - 4, 3, 8);
+          if (f.k === 'cupboard') { g.fillStyle = '#e8e0d0'; for (let k = 0; k < 2; k++) { g.beginPath(); g.arc(fx + 14 + k * 18, fy + 12, 6, Math.PI, 0); g.fill(); } }
+        }
+      }
+      /* a plant in a free corner */
+      const pc = roomPt(R, R.flip ? 1.6 : 10.4, 2.5);
+      g.fillStyle = '#8a4a2a'; g.beginPath(); g.moveTo(pc.x - 8, pc.y); g.lineTo(pc.x + 8, pc.y); g.lineTo(pc.x + 6, pc.y + 12); g.lineTo(pc.x - 6, pc.y + 12); g.fill();
+      for (let k = 0; k < 6; k++) { g.fillStyle = k % 2 ? '#4a7a3a' : '#5a8a44'; g.beginPath(); g.ellipse(pc.x + Math.cos(k) * 6, pc.y - 6 - (k % 3) * 4, 4, 9, k - 2.5, 0, 6.283); g.fill(); }
+    }
+  }
+  /* animated bits of the room you're in: the fire, the window at night, the cat */
+  function drawRoomFx(R, now) {
+    const t = now / 1000, fc = roomPt(R, 6, 1.62);
+    glowCircle(fc.x, fc.y, 90, 'rgba(255,150,60,.25)', 'rgba(255,120,40,0)');
+    for (let k = 0; k < 5; k++) {
+      const x = fc.x - 16 + k * 8, h = 18 + Math.sin(t * 9 + k * 1.7) * 6 + (k % 2) * 6;
+      ctx.fillStyle = k % 2 ? 'rgba(255,200,90,.9)' : 'rgba(255,120,40,.85)';
+      ctx.beginPath(); ctx.moveTo(x - 6, fc.y + 6); ctx.quadraticCurveTo(x - 4, fc.y - h * .5, x + Math.sin(t * 7 + k) * 2, fc.y - h); ctx.quadraticCurveTo(x + 4, fc.y - h * .5, x + 6, fc.y + 6); ctx.fill();
+    }
+    if (!reduced && Math.random() < .15) parts.push({ x: fc.x + rf(-12, 12), y: fc.y - 10, vx: rf(-6, 6), vy: rf(-50, -25), life: .8, max: .8, col: '#ffb050', size: 1.6, grav: 0, grow: 0 });
+    const win = furnOf(R).find(f => f.k === 'window'), dk = dayInfo().dark;
+    if (win && dk > 0) { ctx.fillStyle = `rgba(10,14,40,${dk * .85})`; ctx.fillRect((R.x + win.tx) * TS + 10, (R.y + win.ty) * TS + 14, win.w * TS - 20, 38); if (dk > .5) { circ((R.x + win.tx) * TS + 18, (R.y + win.ty) * TS + 22, 1.2, '#fff'); circ((R.x + win.tx) * TS + 32, (R.y + win.ty) * TS + 40, 1, '#fff'); } }
+    if (R.cat) {
+      const c = catPos(R), purr = (R.purr = Math.max(0, (R.purr || 0) - .016)) > 0, br = Math.sin(t * (purr ? 6 : 2)) * .6;
+      ctx.save(); ctx.translate(c.x, c.y);
+      ell(0, 7, 14, 4, 'rgba(0,0,0,.3)');
+      ctx.strokeStyle = '#3a2a22'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(10, 3); ctx.quadraticCurveTo(18, 2 + Math.sin(t * 1.5) * 4, 14, -6 + Math.sin(t * 1.5) * 3); ctx.stroke();
+      ctx.fillStyle = '#e09040'; ctx.beginPath(); ctx.ellipse(0, 0, 12, 8 + br, 0, 0, 6.283); ctx.fill();
+      ctx.fillStyle = 'rgba(120,60,20,.5)'; for (let k = -1; k <= 1; k++) { ctx.beginPath(); ctx.ellipse(k * 5, -3, 1.5, 4, 0, 0, 6.283); ctx.fill(); }
+      ctx.fillStyle = '#e09040'; ctx.beginPath(); ctx.arc(-10, -3, 6.5, 0, 6.283); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-15, -6); ctx.lineTo(-14, -13); ctx.lineTo(-10, -8); ctx.fill(); ctx.beginPath(); ctx.moveTo(-8, -8); ctx.lineTo(-5, -13); ctx.lineTo(-5, -6); ctx.fill();
+      ctx.strokeStyle = '#3a2a22'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-13, -3); ctx.quadraticCurveTo(-12, -2, -11, -3); ctx.moveTo(-9, -3); ctx.quadraticCurveTo(-8, -2, -7, -3); ctx.stroke();
+      if (purr) { ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.font = '700 9px monospace'; ctx.fillText('~', 2, -12 - Math.sin(t * 6) * 2); }
+      ctx.restore();
+    }
+  }
 
   /* ----- townsfolk ----- */
   function updateFolk(dt) {
@@ -5314,7 +6247,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         if (f.state === 'home') { const h = HOUSES[f.home]; f.x = h.dx * TS + TS / 2; f.y = h.dy * TS + TS / 2; f.pause = rf(.5, 2); }
         f.state = 'wander'; f.tx = 0;
       }
-      if (f.state === 'home') continue;
+      if (f.state === 'home') { const R = roomOfHouse(f.home); if (R) { const q = ownerSeat(R); f.x = q.x; f.y = q.y; f.moving = false; f.face = R.flip ? 1 : -1; } continue; }
       let tx, ty, spd = 40;
       if (f.state === 'going') {
         const fl = houseFlow(f.home), h = HOUSES[f.home], ftx = Math.floor(f.x / TS), fty = Math.floor(f.y / TS);
@@ -5457,7 +6390,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       }
       if (N.done) return;
       if (N.active) { if (!G.mons.some(m => m.wave)) waveCleared(N); }
-      else if ((N.timer -= dt) <= 0) startWave(N);
+      else if (G.inside == null && (N.timer -= dt) <= 0) startWave(N);
     } else if (N && N.id === id && !N.over) {
       N.over = true;
       const left = G.mons.filter(m => m.wave);
@@ -5469,7 +6402,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     }
   }
   function startWave(N) {
-    N.wave++; N.active = true;
+    N.wave++; N.active = true; sfx('bell', 1);
     const k = N.wave, nd = nextDungeon(), D = DUNGEONS[nd < 0 ? DUNGEONS.length - 1 : nd];
     const reach = Math.max(1, Math.ceil(D.floors * k / 5));
     const pool = D.pool.filter(e => e[1] <= reach).map(e => e[0]);
@@ -5491,7 +6424,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     addShake(5);
   }
   function waveCleared(N) {
-    N.active = false;
+    N.active = false; sfx('fanfare', 1);
     const gold = Math.round(rnd(2, 4) * N.wave * goldScale());
     G.gold += gold; float(G.p.x, G.p.y - 34, `+${gold}g`, '#e3c46a', true);
     if (N.wave >= 5) {
@@ -5681,6 +6614,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       g.fillStyle = `hsla(${hue - 10}, 40%, ${forest ? 18 : 26}%, .7)`; g.beginPath(); g.arc(cx - R * .3, cy - R * .35, R * .38, 0, 6.283); g.fill();
       g.fillStyle = 'rgba(200,240,160,.12)'; for (let k = 0; k < 4; k++) dot(cx - R * .5 + hash(k, x, 1) * R, cy - R * .6 + hash(x, k, 2) * R * .8, 2, 'rgba(200,240,160,.14)');
     }
+    drawRooms(g);
   }
 
   /* ----- town landmarks and characters ----- */
@@ -5883,11 +6817,18 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const P = G.p;
     if (nearMerchant()) return { text: 'Press E to trade', act: () => toggleInv(true, 'merchant') };
     if (G.zone === 'town') {
+      const RM = curRoom();
+      if (RM) return roomTarget(RM);
       let best = null, bd = 66;
       for (const q of G.stations || []) { const d = dist(P, q); if (d < bd) { bd = d; best = q; } }
       if (best) return { text: `Press E: ${STATIONS[best.id].verb}`, act: () => toggleInv(true, best.id) };
       for (const n of G.npcs) if (dist(P, n) < 70) return { text: `Press E to talk to ${n.name}`, act: () => talk(n) };
       for (const f of G.folk) if (f.state !== 'home' && dist(P, f) < 50) return { text: `Press E to talk to ${f.name}`, act: () => talkFolk(f) };
+      for (let i = 0; i < HOUSES.length; i++) {
+        const h = HOUSES[i]; if (Math.hypot(P.x - (h.dx + .5) * TS, P.y - (h.dy + .3) * TS) > 40) continue;
+        const R = roomOfHouse(i);
+        return R ? { text: `Press E to enter ${FOLK[R.owner].name}’s home`, act: () => enterRoom(R) } : { text: 'Press E to knock', act: () => { sfx('knock'); msg('You knock. Nobody answers.', '#9b937f'); } };
+      }
       for (const gt of G.gates) if (dist(P, gt) < 70) return { text: `Press E: ${DUNGEONS[gt.d].name}`, act: () => gateDialog(gt.d) };
     } else {
       if (G.portal && dist(P, G.portal) < 60) return { text: 'Press E to return to Aldermere', act: () => returnToTown(false) };
@@ -6018,6 +6959,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     transition(() => enterDungeonNow(d, floor), DUNGEONS[d].name, `Floor ${floor} of ${DUNGEONS[d].floors}`);
   }
   function enterDungeonNow(d, floor) {
+    sfx('gate', 1);
     G.zone = 'dungeon'; G.dun = d; G.depth = floor; G.npcs = []; G.gates = []; G.lastGate = d;
     buildFloor();
     msg(`You enter ${DUNGEONS[d].name}. Floor ${floor} of ${DUNGEONS[d].floors}.`, DUNGEONS[d].col);
@@ -6027,6 +6969,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     transition(() => returnToTownNow(fell), 'Aldermere', fell ? 'Sister Maren’s chapel' : 'Home again');
   }
   function returnToTownNow(fell) {
+    if (!fell) sfx('portal');
     buildTown(fell ? 'healer' : G.lastGate);
     G.p.hp = fell ? Math.round(G.p.max * .5) : G.p.hp;
     msg(fell ? 'You wake in Sister Maren’s chapel, bruised but breathing.' : 'You step out of the portal into Aldermere.', '#e8a33d');
@@ -6108,7 +7051,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
 
     /* stamina, sprinting and magic */
     const sprint = (keys.has('sprint') || joy.far) && P.moving && !P.dash && !P.roll && !P.exhausted && P.st > 0;
-    if (sprint) { P.st = Math.max(0, P.st - 22 * dt * (buffOn('fresh') ? .5 : 1)); P.stT = .6; if (P.st <= 0) { P.exhausted = true; warn('You are out of breath.'); } }
+    if (sprint) { P.st = Math.max(0, P.st - 22 * dt * (buffOn('fresh') ? .5 : 1)); P.stT = .6; if (P.st <= 0) { P.exhausted = true; sfx('tired', 1); warn('You are out of breath.'); } }
     P.sprinting = sprint;
     if ((P.stT = (P.stT || 0) - dt) <= 0) P.st = Math.min(P.maxSt, P.st + 34 * dt);
     if (P.exhausted && P.st >= P.maxSt * .35) P.exhausted = false;
@@ -6140,6 +7083,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       moveEnt(P, P.vx * dt, P.vy * dt);
     }
     P.walk += Math.hypot(P.vx || 0, P.vy || 0) * dt * .075;
+    if (P.hp > 0 && P.hp < P.max * .25) { P.beatT = (P.beatT || 0) - dt; if (P.beatT <= 0) { P.beatT = P.hp < P.max * .12 ? .6 : .9; sfx('heartbeat', .3); } }
+    if (P.moving && !P.dash && !P.roll) { P.stepT = (P.stepT || 0) - dt; if (P.stepT <= 0) { P.stepT = sprint ? .25 : .36; sfx('step', .08); } }
     if (P.moving && !P.dash && !reduced && Math.random() < dt * (sprint ? 12 : 5)) parts.push({ x: P.x + rf(-5, 5), y: P.y + 13, vx: rf(-12, 12), vy: rf(-14, -4), life: .5, max: .5, col: G.zone === 'town' ? '#a89878' : '#6a6258', size: 2.5, grav: 0, grow: 5 });
     const pushOff = (o, rad) => { const dx = P.x - o.x, dy = P.y - o.y, dd = Math.hypot(dx, dy) || .01, min = P.r + rad; if (dd < min) moveEnt(P, dx / dd * (min - dd), dy / dd * (min - dd)); };
     if (G.merchant) pushOff(G.merchant, 15);
@@ -6150,12 +7095,13 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     P.cd = P.cd.map(v => Math.max(0, v - dt));
     if (P.chan) { const C = P.chan; C.next -= dt; while (P.chan === C && C.next <= 0) { C.fn(C.i++); C.next += C.every; if (C.i >= C.n) P.chan = null; } }
     for (const k of ['fort', 'tox', 'aegis']) if (P[k] > 0) P[k] = Math.max(0, P[k] - dt);
-    if (P.lastStand > 0 && (P.lastStand -= dt) <= 0) { P.lastStand = 0; heal(.3); msg('Last Stand ends. You catch your breath.', '#ff9a6a'); }
+    if (P.lastStand > 0 && (P.lastStand -= dt) <= 0) { P.lastStand = 0; heal(.3); msg('The Undying Oath fades. You catch your breath.', '#ff9a6a'); }
     for (const k in P.scd) P.scd[k] = Math.max(0, P.scd[k] - dt);
     P.iframe = Math.max(0, P.iframe - dt); P.hitT = Math.max(0, P.hitT - dt); P.swing = Math.max(0, P.swing - dt);
     P.potCd = Math.max(0, P.potCd - dt); P.wallHit = Math.max(0, (P.wallHit || 0) - dt); P.rollCd = Math.max(0, (P.rollCd || 0) - dt);
     P.barrierHit = Math.max(0, (P.barrierHit || 0) - dt);
     if (P.wall > 0) P.wall = Math.max(0, P.wall - dt);
+    if (P.trance > 0) { P.trance = Math.max(0, P.trance - dt); if (!reduced && Math.random() < dt * 22) parts.push({ x: P.x + rf(-14, 14), y: P.y + rf(-4, 12), vx: rf(-8, 8), vy: rf(-70, -40), life: .7, max: .7, col: pick(['#ff7a4a', '#ffb060', '#ff4a2a']), size: rf(1.5, 3), grav: 0, grow: 0 }); }
     if (P.invis > 0 && (P.invis -= dt) <= 0) { P.invis = 0; msg('You fade back into view.', '#6b665a'); burst(P.x, P.y, '#2e362b', 12, 60, 6, 0, 12, 0.6); }
     for (const k in P.buffs) if (P.buffs[k] > 0 && (P.buffs[k] -= dt) <= 0) { P.buffs[k] = 0; if (k === 'potato') { msg('You are no longer a potato.', '#e8c890'); burst(P.x, P.y, '#c8a060', 16, 100, 3); } else if (k !== 'fresh') msg(`${BUFF_NAME[k]} wears off.`, '#6b665a'); }
     if (P.hot && P.hot.t > 0) { P.hp = Math.min(P.max, P.hp + P.hot.rate * dt); P.hot.t -= dt; if (Math.random() < dt * 4) parts.push({ x: P.x + rf(-8, 8), y: P.y + rf(-4, 10), vx: 0, vy: -30, life: .6, max: .6, col: '#9fe38a', size: 2.2, grav: 0, grow: 0 }); }
@@ -6191,6 +7137,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       }
       G.items = G.items.filter(i => i !== it);
       if (it.t === 'mat') { give(it.sub, it.n); it.taken = true; float(it.x, it.y, `+${it.n} ${MATS[it.sub][0]}`, MATS[it.sub][2]); }
+      sfx(it.t === 'gold' ? 'coin' : it.t === 'gear' ? 'loot' : 'pickup', .03);
       if (it.t === 'gold') { const gv = Math.round(it.v * (1 + ((P.sk || {}).gold || 0))); G.gold += gv; float(it.x, it.y, '+' + gv + 'g', '#e3c46a'); }
       if (it.t === 'map') { revealMap(); msg('A scroll of mapping. The floor unfolds in your mind.', '#74a2e6'); }
       burst(it.x, it.y, '#ffe8a8', 8, 80, 2);
@@ -6201,7 +7148,10 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       if (MON[bm.t].mid) guardianDefeated(bm); else if (G.dun === DUNGEONS.length - 1) finale(); else bossDefeated(bm);
     }
     updateMons(dt);
-    if (G.zone === 'town' && !G.over) { updateFolk(dt); updateNight(dt); }
+    if (G.zone === 'town' && !G.over) {
+      updateFolk(dt); updateNight(dt);
+      const RM = curRoom(); if (RM && P.y > (RM.y + 7.62) * TS && Math.abs(P.x - (RM.x + 6) * TS) < TS * 1.1) leaveRoom();
+    }
     if (G.over) return;
     updateProjs(dt);
     updateZones(dt);
@@ -6216,7 +7166,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
           if ((z.tick -= dt) <= 0) { z.tick = .5; if (inside) hurtPlayer(z.dmg, z.src); }
           if (!reduced && Math.random() < dt * 10) { const a = Math.random() * 6.28, rr = Math.random() * z.r; parts.push(z.fire ? { x: z.x + Math.cos(a) * rr * .8, y: z.y + Math.sin(a) * rr * .5, vx: rf(-8, 8), vy: rf(-60, -30), life: .6, max: .6, col: pick(['#ff9a3a', '#ffd06a', '#ff5a2a']), size: 4, grav: 0, grow: 0 } : { x: z.x + Math.cos(a) * rr, y: z.y + Math.sin(a) * rr * .7, vx: rf(-6, 6), vy: rf(-14, -4), life: 1.2, max: 1.2, col: pick(['#9ab03a', '#c8d050', '#6a7a20']), size: 7, grav: 0, grow: 10 }); }
         } else if (z.kind === 'strike' && z.t <= 0 && !z.hit) {
-          z.hit = true; z.t = z.dur = .5;
+          z.hit = true; z.t = z.dur = .5; sfx(z.look === 'bolt' ? 'zapline' : 'boom', .08);
           const c = STRIKE_COL[z.look] || '255,255,255', col = `rgb(${c})`;
           burst(z.x, z.y, col, z.big ? 34 : 14, z.big ? 260 : 170, z.big ? 5 : 3.5); ring(z.x, z.y, z.r * 1.15, .35, col, 'shock'); addShake(z.big ? 12 : 4);
           if (z.big || z.look === 'rock') decal(z.x, z.y, z.r * .6, 'scorch', 4);
@@ -6227,6 +7177,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
             if (z.freeze) { P.frozenT = z.freeze; float(P.x, P.y - 30, 'PETRIFIED', '#d8d4c8', true); }
           }
         } else if (z.kind === 'boulder' && z.t <= 0) {
+          sfx('boom', .08);
           burst(z.x, z.y, z.bomb ? '#ff9a3a' : '#7a6a5a', 24, 220, 5); burst(z.x, z.y, '#3a3230', 10, 80, 8, -20, 16, 1); if (z.bomb) burst(z.x, z.y, '#ffe07a', 14, 160, 3); ring(z.x, z.y, z.r * 1.2, .4, '#c8a878', 'shock'); decal(z.x, z.y, z.r * .7, 'scorch', 5); addShake(8);
           if (inside) hurtPlayer(z.dmg, z.src);
         } else if (z.kind === 'grip' && z.t <= 0) {
@@ -6326,7 +7277,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       if (!m.awake && P.invis <= 0 && !buffOn('potato') && m.vis && dp < 360) {
         m.awake = true;
         if (d.squadOf && !G.bossAwake) wakeSquad(d.squadOf, m);
-        if (d.boss && !G.bossAwake) { G.bossAwake = true; addShake(8); banner = { name: bossTitle(m.t), sub: BOSS_EPITHET[m.t] || DUNGEONS[G.dun].name, col: d.col, t: 0 }; dread = 1; addShake(14); ring(m.x, m.y, 320, 1, d.col, 'shock'); burst(m.x, m.y, '#0c0810', 40, 160, 8, -20, 20, 1.4); say([say1(bossTitle(m.t), BOSS_LINES[m.t], d.col)]); }
+        if (d.boss && !G.bossAwake) { G.bossAwake = true; sfx('roar'); addShake(8); banner = { name: bossTitle(m.t), sub: BOSS_EPITHET[m.t] || DUNGEONS[G.dun].name, col: d.col, t: 0 }; dread = 1; addShake(14); ring(m.x, m.y, 320, 1, d.col, 'shock'); burst(m.x, m.y, '#0c0810', 40, 160, 8, -20, 20, 1.4); say([say1(bossTitle(m.t), BOSS_LINES[m.t], d.col)]); }
       }
       if (!m.awake || P.invis > 0 || buffOn('potato')) {
         m.wt -= dt;
@@ -6411,7 +7362,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         if (m.wind <= 0) {
           m.atkT = d.rate * (m.enraged ? .7 : 1) * (m.hasteT > 0 ? .65 : 1);
           if (d.ranged && dp > d.reach + m.r + P.r + 10) {
-            m.castT = .3;
+            m.castT = .3; if (m.vis) { const pk = d.ranged.lob ? 'lob' : d.ranged.proj || 'earrow'; sfx({ lob: 'es_lob', rock: 'es_rock', stone: 'es_rock', javelin: 'es_rock', hex: 'es_magic', eyebolt: 'es_magic', bolt: 'es_magic', ifire: 'es_fire', ice: 'es_ice', acid: 'es_spit', spore: 'es_spit', bone: 'es_rock' }[pk] || 'es_arrow', .1); }
             const a0 = Math.atan2(P.y - m.y, P.x - m.x), spread = d.ranged.lob ? 0 : d.ranged.spread || 1;
             if (d.ranged.lob) { const tx = P.x + rf(-24, 24), ty = P.y + rf(-24, 24); zones.push({ kind: 'boulder', bomb: d.ranged.lob !== 'rock', rock: d.ranged.lob === 'rock', foe: true, src: m.t, x: tx, y: ty, ox: m.x, oy: m.y - 14, r: 50, t: 1, dur: 1, dmg: m.dmg }); }
             for (let k = 0; k < spread; k++) {
@@ -6419,7 +7370,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
               projs.push({ kind: d.ranged.proj || (d.boss ? 'bolt' : 'earrow'), x: m.x, y: m.y - 6, vx: Math.cos(a) * d.ranged.speed, vy: Math.sin(a) * d.ranged.speed, dmg: m.dmg || d.dmg, life: Math.max(2, d.ranged.range / Math.max(d.ranged.speed, 1) + .4), mine: false, src: m.t, slow: d.ranged.slow, puddle: d.ranged.puddle ? Math.round((m.dmg || d.dmg) * .4) : 0, r: d.boss || d.ranged.proj ? 7 : 4, hit: [] });
             }
           } else if (dp < d.reach + m.r + P.r + 12) {
-            hurtPlayer(m.dmg || d.dmg, m.t, m);
+            sfx('mswing', .08); hurtPlayer(m.dmg || d.dmg, m.t, m);
             slashes.push({ x: m.x, y: m.y, ang: Math.atan2(P.y - m.y, P.x - m.x), arc: 1.2, r: d.reach + m.r + 6, life: 0.14, max: 0.14, col: '#ff8a70', edge: '#ff5a40', dir: 1 });
           }
         }
@@ -6488,7 +7439,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       if (p.kind === 'arrow' && p.tint && Math.random() < .5) parts.push({ x: p.x, y: p.y, vx: rf(-15, 15), vy: rf(-15, 15), life: .3, max: .3, col: `rgb(${p.tint})`, size: 2, grav: 0, grow: 0 });
       p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
       if (solidAt(p.x, p.y)) {
-        p.life = 0;
+        p.life = 0; if (p.mine) sfx('wallhit', .08);
         if (p.kind === 'fire') explode(p);
         else if (p.explode) blast(p.x, p.y, 55, p.dmg * p.explode, 'fire');
         else burst(p.x, p.y, p.kind === 'ice' ? '#d8f0ff' : '#bba', 4, 60, 2);
@@ -6565,7 +7516,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     cw = r.width; ch = r.height; dpr = Math.min(2, devicePixelRatio || 1);
     cv.width = Math.round(cw * dpr); cv.height = Math.round(ch * dpr);
     lightCv.width = Math.ceil(cw / 2); lightCv.height = Math.ceil(ch / 2);
-    S = (cw < 640 || ch < 500 ? 0.72 : 1) * SET.zoom;
+    S = (cw < 640 || ch < 500 ? clamp(Math.min(cw, ch) / 420, .72, 1) : 1) * SET.zoom;
   }
   function ell(x, y, rx, ry, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, 6.283); ctx.fill(); }
   function circ(x, y, r, col) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); }
@@ -7143,6 +8094,17 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     ctx.fillStyle = 'rgba(255,120,110,.35)'; ctx.beginPath(); ctx.ellipse(fx * 3 - 7, 2, 2, 1.2, 0, 0, 6.283); ctx.ellipse(fx * 3 + 7, 2, 2, 1.2, 0, 0, 6.283); ctx.fill();
     curve(2, -13, 0, -19 + Math.sin(t * 3), -5, -21, 1.6, '#6ab04a'); curve(2, -13, 6, -19, 10, -19 + Math.sin(t * 3 + 1), 1.6, '#6ab04a');
   }
+  /* the front half of the Battle Trance flames, over the hero */
+  function drawTranceFront(now) {
+    const P = G.p; if (!(P.trance > 0)) return;
+    const t = now / 1000, fa = Math.min(1, P.trance, (10 - P.trance) * 4);
+    ctx.save(); ctx.translate(P.x, P.y); ctx.globalAlpha *= fa * .8;
+    for (let k = 0; k < 9; k++) {
+      const ang = k / 9 * 6.283 + t * 1.6, rx = Math.cos(ang) * 17, ry = 8 + Math.sin(ang) * 6, h = 14 + Math.sin(t * 11 + k * 2.1) * 6;
+      if (Math.sin(ang) >= 0) { ctx.fillStyle = k % 2 ? 'rgba(255,190,90,.55)' : 'rgba(255,90,40,.5)'; ctx.beginPath(); ctx.moveTo(rx - 4, ry); ctx.quadraticCurveTo(rx - 3, ry - h * .6, rx + Math.sin(t * 8 + k) * 2, ry - h); ctx.quadraticCurveTo(rx + 3, ry - h * .6, rx + 4, ry); ctx.fill(); }
+    }
+    ctx.restore();
+  }
   function drawPlayer(now) {
     const P = G.p, K = G.cls, t = now / 1000, eq = P.eq || {};
     const A = artOf(eq.armor) || NAKED, H = artOf(eq.head), SH = K === 'knight' ? artOf(eq.offhand) : null;
@@ -7157,6 +8119,18 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (P.buffs && P.buffs.potato > 0) { drawPotato(P, t); ctx.restore(); return; }
     /* warm lantern rim light */
     if (P.invis <= 0) glowCircle(0, 2, 31, 'rgba(255,190,75,.20)', 'rgba(255,155,45,0)');
+    if (P.trance > 0) {
+      /* Battle Trance: a burning aura, flame tongues licking up and a ring at the feet */
+      const fa = Math.min(1, P.trance, (10 - P.trance) * 4), pu = .5 + .5 * Math.sin(t * 9);
+      glowCircle(0, -6, 44, `rgba(255,90,40,${(.28 + .14 * pu) * fa})`, 'rgba(255,60,20,0)');
+      ctx.save(); ctx.globalAlpha *= fa;
+      for (let k = 0; k < 9; k++) {
+        const ang = k / 9 * 6.283 + t * 1.6, rx = Math.cos(ang) * 17, ry = 8 + Math.sin(ang) * 6, h = 16 + Math.sin(t * 11 + k * 2.1) * 7;
+        if (Math.sin(ang) < 0) { ctx.fillStyle = k % 2 ? 'rgba(255,170,70,.55)' : 'rgba(255,80,40,.5)'; ctx.beginPath(); ctx.moveTo(rx - 4, ry); ctx.quadraticCurveTo(rx - 3, ry - h * .6, rx + Math.sin(t * 8 + k) * 2, ry - h); ctx.quadraticCurveTo(rx + 3, ry - h * .6, rx + 4, ry); ctx.fill(); }
+      }
+      ctx.strokeStyle = `rgba(255,120,60,${.5 + .3 * pu})`; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, 14, 20 + pu * 2, 6, 0, 0, 6.283); ctx.stroke();
+      ctx.restore();
+    }
     if (P.invis > 0) ctx.globalAlpha = .3;
     else if (P.iframe > 0 && !P.roll && Math.floor(t * 24) % 2) ctx.globalAlpha = .5;
     if (!P.roll) {
@@ -8554,6 +9528,9 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     let camX = cam.x - vw / 2, camY = cam.y - vh / 2;
     camX = MW * TS < vw ? (MW * TS - vw) / 2 : clamp(camX, 0, MW * TS - vw);
     camY = MH * TS < vh ? (MH * TS - vh) / 2 : clamp(camY, 0, MH * TS - vh);
+    { const RM = curRoom();
+      if (RM) { const rx = RM.x * TS, ry = RM.y * TS, rw = ROOM_W * TS, rh = ROOM_H * TS; camX = rw < vw ? rx + (rw - vw) / 2 : clamp(camX, rx, rx + rw - vw); camY = rh < vh ? ry + (rh - vh) / 2 : clamp(camY, ry, ry + rh - vh); }
+      else if (G.zone === 'town') camX = TOWN.w * TS < vw ? (TOWN.w * TS - vw) / 2 : clamp(camX, 0, TOWN.w * TS - vw); }
     camView.x = camX; camView.y = camY;
     if (shake > 0) { camX += (Math.sin(now / 23) + Math.sin(now / 37) * .6) * shake * .65; camY += (Math.cos(now / 29) + Math.sin(now / 41) * .6) * shake * .65; }
     const k = dpr * S;
@@ -8566,6 +9543,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const tx1 = Math.min(MW - 1, Math.floor((camX + vw) / TS)), ty1 = Math.min(MH - 1, Math.floor((camY + vh) / TS));
 
     for (const d of decals) drawDecal(d);
+    { const RM = curRoom(); if (RM) drawRoomFx(RM, now); }
     if (G.stairs && G.seen[idx(G.stairs.x, G.stairs.y)]) {
       const x = G.stairs.x * TS + TS / 2, y = G.stairs.y * TS + TS / 2, pulse = .24 + Math.sin(now / 400) * .09;
       glowCircle(x, y, 46, `rgba(232,163,61,${pulse})`, 'rgba(232,163,61,0)');
@@ -8586,13 +9564,14 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (merchSeen) ents.push({ y: G.merchant.y, merch: true });
     if (G.zone === 'town') {
       for (const n of G.npcs) ents.push({ y: n.y, npc: n });
-      for (const f of G.folk) if (f.state !== 'home') ents.push({ y: f.y, folk: f });
+      const RMe = curRoom();
+      for (const f of G.folk) if (f.state !== 'home' || (RMe && RMe.owner === G.folk.indexOf(f))) ents.push({ y: f.y, folk: f });
       for (const q of G.stations || []) ents.push({ y: q.y + 8, station: q });
       ents.push({ y: TOWN.lantern.y + 20, lantern: true });
       TOWN.lamps.forEach((l, i) => ents.push({ y: l[1] * TS + TS / 2 + 14, lamp: i }));
     }
     ents.sort((a, b) => a.y - b.y);
-    for (const e of ents) e.dying ? drawDying(e.dying, now) : e.p ? drawPlayer(now) : e.station ? drawStation(e.station, now) : e.merch ? drawMerchant(now) : e.npc ? drawNPC(e.npc, now) : e.folk ? drawFolk(e.folk, now) : e.lantern ? drawGreatLantern(now) : e.lamp !== undefined ? drawLamp(e.lamp, now) : drawMon(e.m, now);
+    for (const e of ents) e.dying ? drawDying(e.dying, now) : e.p ? (drawPlayer(now), drawTranceFront(now)) : e.station ? drawStation(e.station, now) : e.merch ? drawMerchant(now) : e.npc ? drawNPC(e.npc, now) : e.folk ? drawFolk(e.folk, now) : e.lantern ? drawGreatLantern(now) : e.lamp !== undefined ? drawLamp(e.lamp, now) : drawMon(e.m, now);
 
     for (const s of slashes) {
       const q = 1 - s.life / s.max, a0 = s.ang - s.arc / 2, a1 = s.ang + s.arc / 2;
@@ -8655,7 +9634,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     }
 
     /* drifting cloud shadows on sunny days */
-    if (G.zone === 'town' && !reduced) {
+    if (G.zone === 'town' && !reduced && !curRoom()) {
       const a = 1 - dayInfo().dark;
       if (a > 0) for (let i = 0; i < 5; i++) {
         const cx = ((now * .012 + i * 830) % (MW * TS + 900)) - 450, cy = hash(i, 7, 1) * MH * TS;
@@ -8673,7 +9652,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     /* lighting */
     const Lc = lctx, hs = .5 * S;
     Lc.globalCompositeOperation = 'source-over'; const DI = dayInfo();
-    Lc.fillStyle = `rgba(3,3,8,${G.zone === 'town' ? .04 + DI.dark * (.76 - G.shards * .06) : G.arena ? (G.bossAwake ? .72 : .62) : .82})`; Lc.fillRect(0, 0, lightCv.width, lightCv.height);
+    const RMl = curRoom();
+    Lc.fillStyle = `rgba(3,3,8,${RMl ? .1 + DI.dark * .22 : G.zone === 'town' ? .04 + DI.dark * (.76 - G.shards * .06) : G.arena ? (G.bossAwake ? .72 : .62) : .82})`; Lc.fillRect(0, 0, lightCv.width, lightCv.height);
     Lc.globalCompositeOperation = 'destination-out';
     const light = (wx, wy, rad, inten) => {
       const x = (wx - camX) * hs, y = (wy - camY) * hs, r = rad * hs;
@@ -8691,6 +9671,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     for (const z of zaps) light(z.pts[z.pts.length - 1][0], z.pts[z.pts.length - 1][1], 90, .7);
     if (G.stairs) light(G.stairs.x * TS + TS / 2, G.stairs.y * TS + TS / 2, 75, .52);
     if (merchSeen) light(G.merchant.x + 17, G.merchant.y - 19, 190, .92);
+    if (RMl) { const fc = roomPt(RMl, 6, 2); light(fc.x, fc.y, 380 * (1 + fl * 3), 1); light(fc.x, fc.y + 170, 340, .85); const tb = roomPt(RMl, 6, 4.4); light(tb.x, tb.y, 200, .8); }
     if (G.zone === 'town') {
       if (DI.dark > .25) {
         TOWN.lamps.forEach(([tx, ty]) => light(tx * TS + TS / 2, ty * TS - 10, 175, .85));
@@ -8704,7 +9685,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (G.portal) light(G.portal.x, G.portal.y - 10, 160, .9);
     for (const m of G.mons) if ((m.t === 'lich' || MON[m.t].mid) && m.vis) light(m.x, m.y - 30, 175, .85);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.drawImage(lightCv, 0, 0, cw, ch);
-    if (G.zone === 'town') {
+    if (RMl) { ctx.fillStyle = 'rgba(255,150,70,.07)'; ctx.fillRect(0, 0, cw, ch); }
+    else if (G.zone === 'town') {
       const warm = Math.sin(Math.min(1, DI.dark * (DI.phase === 'dusk' || DI.phase === 'dawn' ? 1 : 0)) * Math.PI);
       if (warm > 0) { ctx.fillStyle = `rgba(255,120,50,${.13 * warm})`; ctx.fillRect(0, 0, cw, ch); }
       if (DI.dark > 0) { ctx.fillStyle = `rgba(30,50,130,${.14 * DI.dark})`; ctx.fillRect(0, 0, cw, ch); }
@@ -8784,6 +9766,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     }
     ctx.globalAlpha = 1; ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
 
+    { const RM = curRoom();
+      if (RM) {
+        ctx.setTransform(k, 0, 0, k, -camX * k, -camY * k); ctx.fillStyle = '#050507';
+        const rx = RM.x * TS, ry = RM.y * TS, rw = ROOM_W * TS, rh = ROOM_H * TS, big = 4000;
+        ctx.fillRect(rx - big, ry - big, big * 2 + rw, big); ctx.fillRect(rx - big, ry + rh, big * 2 + rw, big); ctx.fillRect(rx - big, ry, big, rh); ctx.fillRect(rx + rw, ry, big, rh);
+      } }
     if (mouse.in && !paused && !G.over) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const col = CLASSES[G.cls].col, mx = mouse.x, my = mouse.y, rate = CLASSES[G.cls].auto.rate;
@@ -8810,9 +9798,16 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   /* ---------------- HUD ---------------- */
   const mm = $('minimap'), mctx = mm.getContext('2d');
   function drawMinimap() {
-    const w = mm.width, h = mm.height, s = Math.min(w / MW, h / MH);
+    const RMm = curRoom(), mwv = G.zone === 'town' ? TOWN.w : MW;
+    const w = mm.width, h = mm.height, s = Math.min(w / mwv, h / MH);
     mctx.clearRect(0, 0, w, h);
-    for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
+    if (RMm) {
+      const s2 = Math.min(w / ROOM_W, h / ROOM_H), ox = (w - ROOM_W * s2) / 2;
+      for (let y = 0; y < ROOM_H; y++) for (let x = 0; x < ROOM_W; x++) { const tt = G.tiles[idx(RMm.x + x, RMm.y + y)]; if (tt === 10 || tt === 12) { mctx.fillStyle = tt === 10 ? '#8a6a48' : '#4a3626'; mctx.fillRect(ox + x * s2, y * s2, s2 + .3, s2 + .3); } }
+      mctx.fillStyle = '#fff'; mctx.beginPath(); mctx.arc(ox + (G.p.x / TS - RMm.x) * s2, (G.p.y / TS - RMm.y) * s2, 2.4, 0, 6.3); mctx.fill();
+      return;
+    }
+    for (let y = 0; y < MH; y++) for (let x = 0; x < mwv; x++) {
       const i = idx(x, y);
       if (!G.seen[i] || solidT(x, y)) continue;
       mctx.fillStyle = vis[i] ? '#8a7a5c' : '#4a4236'; mctx.fillRect(x * s, y * s, s + .3, s + .3);
@@ -8959,7 +9954,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     if (G.cls === 'mage') { $('mpFill').style.width = (P.mp / P.maxMp * 100) + '%'; $('mpText').textContent = `${Math.floor(P.mp)} / ${P.maxMp}`; }
     $('stFill').style.width = (P.st / P.maxSt * 100) + '%';
     $('stBar').classList.toggle('tired', !!P.exhausted);
-    $('xpFill').style.width = (P.xp / need(P.lvl) * 100) + '%';
+    $('xpFill').style.width = (P.xp / need(P.lvl) * 100) + '%'; $('xpFill').parentNode.title = `XP ${Math.floor(P.xp)} / ${need(P.lvl)}`;
     $('hStats').innerHTML = `<span>DMG <b>${Math.round(P.atk)}</b></span><span>DEF <b>${P.def}</b></span><span>GOLD <b style="color:var(--gold)">${G.gold}</b></span><span>KILLS <b>${G.kills}</b></span>`;
     const chips = [];
     if (P.wall > 0) chips.push(`<span class="chip" style="color:#74a2e6">SHIELD WALL ${P.wall.toFixed(1)}s</span>`);
@@ -8974,7 +9969,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     const broken = SLOTS.filter(s => P.eq[s] && P.eq[s].dur <= 0).length, worn = SLOTS.filter(s => P.eq[s] && P.eq[s].dur > 0 && P.eq[s].dur <= P.eq[s].maxDur * .2).length;
     if (broken) chips.push(`<span class="chip" style="color:#ff6a5a">${broken} BROKEN</span>`); else if (worn) chips.push('<span class="chip" style="color:#e8a33d">GEAR WORN</span>');
     $('chips').innerHTML = chips.join('');
-    $('depthLabel').textContent = G.zone === 'town' ? `Aldermere · ${timeLabel()} · ${G.shards}/5 shards` : `${DUNGEONS[G.dun].name} · Floor ${G.depth} of ${DUNGEONS[G.dun].floors}`;
+    $('depthLabel').textContent = curRoom() ? `${FOLK[curRoom().owner].name}’s home · ${timeLabel()}` : G.zone === 'town' ? `Aldermere · ${timeLabel()} · ${G.shards}/5 shards` : `${DUNGEONS[G.dun].name} · Floor ${G.depth} of ${DUNGEONS[G.dun].floors}`;
     const boss = G.mons.find(m => MON[m.t].boss), squad = !boss && G.squad && G.mons.filter(m => MON[m.t].squadOf === G.squad.key);
     $('boss').hidden = !((boss || (squad && squad.length)) && G.bossAwake);
     { const gu = !!(squad && squad.length) || !!(boss && MON[boss.t].mid); $('boss').classList.toggle('guard', gu); const kt = gu ? 'GUARDIAN' : 'BOSS'; if ($('bossKind').dataset.k !== kt) { $('bossKind').dataset.k = kt; $('bossKind').textContent = kt; } }
@@ -9123,15 +10118,17 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   function setPaused(v) {
     if (!G || G.over) return;
+    if (!v && performance.now() - lvlAt < 500) return;
     paused = v; keys.clear(); mouse.down = false; touchAttack = false;
     $('pauseBtn').textContent = v ? 'Resume' : 'Pause';
     if (v) {
       $('veilCard').innerHTML = `<h2 style="color:var(--torch)">Paused</h2><p>${where()} · Level ${G.p.lvl} · ${G.kills} kills</p><div class="btns"><button class="primary" id="resume">Resume</button><button class="ghost" id="pSaves">Save states</button><button class="ghost" id="pSettings">Settings</button><button class="ghost" id="pLog">Update log${logSeen() ? '' : ' <em class="newtag">NEW</em>'}</button>${cloud.state !== 'off' ? `<button class="ghost" id="pAcct">${cloud.state === 'in' ? acctLabel() : 'Log in'}</button>` : ''}${touchMode && document.fullscreenEnabled ? `<button class="ghost" id="pFull">${fsOn ? 'Exit fullscreen' : 'Fullscreen'}</button>` : ''}<button class="ghost" id="pMenu">Main menu</button></div><p style="font-size:13px">${touchMode ? 'Tap Resume to keep going.' : 'Press Esc, or click the game, to keep going.'}</p>`;
       $('veil').hidden = false;
     } else { $('veil').hidden = true; $('stage').focus(); }
+    auVol();
   }
   function endRun(kind) {
-    G.over = kind; keys.clear();
+    G.over = kind; keys.clear(); if (kind !== 'won') sfx('death');
     recordBest(true); saveStore.clear(); progress.finish(1);
     setTimeout(() => {
       const c = CLASSES[G.cls], mins = Math.floor(G.time / 60), secs = String(Math.floor(G.time % 60)).padStart(2, '0');
@@ -9161,6 +10158,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   /* the update log, newest first: [date, title, [lines]] */
   const UPDATES = [
+    ['2026.10.17', 'Darker dungeons', ['Every dungeon’s music is now dark and ominous, with low drones and uneasy notes. The Goblin Hollows get slow, heavy war drums.', 'Battle Trance wraps you in a burning aura while it lasts.', 'New sounds for Rallying Prayer and Judgment. Last Stand is now called Undying Oath.']],
+    ['2026.10.16', 'Richer ability sounds', ['Every ability now has its own richer, fantasy-style sound: roaring and crackling fire, cracking ice, buzzing lightning, ringing steel, glowing magic chords and mystic horns.', 'Sounds echo slightly, as if in a real room, and abilities are louder than everyday sounds.']],
+    ['2026.10.16', 'A sound for everything', ['Each class attacks with its own sound: the knight’s blade slashes, the mage’s bolts whoomph, the archer’s bow draws and snaps, and the assassin stabs quick and light.', 'Every ability, spell and boss move has a sound that matches its name.', 'New sounds for menus, gear, crafting, shopping, talking, night bells, enemy shots, deaths, stuns and low health.']],
+    ['2026.10.16', 'Homes and sounds of every place', ['Walk up to a villager’s front door to step inside their home.', 'Nap in beds, warm up by the fire, read books, open chests and cupboards, and pet the cat.', 'At night the owners are home, and they have opinions about their beds.', 'Every dungeon has its own music, and each place has its own background sounds and footsteps.', 'Town has day and night music, a tense tune during monster attacks, and a cozy tune at home.']],
+    ['2026.10.16', 'Music and sound', ['Music for town, the dungeons and boss fights, all made right in your browser.', 'Sound effects for swings, hits, spells, coins, potions, dodges and boss roars.', 'Turn music and sound up, down or off in Settings.', 'A level-up screen pauses the game and shows which stats grew.']],
+    ['2026.10.16', 'A fresh look', ['Phones get a bigger view of the dungeon and a thumb arc of buttons around the attack button.', 'The main menu sits right under the picture on phones.', 'A warmer, cleaner look for the HUD, health bars and buttons.', 'Each level now takes more experience than the last. Hover the XP bar to see how far you are.']],
     ['2026.10.10', 'Update log', ['See what’s new from the main menu or the pause menu.', 'A NEW tag appears when there’s an update you haven’t read.']],
     ['2026.10.04', 'Tougher bosses', ['Main bosses have 60% more health.', 'Guardians and the Deepwatch have 40% more health.']],
     ['2026.10.03', 'Bosses unleashed', ['24 new boss moves, from the Rat King’s Burrow to Cinderwing’s Fire Breath.', 'Every guardian now has its own named attacks.', 'Ossric, Morwen and the Deepwatch Captain have new looks.', 'Guardians stand on a square ward and show a GUARDIAN health bar.']],
@@ -9259,6 +10262,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   const SETTING_ROWS = [
     ['lang', 'Language', LANGS, 'The language for menus, story and messages.'],
     ['diff', 'Difficulty', [['easy', 'Easy'], ['normal', 'Normal'], ['hard', 'Hard']], 'How hard monsters hit and how much health they have. Takes effect on the next floor for health.'],
+    ['music', 'Music', [[0, 'Off'], [.35, 'Low'], [.7, 'Medium'], [1, 'High']], 'Music for town, the dungeons and boss fights.'],
+    ['sfx', 'Sound effects', [[0, 'Off'], [.4, 'Low'], [.8, 'Medium'], [1.1, 'High']], 'Swings, hits, spells, coins and the rest.'],
     ['zoom', 'Camera', [[.85, 'Far'], [1, 'Normal'], [1.18, 'Near']], 'How close the camera sits to your hero.'],
     ['shake', 'Screen shake', [[true, 'On'], [false, 'Off']], 'The jolt when big hits land.'],
     ['particles', 'Particles', [['full', 'Full'], ['reduced', 'Reduced']], 'Fewer sparks, blood and dust, for slower computers.'],
@@ -9643,6 +10648,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   }
   function applySettings() {
     if (document.documentElement.lang !== SET.lang) setLang(SET.lang);
+    auVol();
     $('minimap').hidden = !SET.minimap;
     if (G && !$('game').hidden) resize();
   }
@@ -9687,6 +10693,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
       return;
     }
     if (invOpen && !paused) { if (e.key === 'Escape' || isE || isI || e.key === 'k' || e.key === 'K' || e.key === 't' || e.key === 'T') { e.preventDefault(); toggleInv(false); } return; }
+    if (paused && $('lvlOk') && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); return setPaused(false); }
     if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') { e.preventDefault(); return setPaused(!paused); }
     if (paused) return;
     if (isI) { e.preventDefault(); return toggleInv(true, 'bag'); }
@@ -9783,7 +10790,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   $('veil').addEventListener('click', e => {
     if (e.target.id === 'again') newGame(G.cls, G.name);
     else if (e.target.id === 'choose') showSelect();
-    else if (e.target.id === 'resume') setPaused(false);
+    else if (e.target.id === 'resume' || e.target.id === 'lvlOk') setPaused(false);
+    else if (e.target.id === 'lvlTree') { lvlAt = 0; setPaused(false); toggleInv(true, 'bag', 'skills'); }
     else if (e.target.id === 'wake') wake();
     else if (e.target.id === 'pSaves') openModal('saves');
     else if (e.target.id === 'pSettings') openModal('settings');
@@ -9873,3 +10881,6 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 })();
 </script>
+
+</body>
+</html>
