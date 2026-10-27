@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Lanternfall: a lantern-lit dungeon RPG. Pick a hero, craft your gear, and bring the light back to Aldermere.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23111218'/%3E%3Cpath d='M22 20h20l4 8v18a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V28z' fill='%232a2622'/%3E%3Cellipse cx='32' cy='36' rx='7' ry='10' fill='%23ffb040'/%3E%3Cellipse cx='32' cy='38' rx='3.5' ry='6' fill='%23fff0b0'/%3E%3Crect x='28' y='12' width='8' height='8' rx='2' fill='%232a2622'/%3E%3C/svg%3E">
 <title>Lanternfall</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -540,8 +533,6 @@
   }
   @media (prefers-reduced-motion: reduce) { .cls, .hbar i { transition: none; } }
 </style>
-</head>
-<body>
 
 <div class="shell">
   <header class="top">
@@ -3378,6 +3369,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     death: () => [392, 349, 311, 262].forEach((f, i) => tone(f, .6, { type: 'triangle', vol: .12, at: i * .3 })),
     stairs: () => [392, 330, 262, 196].forEach((f, i) => { tone(f, .14, { type: 'triangle', vol: .08, at: i * .1 }); hiss(.05, { f: 600, vol: .08, at: i * .1 }); }),
     click: () => tone(1100, .035, { vol: .025 }),
+    fireboom: () => R.blast(0, 1),
+    /* each Starfall star: a whistle as it drops, then a sparkling hit when it lands */
+    starwhistle: () => R.whistle(0, 1, RND(3600, 5000), RND(1200, 1700), .35),
+    /* Arrow Rain: arrows whistling down and thudding into the ground the whole time it lasts */
+    rainarrow: () => { R.whistle(0, .7, RND(2600, 3400), RND(800, 1100), .3); R.thunk(.02, .55); if (Math.random() < .5) R.thunk(.07, .4); },
+    starhit: () => { R.crystal(0, 1, 4, .04, 3000, 6500); R.thump(0, .5, 150, .12); },
     es_arrow: () => SB.twang(0, .35), es_rock: () => SB.swish(0, .5, 200, 800, .2), es_lob: () => { SB.swish(0, .5, 200, 700, .3); SB.whistle(.05, .5, 900, 500, .6); },
     es_magic: () => { SB.hum(0, .4, 330, .25); SB.rise(0, .4, 400, 900, .15); }, es_fire: () => SB.fire(0, .4, .25), es_ice: () => SB.ice(0, .5), es_spit: () => SB.bloop(0, .6),
     mswing: () => SB.swish(0, .5, 300, 1300, .16),
@@ -3451,12 +3448,12 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     ring: (at = 0, v = 1, f = 1800, d = .35) => { tone(f, d, { type: 'sine', vol: .05 * v, at }); tone(f * 2.71, d * .6, { type: 'sine', vol: .018 * v, at }); },
     thud: (at = 0, v = 1, f = 130, d = .16) => { tone(f, d, { type: 'sine', slide: f * .45, vol: .22 * v, at }); hiss(d * .6, { f: 500, vol: .08 * v, at }); },
     boom: (at = 0, v = 1) => { hiss(.6, { f: 700, f2: 70, vol: .28 * v, at }); tone(85, .5, { type: 'sine', slide: 38, vol: .24 * v, at }); },
-    crunch: (at = 0, v = 1) => { hiss(.45, { f: 900, f2: 120, vol: .2 * v, at }); for (let i = 0; i < 4; i++) hiss(.04, { type: 'bandpass', f: 600 + i * 300, q: 3, vol: .1 * v, at: at + i * .06 }); },
-    fire: (at = 0, v = 1, d = .5) => { hiss(d, { f: 300, f2: 1500, vol: .16 * v, attack: .06, at }); for (let i = 0; i < 5; i++) hiss(.03, { type: 'highpass', f: 2500 + Math.random() * 2000, vol: .05 * v, at: at + Math.random() * d }); },
+    crunch: (at = 0, v = 1) => { hiss(.5, { f: 900, f2: 110, vol: .22 * v, at }); tone(90, .35, { type: 'sine', slide: 50, vol: .12 * v, at }); },
+    fire: (at = 0, v = 1, d = .5) => hiss(d, { f: 300, f2: 1500, vol: .16 * v, attack: .06, at }),
     whoom: (at = 0, v = 1) => { hiss(.3, { f: 240, f2: 1300, vol: .16 * v, attack: .07, at }); tone(120, .3, { type: 'sine', slide: 360, vol: .1 * v, attack: .06, at }); hiss(.12, { type: 'bandpass', f: 500, q: 1, vol: .08 * v, at: at + .2 }); },
     ice: (at = 0, v = 1) => { for (let i = 0; i < 5; i++) tone(2200 + Math.random() * 2200, .18, { type: 'sine', vol: .03 * v, at: at + i * .03 }); hiss(.25, { type: 'highpass', f: 5000, vol: .06 * v, at }); },
     shatter: (at = 0, v = 1) => { hiss(.3, { type: 'highpass', f: 3000, vol: .14 * v, at }); for (let i = 0; i < 6; i++) tone(2500 + Math.random() * 3000, .12, { type: 'triangle', vol: .03 * v, at: at + Math.random() * .1 }); },
-    zap: (at = 0, v = 1) => { for (let i = 0; i < 4; i++) { tone(900 + Math.random() * 1200, .06, { type: 'sawtooth', slide: 200, vol: .05 * v, lp: 4000, at: at + i * .045 }); hiss(.04, { type: 'highpass', f: 3000, vol: .07 * v, at: at + i * .045 }); } },
+    zap: (at = 0, v = 1) => { tone(1400, .25, { type: 'sawtooth', slide: 300, vol: .06 * v, lp: 3500, at, vib: [40, 120] }); hiss(.25, { type: 'bandpass', f: 2500, f2: 1200, q: 1, vol: .08 * v, at }); },
     thunder: (at = 0, v = 1) => { hiss(.08, { type: 'highpass', f: 2000, vol: .2 * v, at }); hiss(1.8, { f: 400, f2: 60, vol: .26 * v, at: at + .03, attack: .02 }); },
     holy: (at = 0, v = 1) => [523, 659, 784, 1047].forEach((f, i) => tone(f, .9, { type: 'sine', vol: .04 * v, attack: .08, at: at + i * .04 })),
     chime: (at = 0, v = 1) => [1047, 1319, 1568].forEach((f, i) => tone(f, .5, { type: 'triangle', vol: .04 * v, at: at + i * .07 })),
@@ -3511,18 +3508,21 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     metal: (at = 0, v = 1, f = 500, d = 1.2, wet = .3) => { [[1, 1], [2.76, .55], [5.4, .3], [8.93, .17], [13.3, .1]].forEach(([r, a]) => tone(f * r, d / (1 + r * .25), { type: 'sine', vol: .09 * v * a, at, wet })); nz({ at, d: .05, type: 'highpass', f: [[0, 3000]], g: [[.002, .2 * v], [.05, .0001]], wet }); },
     crack: (at = 0, v = 1, wet = .35) => { nz({ at, d: .03, type: 'highpass', f: [[0, 2500]], g: [[.002, .5 * v], [.03, .0001]], wet }); nz({ at, d: .12, q: .8, f: [[0, 1800], [.12, 600]], g: [[.004, .22 * v], [.12, .0001]], wet }); },
     rumble: (at = 0, v = 1, d = 1.5, wet = .4) => nz({ at, d, type: 'lowpass', q: .8, wet, f: [[0, 220], [d, 70]], g: [[d * .15, .3 * v], [d * .5, .18 * v], [d, .0001]] }),
-    crackle: (at = 0, v = 1, d = .6, n = 14) => { for (let i = 0; i < n; i++) nz({ at: at + Math.random() * d, d: .02, type: 'highpass', q: .7, f: [[0, RND(2000, 6000)]], g: [[.002, RND(.05, .14) * v], [.02, .0001]] }); },
+    /* kept so older calls still work, but it no longer makes any popping sound */
+    crackle: () => {},
     ignite: (at = 0, v = 1) => { nz({ at, d: .5, type: 'lowpass', q: .7, wet: .2, f: [[0, 200], [.08, 2400], [.5, 500]], g: [[.03, .32 * v], [.5, .0001]] }); tone(60, .35, { type: 'sine', slide: 40, vol: .2 * v, at }); },
-    fire: (at = 0, v = 1, d = 1) => { nz({ at, d, type: 'lowpass', q: .6, wet: .25, f: [[0, 500], [d * .3, 1100], [d * .7, 700], [d, 400]], g: [[d * .15, .26 * v], [d * .6, .18 * v], [d, .0001]] }); R.crackle(at, v, d, Math.round(d * 26)); },
+    fire: (at = 0, v = 1, d = 1) => nz({ at, d, type: 'lowpass', q: .6, wet: .25, f: [[0, 500], [d * .3, 1100], [d * .7, 700], [d, 400]], g: [[d * .15, .26 * v], [d * .6, .18 * v], [d, .0001]] }),
     boom: (at = 0, v = 1, wet = .45) => { R.crack(at, v * .8, wet); tone(70, 1.1, { type: 'sine', slide: 28, vol: .42 * v, at, wet }); nz({ at, d: 1.4, type: 'lowpass', q: .6, wet, f: [[0, 1800], [1.4, 60]], g: [[.01, .45 * v], [.5, .2 * v], [1.4, .0001]] }); R.debris(at + .15, v * .7, .8); },
-    debris: (at = 0, v = 1, d = .7) => { for (let i = 0; i < 9; i++) nz({ at: at + Math.random() * d, d: .06, type: 'lowpass', q: 1, f: [[0, RND(500, 1400)]], g: [[.004, RND(.06, .15) * v], [.06, .0001]] }); },
+    blast: (at = 0, v = 1, wet = .45) => { tone(80, 1, { type: 'sine', slide: 30, vol: .45 * v, at, wet }); nz({ at, d: 1.3, type: 'lowpass', q: .6, wet, f: [[0, 2200], [1.3, 70]], g: [[.008, .5 * v], [.45, .2 * v], [1.3, .0001]] }); nz({ at, d: .45, q: .9, wet, f: [[0, 300], [.15, 900], [.45, 350]], g: [[.03, .22 * v], [.45, .0001]] }); },
+    roar: (at = 0, v = 1, d = .6) => nz({ at, d, type: 'lowpass', q: .6, wet: .25, f: [[0, 400], [d * .35, 1300], [d, 500]], g: [[d * .25, .24 * v], [d, .0001]] }),
+    debris: (at = 0, v = 1, d = .7) => nz({ at, d, type: 'lowpass', q: .7, wet: .3, f: [[0, 700], [d, 150]], g: [[d * .2, .12 * v], [d, .0001]] }),
     crystal: (at = 0, v = 1, n = 8, d = .3, lo = 3000, hi = 7000) => { for (let i = 0; i < n; i++) { const f = RND(lo, hi); tone(f, RND(.15, .45), { type: 'sine', vol: .04 * v, at: at + Math.random() * d, wet: .5 }); } },
     shatter: (at = 0, v = 1) => { R.crack(at, v); R.crystal(at, v * 1.4, 16, .25); nz({ at, d: .4, type: 'highpass', q: .7, wet: .4, f: [[0, 4000]], g: [[.005, .22 * v], [.4, .0001]] }); },
     freeze: (at = 0, v = 1, d = .5) => { R.crystal(at, v, 10, d, 2500, 6000); nz({ at, d, q: 8, wet: .3, f: [[0, 2500], [d, 6000]], g: [[d * .5, .08 * v], [d, .0001]] }); },
-    elec: (at = 0, v = 1, d = .4) => { const st = []; for (let i = 0; i < d / .018; i++) st.push(RND(70, 480)); tone(200, d, { type: 'sawtooth', steps: st, vol: .1 * v, lp: 3200, at, wet: .3 }); for (let i = 0; i < 6; i++) nz({ at: at + Math.random() * d, d: .05, type: 'highpass', f: [[0, 3500]], g: [[.003, .18 * v], [.05, .0001]] }); },
+    elec: (at = 0, v = 1, d = .4) => { tone(160, d, { type: 'sawtooth', vol: .09 * v, lp: 2800, at, wet: .3, vib: [55, 70] }); tone(320, d, { type: 'square', vol: .03 * v, lp: 2000, at, wet: .3, vib: [37, 90] }); nz({ at, d, q: .8, wet: .3, f: [[0, 3000], [d, 2000]], g: [[.02, .1 * v], [d, .0001]] }); },
     thunder: (at = 0, v = 1) => { R.crack(at, v * 1.4, .5); nz({ at: at + .05, d: 2.6, type: 'lowpass', q: .7, wet: .6, f: [[0, 900], [.4, 300], [2.6, 60]], g: [[.05, .45 * v], [.6, .2 * v], [1.1, .3 * v], [2.6, .0001]] }); },
     bubble: (at = 0, v = 1, n = 6, d = .5) => { for (let i = 0; i < n; i++) { const f = RND(180, 600); tone(f, RND(.05, .12), { type: 'sine', slide: f * RND(2, 3), vol: .1 * v, at: at + Math.random() * d, wet: .15 }); } },
-    sizzle: (at = 0, v = 1, d = .6) => { for (let i = 0; i < 5; i++) nz({ at: at + i * d / 5, d: d / 4, type: 'highpass', q: .5, f: [[0, RND(4000, 7000)]], g: [[.02, RND(.05, .12) * v], [d / 4, .0001]] }); },
+    sizzle: (at = 0, v = 1, d = .6) => nz({ at, d, type: 'highpass', q: .5, f: [[0, 4500], [d, 3500]], g: [[.05, .09 * v], [d, .0001]] }),
     gas: (at = 0, v = 1, d = 1.2) => nz({ at, d, type: 'highpass', q: .5, wet: .3, f: [[0, 2600], [d, 1600]], g: [[.03, .22 * v], [d * .4, .1 * v], [d, .0001]] }),
     splash: (at = 0, v = 1) => { nz({ at, d: .35, type: 'lowpass', q: .6, wet: .2, f: [[0, 2500], [.35, 400]], g: [[.006, .32 * v], [.35, .0001]] }); R.bubble(at + .05, v * .8, 6, .3); },
     glass: (at = 0, v = 1) => { R.crack(at, v * .8); for (let i = 0; i < 14; i++) tone(RND(2500, 7500), RND(.08, .3), { type: 'sine', vol: .045 * v, at: at + Math.random() * .35, wet: .3 }); },
@@ -3579,13 +3579,13 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     snipe: () => { R.creak(0, ABV, .45); R.hum(.05, ABV * .5, 440, .45, 6); R.crack(.47, ABV * .8, .3); R.whistle(.48, ABV * 1.2, 3400, 2600, .7); R.air(.48, ABV, .7, 2000, 4500); },
     multishot: () => { R.creak(0, ABV * .8, .2); for (const [d, f] of [[0, 1], [.02, 1.15], [.04, .85]]) { R.release(.2 + d, ABV * .8); R.whistle(.2 + d, ABV * .5, 2400 * f, 1600 * f, .5); } },
     ricochet: () => { R.creak(0, ABV * .7, .18); R.release(.18, ABV); R.whistle(.4, ABV * .8, 3200, 1400, .3); R.metal(.4, ABV * .3, 2400, .3); R.whistle(.6, ABV * .7, 3000, 1300, .3); R.metal(.6, ABV * .25, 2700, .3); R.thunk(.85, ABV * .5); },
-    rain: () => { R.creak(0, ABV * .8, .25); R.release(.25, ABV); for (let i = 0; i < 8; i++) R.whistle(.6 + i * .06, ABV * .45, RND(2400, 3400), RND(700, 1100), .55); for (let i = 0; i < 8; i++) R.thunk(1.15 + i * .05 + Math.random() * .03, ABV * .4); },
+    rain: () => { R.creak(0, ABV * .8, .25); R.release(.25, ABV); R.air(.27, ABV * .8, .5, 1200, 3800); },
     volley: () => { R.creak(0, ABV * .7, .15); for (let i = 0; i < 5; i++) { R.release(.15 + i * .07, ABV * .7); R.whistle(.16 + i * .07, ABV * .35, RND(2200, 3000), 1400, .45); } },
     disengage: () => { R.swoosh(0, ABV * .8, 200, 900, .35, .7); R.release(.12, ABV); R.thump(.38, ABV * .5, 130, .15, .1); R.step(.45, ABV * .5); },
     trap: () => { for (let i = 0; i < 5; i++) R.tick(i * .06, ABV * .6, 1600); R.boing(.32, ABV * .6); R.metal(.34, ABV * .6, 1200, .4); },
     hawk: () => { R.spirit(0, ABV, 2200, .7); R.wings(.35, ABV, 5, .1); R.swoosh(.8, ABV * .7, 400, 2000, .3); R.shimmer(.85, ABV * .4, .3, 2500, 5000); },
     tempest: () => { nz({ d: 2, q: 1.4, wet: .4, f: [[0, 300], [.6, 1200], [1.2, 500], [2, 900]], g: [[.5, .25 * ABV], [1.4, .15 * ABV], [2, .0001]] }); for (let i = 0; i < 6; i++) R.whistle(.2 + i * .2, ABV * .4, RND(1800, 3200), RND(900, 1600), .6); R.release(.1, ABV * .8); },
-    firearrow: () => { R.release(0, ABV); nz({ at: .02, d: .7, q: 1.1, wet: .3, f: [[0, 350], [.25, 1300], [.7, 600]], g: [[.12, .2 * ABV], [.7, .0001]] }); nz({ at: .05, d: .6, type: 'lowpass', q: .5, wet: .2, f: [[0, 900], [.6, 500]], g: [[.1, .08 * ABV], [.6, .0001]] }); for (let i = 0; i < 5; i++) tone(RND(1800, 3200), .06, { type: 'triangle', vol: .02 * ABV, at: .15 + i * .09 + Math.random() * .04, wet: .4 }); },
+    firearrow: () => { R.release(0, ABV); nz({ at: .02, d: .7, q: 1.1, wet: .3, f: [[0, 350], [.25, 1300], [.7, 600]], g: [[.12, .2 * ABV], [.7, .0001]] }); nz({ at: .05, d: .6, type: 'lowpass', q: .5, wet: .2, f: [[0, 900], [.6, 500]], g: [[.1, .08 * ABV], [.6, .0001]] }); },
     venomshot: () => { R.creak(0, ABV * .6, .15); R.release(.15, ABV); R.sizzle(.2, ABV * .7, .4); R.bubble(.25, ABV * .6, 4, .3); },
     frostarrow: () => { R.creak(0, ABV * .6, .15); R.release(.15, ABV); R.freeze(.18, ABV * .9, .4); },
     cluster: () => { R.creak(0, ABV * .7, .2); R.release(.2, ABV); R.sizzle(.25, ABV * .5, .4); R.boom(.75, ABV * .5); R.boom(.9, ABV * .45); R.boom(1.05, ABV * .4); },
@@ -3607,7 +3607,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     plaguebomb: () => { R.swoosh(0, ABV * .6, 300, 1100, .3); R.glass(.3, ABV); R.gas(.33, ABV * .8, 1.3); R.bubble(.4, ABV * .7, 8, .8); },
     virulence: () => { R.splash(0, ABV * 1.2); R.gas(.05, ABV * .7, .9); R.bubble(.1, ABV * .8, 10, .5); },
     /* mage */
-    fireball: () => { R.ignite(0, ABV); R.fire(.05, ABV * .9, .7); R.swoosh(.1, ABV * .7, 200, 900, .5, .6, .2); },
+    fireball: () => { R.ignite(0, ABV); R.roar(.04, ABV * .9, .65); },
     nova: () => { R.freeze(0, ABV, .35); R.shatter(.35, ABV * 1.2); nz({ at: .35, d: .8, type: 'highpass', q: .5, wet: .5, f: [[0, 5000], [.8, 2500]], g: [[.01, .18 * ABV], [.8, .0001]] }); },
     lightning: () => { R.elec(0, ABV * 1.2, .45); R.crack(.05, ABV, .4); R.elec(.25, ABV, .3); R.crack(.3, ABV * .8, .4); R.rumble(.3, ABV * .4, .8); },
     blink: () => { nz({ d: .18, q: 3, wet: .3, f: [[0, 400], [.18, 4500]], g: [[.12, .2 * ABV], [.18, .0001]] }); tone(300, .2, { type: 'sine', slide: 2400, vol: .06 * ABV, at: 0, wet: .4 }); R.thump(.2, ABV * .3, 300, .08); R.shimmer(.2, ABV * .4, .3, 3000, 6000); },
@@ -3616,11 +3616,11 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     miasma: () => { R.bubble(0, ABV * 1.2, 12, 1.2); R.gas(.1, ABV * .7, 1.4); tone(65, 1.4, { type: 'sine', vol: .12 * ABV, attack: .4, wet: .3 }); },
     barrier: () => { R.hum(0, ABV * 1.2, 196, 1.2, 6); R.metal(.05, ABV * .4, 1400, 1.6); R.shimmer(.1, ABV * .4, .6, 2000, 4000); },
     orbs: () => { for (let i = 0; i < 3; i++) { R.hum(i * .15, ABV * .6, 330 * (1 + i * .25), .7, 8); R.bell(i * .15, ABV * .3, 990 * (1 + i * .25), .8); } },
-    meteor: () => { nz({ d: 1.1, type: 'lowpass', q: .7, wet: .3, f: [[0, 300], [1.1, 1400]], g: [[1, .3 * ABV], [1.1, .0001]] }); R.whistle(0, ABV, 1800, 300, 1.1); R.boom(1.05, ABV * 1.4, .6); R.fire(1.15, ABV * .6, .8); },
+    meteor: () => { nz({ d: 1.1, type: 'lowpass', q: .7, wet: .3, f: [[0, 300], [1.1, 1400]], g: [[1, .3 * ABV], [1.1, .0001]] }); R.whistle(0, ABV, 1800, 300, 1.1); R.blast(1.05, ABV * 1.5, .6); },
     drain: () => { R.reverse(0, ABV, .8, 2400, 300); R.pulse(.3, ABV * .5, 80); tone(440, 1.1, { type: 'sine', slide: 110, vol: .08 * ABV, attack: .3, at: .2, wet: .6, vib: [6, 10] }); },
     firewall: () => { R.ignite(0, ABV * 1.2); nz({ d: .5, type: 'lowpass', q: .6, wet: .3, f: [[0, 300], [.5, 2000]], g: [[.4, .3 * ABV], [.5, .2 * ABV]] }); R.fire(.1, ABV * 1.1, 1.8); },
     thunder: () => { R.elec(0, ABV * .6, .2); R.thunder(.15, ABV * 1.4); },
-    starfall: () => { for (let i = 0; i < 7; i++) { const t0 = i * .13; R.whistle(t0, ABV * .45, RND(3600, 5000), RND(1200, 1800), .45); R.crystal(t0 + .45, ABV * .4, 3, .05, 3000, 6000); R.thump(t0 + .45, ABV * .25, 140, .12); } },
+    starfall: () => { tone(600, .6, { type: 'sine', slide: 1800, vol: .06 * ABV, attack: .3, wet: .6 }); R.shimmer(.1, ABV * .6, .6, 3000, 6500); },
     timestop: () => { [0, .25, .55, .95, 1.45].forEach((t0, i) => R.tick(t0, ABV * .9, i % 2 ? 1600 : 2200)); tone(900, 1.6, { type: 'sine', slide: 50, vol: .08 * ABV, at: .1, wet: .6 }); R.reverse(0, ABV * .6, 1.2, 1500, 200); R.shimmer(1.4, ABV * .4, .8, 4000, 7000); },
   };
   /* boss and guardian moves */
@@ -3670,8 +3670,8 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   };
   const sndOn = () => AU.ctx && +SET.sfx && AU.ctx.state === 'running';
   /* measured so every ability lands at about the same loudness */
-  const AB_GAIN = {charge:1.4,whirl:5.56,execute:1.07,earthsplit:1.35,trance:1.42,wall:0.95,warcry:1.77,bash:0.85,fortress:0.85,aegis:3.57,rally:3.47,smite:0.71,consecrate:3.73,judgment:0.58,laststand:1.07,pierce:3.5,snipe:1.02,multishot:5.38,ricochet:4.31,rain:6,volley:6,disengage:2.75,trap:2.34,hawk:4.27,tempest:6,firearrow:5.7,venomshot:3.62,frostarrow:5.81,cluster:1.45,phoenix:3.33,flurry:6,lunge:3.7,bladedance:6,shuriken:1.26,lotus:5.2,vanish:3.76,shadowstep:6,smoke:0.9,mark:5.75,eclipse:2.02,fan:6,toxic:2.58,caltrops:6,plaguebomb:1.17,virulence:0.84,fireball:2.43,nova:0.7,lightning:0.87,blink:6,mend:4.5,icelance:1.05,miasma:1.41,barrier:3.5,orbs:5.38,meteor:0.74,drain:3.12,firewall:2.63,thunder:0.62,starfall:5.32,timestop:5.26};
-  const SFX_GAIN = { swing: 3.4, stab: .75, bow: 2.8, zap: 1.6, slicehit: 3 };
+  const AB_GAIN = {charge:1.4,whirl:5.56,execute:1.16,earthsplit:1.59,trance:1.42,wall:0.95,warcry:1.77,bash:0.85,fortress:0.85,aegis:3.57,rally:3.47,smite:0.71,consecrate:3.73,judgment:0.58,laststand:1.07,pierce:3.5,snipe:1.02,multishot:5.38,ricochet:4.31,rain:5.5,volley:6,disengage:2.75,trap:2.34,hawk:4.27,tempest:6,firearrow:7,venomshot:4.55,frostarrow:5.81,cluster:1.92,phoenix:2.98,flurry:6,lunge:3.7,bladedance:6,shuriken:1.26,lotus:5.2,vanish:3.76,shadowstep:6,smoke:0.9,mark:5.75,eclipse:2.02,fan:6,toxic:2.99,caltrops:6,plaguebomb:1.17,virulence:0.84,fireball:2.16,nova:0.7,lightning:0.94,blink:6,mend:4.5,icelance:1.05,miasma:1.41,barrier:3.5,orbs:5.38,meteor:0.59,drain:3.12,firewall:2.48,thunder:0.57,starfall:5.5,timestop:5.26};
+  const SFX_GAIN = { swing: 3.4, stab: .75, bow: 2.8, zap: 1.6, slicehit: 3, starwhistle: 6, starhit: 2.5, rainarrow: 3.3 };
   function onBus(gain, f) { const b = AU.ctx.createGain(); b.gain.value = gain; b.connect(AU.sfx); AU.bus = b; try { f(); } catch {} AU.bus = null; }
   function sfxAb(id, res) { const f = AB_SND[id]; if (!f) return sfx(res === 'mp' ? 'spell' : 'skill'); if (sndOn()) onBus(AB_GAIN[id] || 1, f); }
   function sfxBoss(id) { const f = BOSS_SND[id]; if (!f) return sfx('bosscast'); if (sndOn()) try { f(); } catch {} }
@@ -7207,6 +7207,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         else if ((z.tick -= dt) <= 0) {
           z.tick = z.every || .5;
           if (z.rain) {
+            sfx('rainarrow', .06);
             for (let k = 0; k < 2; k++) {
               const a = Math.random() * 6.283, rr = Math.sqrt(Math.random()) * z.r, x = z.x + Math.cos(a) * rr, y = z.y + Math.sin(a) * rr * .7;
               burst(x, y, '#e8d8b0', 4, 70, 2); for (const m of near(x, y, 34)) hurtMon(m, z.dmg, { col: '#ffe08a', ang: Math.PI / 2, knock: 30 });
@@ -7225,12 +7226,13 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
         if (!reduced && z.look === 'holy' && Math.random() < dt * 8) { const a = Math.random() * 6.283, rr = Math.random() * z.r; parts.push({ x: z.x + Math.cos(a) * rr, y: z.y + Math.sin(a) * rr * .7, vx: 0, vy: rf(-40, -20), life: .8, max: .8, col: pick(['#ffe08a', '#fff4c8']), size: 2.5, grav: 0, grow: 0 }); }
         if (!reduced && z.look === 'smoke' && Math.random() < dt * 14) { const a = Math.random() * 6.283, rr = Math.random() * z.r; parts.push({ x: z.x + Math.cos(a) * rr, y: z.y + Math.sin(a) * rr * .7, vx: rf(-8, 8), vy: rf(-12, -4), life: 1.4, max: 1.4, col: pick(['#5a5a66', '#7a7a86', '#4a4a54']), size: 10, grav: 0, grow: 14 }); }
       } else if (z.kind === 'fall' && z.t <= 0) {
+        if (!z.big) sfx('starhit', .05);
         blast(z.x, z.y, z.r, z.dmg, z.big ? 'meteor' : 'star');
       } else if (z.kind === 'starfall' && (z.tick -= dt) <= 0) {
         z.tick = .2;
         const near = G.mons.filter(m => m.vis && Math.hypot(m.x - z.x, m.y - z.y) < z.r), tg = near.length && Math.random() < .8 ? pick(near) : null;
         const x = tg ? tg.x + rf(-10, 10) : z.x + rf(-.7, .7) * z.r, y = tg ? tg.y + rf(-10, 10) : z.y + rf(-.7, .7) * z.r;
-        if (!solidAt(x, y)) zones.push({ kind: 'fall', x, y, r: 55, t: .35, dur: .35, dmg: z.dmg });
+        if (!solidAt(x, y)) { zones.push({ kind: 'fall', x, y, r: 55, t: .35, dur: .35, dmg: z.dmg }); sfx('starwhistle', .05); }
       }
     }
     zones = zones.filter(z => z.t > 0);
@@ -7416,7 +7418,7 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
     }
   }
 
-  function explode(p) { blast(p.x, p.y, 90, p.dmg, 'fire'); }
+  function explode(p) { sfx('fireboom', .06); blast(p.x, p.y, 90, p.dmg, 'fire'); }
   function updateProjs(dt) {
     const P = G.p;
     for (const p of projs) {
@@ -10881,6 +10883,3 @@ The Lantern of a Forgotten Kingdom. Start a new journey to play it. ¦ La Linter
   window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 })();
 </script>
-
-</body>
-</html>
